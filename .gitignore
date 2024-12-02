@@ -35,5 +35,5 @@ build/
 .DS_Store
 
 ### Advent Of Code ###
-misc/session
+misc/keys/
 src/main/resources/**/Problem[0-9][0-9].txt
