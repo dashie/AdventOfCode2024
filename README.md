@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl "https://adventofcode.com/2024/day/2/input" \
+curl "https://adventofcode.com/2024/day/3/input" \
   --cookie session=$(cat misc/session) \
-  > src/main/resources/adventofcode/y2024/Problem02.txt
+  > src/main/resources/adventofcode/y2024/Problem03.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
