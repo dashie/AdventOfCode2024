@@ -6,7 +6,7 @@ https://adventofcode.com/2024
 
 - [x] Day 1: Historian Hysteria
 - [x] Day 2: Red-Nosed Reports
-- [ ] Day 3
+- [x] Day 3: Mull It Over
 - [ ] Day 4
 - [ ] Day 5
 - [ ] Day 6
