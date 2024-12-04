@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.lang.Integer.parseInt;
+import static java.util.stream.Collectors.toList;
 
 public class PatternEx {
 
@@ -47,7 +49,7 @@ public class PatternEx {
         Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {
             String matchedString = matcher.group(0);
-            return Integer.parseInt(matcher.group());
+            return parseInt(matchedString);
         }
         throw new IllegalStateException("Cannot match \"%s\" to int".formatted(str));
     }
@@ -71,20 +73,20 @@ public class PatternEx {
         return Arrays.stream(matchAndSplit(str, splitRegex))
                      .map(String::trim)
                      .map(Integer::parseInt)
-                     .collect(Collectors.toList());
+                     .collect(toList());
     }
 
     public List<Long> matchAndSplitToLongList(String str, String splitRegex) {
         return Arrays.stream(matchAndSplit(str, splitRegex))
                      .map(String::trim)
                      .map(Long::parseLong)
-                     .collect(Collectors.toList());
+                     .collect(toList());
     }
 
-    public static Integer parseInt(String str) {
+    public static Integer extractInt(String str) {
         Matcher m = INT_PATTERN.matcher(str);
         if (m.find()) {
-            return Integer.parseInt(m.group(0));
+            return parseInt(m.group(0));
         }
         return null;
     }

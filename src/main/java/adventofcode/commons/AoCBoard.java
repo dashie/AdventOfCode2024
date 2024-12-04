@@ -5,27 +5,27 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AOCBoard<T> {
+public class AoCBoard<T> {
 
     public T[][] buffer; // create a safe method to replace
     public final int N;
     public final int M;
 
-    public AOCBoard(Class<T> clazz, int n, int m) {
+    public AoCBoard(Class<T> clazz, int n, int m) {
         N = n;
         M = m;
         buffer = (T[][]) Array.newInstance(clazz, M, N);
     }
 
-    public AOCBoard(T[][] data) {
+    public AoCBoard(T[][] data) {
         N = data[0].length;
         M = data.length;
         buffer = data;
     }
 
     @Override
-    public AOCBoard<T> clone() throws CloneNotSupportedException {
-        return new AOCBoard<>(buffer.clone());
+    public AoCBoard<T> clone() throws CloneNotSupportedException {
+        return new AoCBoard<>(buffer.clone());
     }
 
     public void fill(T value) {
@@ -48,12 +48,12 @@ public class AOCBoard<T> {
         }
     }
 
-    public boolean isValidCell(AOCPoint p) {
+    public boolean isValidCell(AoCPoint p) {
         return p.x >= 0 && p.x < N
             && p.y >= 0 && p.y < M;
     }
 
-    public T get(AOCPoint p) {
+    public T get(AoCPoint p) {
         return get(p.x, p.y);
     }
 
@@ -66,7 +66,7 @@ public class AOCBoard<T> {
         return v != null ? v : defaultValue;
     }
 
-    public T getSafe(AOCPoint p) {
+    public T getSafe(AoCPoint p) {
         try {
             return get(p.x, p.y);
         } catch (IndexOutOfBoundsException ex) {
@@ -74,7 +74,7 @@ public class AOCBoard<T> {
         }
     }
 
-    public T getSafe(AOCPoint p, int xOffset, int yOffset) {
+    public T getSafe(AoCPoint p, int xOffset, int yOffset) {
         try {
             return get(p.x + xOffset, p.y + yOffset);
         } catch (IndexOutOfBoundsException ex) {
@@ -82,7 +82,7 @@ public class AOCBoard<T> {
         }
     }
 
-    public T getSafeWithDeafult(AOCPoint p, T defaultValue) {
+    public T getSafeWithDeafult(AoCPoint p, T defaultValue) {
         try {
             return getWithDefault(p.x, p.y, defaultValue);
         } catch (IndexOutOfBoundsException ex) {
@@ -90,7 +90,7 @@ public class AOCBoard<T> {
         }
     }
 
-    public T getSafeWithDeafult(AOCPoint p, int xOffset, int yOffset, T defaultValue) {
+    public T getSafeWithDeafult(AoCPoint p, int xOffset, int yOffset, T defaultValue) {
         try {
             return getWithDefault(p.x + xOffset, p.y + yOffset, defaultValue);
         } catch (IndexOutOfBoundsException ex) {
@@ -98,25 +98,36 @@ public class AOCBoard<T> {
         }
     }
 
-    public int forEach(BiFunction<AOCPoint, T, Boolean> fn) {
+    public T getOrBlank(AoCPoint p) {
+        return getSafeWithDeafult(p, (T) (Character) ' ');
+    }
+
+    public T getOrBlank(AoCPoint p, int xOffset, int yOffset) {
+        return getSafeWithDeafult(p, xOffset, yOffset, (T) (Character) ' ');
+    }
+
+    public boolean checkSafe(AoCPoint p, T value) {
+        T v = getSafe(p);
+        return v != null && v.equals(value);
+    }
+
+    public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
         int count = 0;
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                AOCPoint p = new AOCPoint(n, m);
+                AoCPoint p = new AoCPoint(n, m);
                 T value = buffer[m][n];
-                if (fn.apply(p, value)) {
-                    count++;
-                }
+                count += fn.apply(p, value);
             }
         }
         return count;
     }
 
-    public AOCPoint searchFor(T value) {
+    public AoCPoint searchFor(T value) {
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
                 if (buffer[m][n] == value) {
-                    AOCPoint p = new AOCPoint(n, m);
+                    AoCPoint p = new AoCPoint(n, m);
                     return p;
                 }
             }
@@ -124,7 +135,7 @@ public class AOCBoard<T> {
         return null;
     }
 
-    public void set(AOCPoint p, T value) {
+    public void set(AoCPoint p, T value) {
         set(p.x, p.y, value);
     }
 

@@ -7,7 +7,7 @@ https://adventofcode.com/2024
 - [x] Day 1: Historian Hysteria
 - [x] Day 2: Red-Nosed Reports
 - [x] Day 3: Mull It Over
-- [ ] Day 4
+- [x] Day 4: Ceres Search
 - [ ] Day 5
 - [ ] Day 6
 - [ ] Day 7
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl "https://adventofcode.com/2024/day/3/input" \
-  --cookie session=$(cat misc/session) \
-  > src/main/resources/adventofcode/y2024/Problem03.txt
+curl "https://adventofcode.com/2024/day/5/input" \
+  --cookie session=$(cat misc/keys/session) \
+  > src/main/resources/adventofcode/y2024/Problem05.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`

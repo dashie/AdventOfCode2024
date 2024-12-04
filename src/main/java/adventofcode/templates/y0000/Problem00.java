@@ -1,17 +1,16 @@
 package adventofcode.templates.y0000;
 
-import adventofcode.commons.AOCProblem;
+import adventofcode.commons.AoCInput;
+import adventofcode.commons.AoCProblem;
 
-import java.io.BufferedReader;
-
-public class Problem00 extends AOCProblem<Long> {
+public class Problem00 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
         new Problem00().solve(false);
     }
 
     @Override
-    public void processInput(BufferedReader reader) throws Exception {
+    public void processInput(AoCInput input) throws Exception {
 
         // data = reader.lines()
     }

@@ -1,17 +1,20 @@
 package adventofcode.y2024;
 
-import adventofcode.commons.AOCProblem;
+import adventofcode.commons.AoCInput;
+import adventofcode.commons.AoCProblem;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.Long.parseLong;
+import static java.lang.Math.abs;
 
 /**
  * Day 1: Historian Hysteria
  * https://adventofcode.com/2024/day/1
  */
-public class Problem01 extends AOCProblem<Long> {
+public class Problem01 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
         new Problem01().solve(false);
@@ -21,13 +24,12 @@ public class Problem01 extends AOCProblem<Long> {
     private List<Long> list2 = new ArrayList<>();
 
     @Override
-    public void processInput(BufferedReader reader) throws Exception {
-        reader.lines()
-              .forEach(line -> {
-                  String[] parts = line.split("\s+");
-                  list1.add(Long.parseLong(parts[0]));
-                  list2.add(Long.parseLong(parts[1]));
-              });
+    public void processInput(AoCInput input) throws Exception {
+        input.lines().forEach(line -> {
+            String[] parts = line.split("\s+");
+            list1.add(parseLong(parts[0]));
+            list2.add(parseLong(parts[1]));
+        });
 
         list1.sort(Long::compareTo);
         list2.sort(Long::compareTo);
@@ -45,7 +47,7 @@ public class Problem01 extends AOCProblem<Long> {
     protected Long partOne() throws Exception {
         long result = 0;
         for (int i = 0; i < list1.size(); i++) {
-            result += Math.abs(list1.get(i) - list2.get(i));
+            result += abs(list1.get(i) - list2.get(i));
         }
         return result;
     }

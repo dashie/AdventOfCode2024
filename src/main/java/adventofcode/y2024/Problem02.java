@@ -1,18 +1,21 @@
 package adventofcode.y2024;
 
-import adventofcode.commons.AOCProblem;
+import adventofcode.commons.AoCInput;
+import adventofcode.commons.AoCProblem;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.signum;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 /**
  * Day 2: Red-Nosed Reports
  * https://adventofcode.com/2024/day/2
  */
-public class Problem02 extends AOCProblem<Long> {
+public class Problem02 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
         new Problem02().solve(false);
@@ -21,14 +24,14 @@ public class Problem02 extends AOCProblem<Long> {
     private List<List<Long>> reports = new ArrayList<>();
 
     @Override
-    public void processInput(BufferedReader reader) throws Exception {
-        reader.lines()
-              .forEach(line -> {
-                  reports.add(Arrays
-                      .stream(line.split(" "))
-                      .map(Long::parseLong)
-                      .collect(Collectors.toUnmodifiableList()));
-              });
+    public void processInput(AoCInput input) throws Exception {
+        input.lines()
+             .forEach(line -> {
+                 reports.add(Arrays
+                     .stream(line.split(" "))
+                     .map(Long::parseLong)
+                     .collect(toUnmodifiableList()));
+             });
 
     }
 
@@ -50,13 +53,13 @@ public class Problem02 extends AOCProblem<Long> {
         float signum = 0;
         for (int i = 1; i < report.size(); i++) {
             long diff = report.get(i) - report.get(i - 1);
-            long step = Math.abs(diff);
+            long step = abs(diff);
             if (step < 1 || step > 3) {
                 return false;
             }
             if (i == 1) {
-                signum = Math.signum(diff);
-            } else if (signum != Math.signum(diff)) {
+                signum = signum(diff);
+            } else if (signum != signum(diff)) {
                 return false;
             }
         }
