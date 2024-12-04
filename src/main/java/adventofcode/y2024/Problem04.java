@@ -56,13 +56,7 @@ public class Problem04 extends AoCProblem<Long> {
     @Override
     protected Long partTwo() throws Exception {
         long result = board.forEach((p, c) -> {
-            int n = 0;
-            if (c == 'A') {
-                if (checkMaxCross(p)) {
-                    n++;
-                }
-            }
-            return n;
+            return c == 'A' && checkMaxCross(p) ? 1 : 0;
         });
         return result;
     }
