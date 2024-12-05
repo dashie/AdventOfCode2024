@@ -1,13 +1,14 @@
 package adventofcode.commons;
 
 import java.io.BufferedReader;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  *
  */
-public class AoCInput {
+public class AoCInput implements Iterable<String>, AutoCloseable {
 
     private final BufferedReader reader;
 
@@ -47,5 +48,15 @@ public class AoCInput {
 
     public BufferedReader reader() {
         return reader;
+    }
+
+    @Override
+    public void close() throws Exception {
+        reader.close();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return lines().iterator();
     }
 }

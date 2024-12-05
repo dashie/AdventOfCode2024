@@ -23,11 +23,11 @@ public class Problem05v2 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        String line;
-        while (!(line = input.reader().readLine()).isEmpty()) {
+        for (String line : input) {
+            if (line.isEmpty()) break;
             orderSet.add(line);
         }
-        while ((line = input.reader().readLine()) != null) {
+        for (String line : input) {
             updates.add(Arrays
                 .stream(line.split(","))
                 .collect(toUnmodifiableList()));
