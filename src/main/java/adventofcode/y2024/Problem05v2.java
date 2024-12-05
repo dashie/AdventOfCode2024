@@ -12,29 +12,24 @@ import static java.util.stream.Collectors.toUnmodifiableList;
  * Day 5: Print Queue
  * https://adventofcode.com/2024/day/4
  */
-public class Problem05 extends AoCProblem<Long> {
+public class Problem05v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem05().solve(false);
+        new Problem05v2().solve(false);
     }
 
-    private Map<Long, Set<Long>> orderMap = new HashMap<>();
-    private List<List<Long>> updates = new ArrayList<>();
+    private Set<String> orderSet = new HashSet<>();
+    private List<List<String>> updates = new ArrayList<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
         String line;
         while (!(line = input.reader().readLine()).isEmpty()) {
-            String[] tokens = line.split("\\|");
-            long n = parseLong(tokens[0]);
-            long u = parseLong(tokens[1]);
-            orderMap.compute(n, (k, v) -> v == null ? new HashSet<>() : v)
-                    .add(u);
+            orderSet.add(line);
         }
         while ((line = input.reader().readLine()) != null) {
             updates.add(Arrays
                 .stream(line.split(","))
-                .map(Long::parseLong)
                 .collect(toUnmodifiableList()));
         }
     }
@@ -47,22 +42,20 @@ public class Problem05 extends AoCProblem<Long> {
     @Override
     protected Long partOne() throws Exception {
         long result = 0;
-        for (List<Long> update : updates) {
+        for (List<String> update : updates) {
             if (isCorrect(update)) {
-                long middle = update.get(update.size() / 2);
-                result += middle;
+                result += parseLong(update.get(update.size() / 2));
             }
         }
         return result;
     }
 
-    private boolean isCorrect(List<Long> update) {
+    private boolean isCorrect(List<String> update) {
         for (int i = update.size() - 1; i > 0; i--) {
-            long n = update.get(i);
+            String n = update.get(i);
             for (int j = 0; j < i; j++) {
-                long prev = update.get(j);
-                Set<Long> set = orderMap.get(n);
-                if (set != null && set.contains(prev)) {
+                String prev = update.get(j);
+                if (orderSet.contains(n + "|" + prev)) {
                     return false;
                 }
             }
@@ -78,26 +71,24 @@ public class Problem05 extends AoCProblem<Long> {
     @Override
     protected Long partTwo() throws Exception {
         long result = 0;
-        for (List<Long> update : updates) {
+        for (List<String> update : updates) {
             if (!isCorrect(update)) {
-                List<Long> fixed = fixOrder(update);
-                long middle = fixed.get(fixed.size() / 2);
-                result += middle;
+                List<String> fixed = fixOrder(update);
+                result += parseLong(fixed.get(fixed.size() / 2));
             }
         }
         return result;
     }
 
-    private List<Long> fixOrder(List<Long> update) {
-        List<Long> fixed = new ArrayList<>();
+    private List<String> fixOrder(List<String> update) {
+        List<String> fixed = new ArrayList<>();
         fixed.add(update.get(0));
         next:
         for (int i = 1; i < update.size(); i++) {
-            long n = update.get(i);
+            String n = update.get(i);
             for (int j = 0; j < i; j++) {
-                long prev = fixed.get(j);
-                Set<Long> set = orderMap.get(n);
-                if (set != null && set.contains(prev)) {
+                String prev = fixed.get(j);
+                if (orderSet.contains(n + "|" + prev)) {
                     fixed.add(j, n);
                     continue next;
                 }
