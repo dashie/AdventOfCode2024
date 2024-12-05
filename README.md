@@ -8,7 +8,7 @@ https://adventofcode.com/2024
 - [x] Day 2: Red-Nosed Reports
 - [x] Day 3: Mull It Over
 - [x] Day 4: Ceres Search
-- [ ] Day 5
+- [x] Day 5: Print Queue
 - [ ] Day 6
 - [ ] Day 7
 - [ ] Day 8
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl "https://adventofcode.com/2024/day/5/input" \
+curl -s "https://adventofcode.com/2024/day/6/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem05.txt
+  > src/main/resources/adventofcode/y2024/Problem06.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
