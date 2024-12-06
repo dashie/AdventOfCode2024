@@ -63,11 +63,11 @@ public class AoCPoint {
         return new AoCVector(x - x1, y - y1, z - 0);
     }
 
-    public AoCPoint traslate(AoCVector v) {
+    public AoCPoint translate(AoCVector v) {
         return new AoCPoint(x + v.x, y + v.y);
     }
 
-    public AoCPoint traslate(int dx, int dy) {
+    public AoCPoint translate(int dx, int dy) {
         return new AoCPoint(x + dx, y + dy);
     }
 

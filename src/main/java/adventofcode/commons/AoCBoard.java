@@ -53,69 +53,48 @@ public class AoCBoard<T> {
             && p.y >= 0 && p.y < M;
     }
 
+    public T get(int x, int y, T defaultValue) {
+        try {
+            return buffer[y][x];
+        } catch (IndexOutOfBoundsException ex) {
+            return defaultValue;
+        }
+    }
+
+    public T get(AoCPoint p, T defaultValue) {
+        return get(p.x, p.y, defaultValue);
+    }
+
     public T get(AoCPoint p) {
-        return get(p.x, p.y);
+        return get(p.x, p.y, null);
     }
 
-    public T get(int x, int y) {
-        return buffer[y][x];
+    public T get(AoCPoint p, int xOffset, int yOffset, T defaultValue) {
+        return get(p.x + xOffset, p.y + yOffset, defaultValue);
     }
 
-    public T getWithDefault(int x, int y, T defaultValue) {
-        T v = get(x, y);
-        return v != null ? v : defaultValue;
+    public T get(AoCPoint p, int xOffset, int yOffset) {
+        return get(p, xOffset, yOffset, null);
     }
 
-    public T getSafe(AoCPoint p) {
-        try {
-            return get(p.x, p.y);
-        } catch (IndexOutOfBoundsException ex) {
-            return null;
-        }
-    }
-
-    public T getSafe(AoCPoint p, int xOffset, int yOffset) {
-        try {
-            return get(p.x + xOffset, p.y + yOffset);
-        } catch (IndexOutOfBoundsException ex) {
-            return null;
-        }
-    }
-
-    public T getSafeWithDeafult(AoCPoint p, T defaultValue) {
-        try {
-            return getWithDefault(p.x, p.y, defaultValue);
-        } catch (IndexOutOfBoundsException ex) {
-            return defaultValue;
-        }
-    }
-
-    public T getSafeWithDeafult(AoCPoint p, int xOffset, int yOffset, T defaultValue) {
-        try {
-            return getWithDefault(p.x + xOffset, p.y + yOffset, defaultValue);
-        } catch (IndexOutOfBoundsException ex) {
-            return defaultValue;
-        }
-    }
-
-    public T getSafeWithDeafult(AoCPoint p, AoCVector v, T defaultValue) {
-        try {
-            return getWithDefault(p.x + v.x, p.y + v.y, defaultValue);
-        } catch (IndexOutOfBoundsException ex) {
-            return defaultValue;
-        }
+    public T get(AoCPoint p, AoCVector v, T defaultValue) {
+        return get(p, v.x, v.y, defaultValue);
     }
 
     public T getOrBlank(AoCPoint p) {
-        return getSafeWithDeafult(p, (T) (Character) ' ');
+        return get(p, (T) (Character) ' ');
     }
 
     public T getOrBlank(AoCPoint p, int xOffset, int yOffset) {
-        return getSafeWithDeafult(p, xOffset, yOffset, (T) (Character) ' ');
+        return get(p, xOffset, yOffset, (T) (Character) ' ');
     }
 
-    public boolean checkSafe(AoCPoint p, T value) {
-        T v = getSafe(p);
+    public T getOrBlank(AoCPoint p, AoCVector v) {
+        return get(p, v.x, v.y, (T) (Character) ' ');
+    }
+
+    public boolean check(AoCPoint p, T value) {
+        T v = get(p, null);
         return v != null && v.equals(value);
     }
 

@@ -42,9 +42,9 @@ public class Problem04 extends AoCProblem<Long> {
     }
 
     private int searchXmas(AoCPoint p, AoCVector v) {
-        if (board.getOrBlank(p.traslate(v)) != 'M') return 0;
-        if (board.getOrBlank(p.traslate(v.mul(2))) != 'A') return 0;
-        if (board.getOrBlank(p.traslate(v.mul(3))) != 'S') return 0;
+        if (board.getOrBlank(p, v) != 'M') return 0;
+        if (board.getOrBlank(p, v.mul(2)) != 'A') return 0;
+        if (board.getOrBlank(p, v.mul(3)) != 'S') return 0;
         return 1;
     }
 

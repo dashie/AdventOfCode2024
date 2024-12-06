@@ -31,22 +31,20 @@ public class Problem06 extends AoCProblem<Long> {
     protected Long partOne() throws Exception {
         AoCVector d0 = AoCVector.SOUTH;
         AoCPoint p0 = board.searchFor('^');
-        return countCells(p0, d0);
+        return (long) countCells(p0, d0);
     }
 
-    private long countCells(AoCPoint p, AoCVector d) {
+    private int countCells(AoCPoint p, AoCVector d) {
         visited.add(p.toString());
         for (; ; ) {
-            while (board.getSafeWithDeafult(p, d, '#') != '#') {
-                p = p.traslate(d);
+            while (board.get(p, d, '#') != '#') { // go straight until the first obstacle
+                p = p.translate(d);
                 visited.add(p.toString());
             }
-            if (board.getSafe(p.traslate(d)) == null) {
-                break;
-            }
+            if (board.get(p.translate(d)) == null) // if out of board (null) then exit
+                return visited.size();
             d = d.rotate90L();
         }
-        return (long) visited.size();
     }
 
     /**
@@ -58,9 +56,9 @@ public class Problem06 extends AoCProblem<Long> {
         final AoCVector d0 = AoCVector.SOUTH;
         final AoCPoint p0 = board.searchFor('^');
         long loopsCount = board.forEach((p, c) -> {
-            if (c == '#' || c == '^') return 0;
-            if (!visited.contains(p.toString())) return 0;
-            board.set(p, '#');
+            if (c == '#' || c == '^') return 0; // if the position is already an obstacle or is the starting pos, return
+            if (!visited.contains(p.toString())) return 0; // if the position is not on the default guard path, return
+            board.set(p, '#'); // place new obstacle and remove it then
             try {
                 return findLoops(p0, d0) ? 1 : 0;
             } finally {
@@ -74,17 +72,15 @@ public class Problem06 extends AoCProblem<Long> {
         Set<String> directions = new HashSet<>(); // visit cells with directions
         directions.add(p + "-" + d);
         for (; ; ) {
-            while (board.getSafeWithDeafult(p, d, '#') != '#') {
-                p = p.traslate(d);
-                directions.add(p + "-" + d);
+            while (board.get(p, d, '#') != '#') { // go straight until the first obstacle
+                p = p.translate(d);
+                if (!directions.add(p + "-" + d)) // add & check direction on the same position
+                    return true; // if the position has been already visited with the same direction we have a loop
             }
-            if (board.getSafe(p.traslate(d)) == null)
-                break;
+            if (board.get(p.translate(d)) == null) // if out of board (null) then exit
+                return false;
             d = d.rotate90L();
-            if (directions.contains(p.traslate(d) + "-" + d))
-                return true;
         }
-        return false;
     }
 
 }
