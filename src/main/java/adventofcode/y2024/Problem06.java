@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.Collections.emptySet;
+
 /**
  * Day 6: Guard Gallivant
  * https://adventofcode.com/2024/day/6
@@ -59,10 +61,9 @@ public class Problem06 extends AoCProblem<Long> {
         return p;
     }
 
-    private Character updateVisited(AoCPoint p, AoCVector d) {
-        visited.compute(p.toString(), (k, v) -> v == null ? new HashSet<>() : v)
+    private void updateVisited(AoCPoint p, AoCVector d) {
+        visited.computeIfAbsent(p.toString(), (k) -> new HashSet<>())
                .add(d.toString());
-        return 'X';
     }
 
     /**
@@ -95,8 +96,7 @@ public class Problem06 extends AoCProblem<Long> {
             }
             d = d.rotate90L();
             AoCPoint p1 = p.traslateNew(d);
-            Set<String> visitedDirs = visited.get(p1.toString());
-            if (visitedDirs != null && visitedDirs.contains(d.toString()))
+            if (visited.getOrDefault(p1.toString(), emptySet()).contains(d.toString()))
                 return true;
         }
         return false;
