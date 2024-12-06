@@ -98,6 +98,14 @@ public class AoCBoard<T> {
         }
     }
 
+    public T getSafeWithDeafult(AoCPoint p, AoCVector v, T defaultValue) {
+        try {
+            return getWithDefault(p.x + v.x, p.y + v.y, defaultValue);
+        } catch (IndexOutOfBoundsException ex) {
+            return defaultValue;
+        }
+    }
+
     public T getOrBlank(AoCPoint p) {
         return getSafeWithDeafult(p, (T) (Character) ' ');
     }

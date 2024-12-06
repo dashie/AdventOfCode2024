@@ -28,33 +28,6 @@ public class AoCVector {
         this.z = z;
     }
 
-    public int manhattam() {
-        return Math.abs(x) + Math.abs(y);
-    }
-
-    public AoCVector absolute() {
-        return new AoCVector(Math.abs(x), Math.abs(y), Math.abs(z));
-    }
-
-    public AoCVector rotate90R() {
-        return new AoCVector(y, -x, z);
-    }
-
-    public AoCVector rotate180() {
-        return new AoCVector(-x, -y, z);
-    }
-
-    public AoCVector rotate90L() {
-        return new AoCVector(-y, x, z);
-    }
-
-    public AoCVector signs() {
-        return new AoCVector(
-            x > 0 ? 1 : x < 0 ? -1 : 0,
-            y > 0 ? 1 : y < 0 ? -1 : 0,
-            z > 0 ? 1 : z < 0 ? -1 : 0);
-    }
-
     public boolean equals(int x, int y) {
         return this.x == x && this.y == y;
     }
@@ -83,6 +56,37 @@ public class AoCVector {
 
     public static AoCVector valueOf(String x, String y, String z) {
         return new AoCVector(parseInt(x), parseInt(y), parseInt(z));
+    }
+
+    public int manhattam() {
+        return Math.abs(x) + Math.abs(y);
+    }
+
+    public AoCVector absolute() {
+        return new AoCVector(Math.abs(x), Math.abs(y), Math.abs(z));
+    }
+
+    public AoCVector rotate90R() {
+        return new AoCVector(y, -x, z);
+    }
+
+    public AoCVector rotate180() {
+        return new AoCVector(-x, -y, z);
+    }
+
+    public AoCVector rotate90L() {
+        return new AoCVector(-y, x, z);
+    }
+
+    public AoCVector mul(int n) {
+        return new AoCVector(x * n, y * n, z * n);
+    }
+
+    public AoCVector signs() {
+        return new AoCVector(
+            x > 0 ? 1 : x < 0 ? -1 : 0,
+            y > 0 ? 1 : y < 0 ? -1 : 0,
+            z > 0 ? 1 : z < 0 ? -1 : 0);
     }
 
     public static AoCVector[] newArray(int size, int x, int y, int z) {

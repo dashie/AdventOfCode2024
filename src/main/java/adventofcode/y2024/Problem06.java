@@ -2,12 +2,8 @@ package adventofcode.y2024;
 
 import adventofcode.commons.*;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import static java.util.Collections.emptySet;
 
 /**
  * Day 6: Guard Gallivant
@@ -20,7 +16,7 @@ public class Problem06 extends AoCProblem<Long> {
     }
 
     private AoCBoard<Character> board;
-    private Map<String, Set<String>> visited = new HashMap<>(); // visit flag with directions
+    private Set<String> visited = new HashSet<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -33,37 +29,24 @@ public class Problem06 extends AoCProblem<Long> {
      */
     @Override
     protected Long partOne() throws Exception {
-        AoCVector d = AoCVector.SOUTH;
-        AoCPoint p = board.searchFor('^');
-        return countCells(p, d);
+        AoCVector d0 = AoCVector.SOUTH;
+        AoCPoint p0 = board.searchFor('^');
+        return countCells(p0, d0);
     }
 
     private long countCells(AoCPoint p, AoCVector d) {
-        visited.clear();
-        updateVisited(p, d);
+        visited.add(p.toString());
         for (; ; ) {
-            p = moveStraight(p, d);
-            if (board.getSafe(p.traslateNew(d)) == null) {
+            while (board.getSafeWithDeafult(p, d, '#') != '#') {
+                p = p.traslate(d);
+                visited.add(p.toString());
+            }
+            if (board.getSafe(p.traslate(d)) == null) {
                 break;
             }
             d = d.rotate90L();
         }
         return (long) visited.size();
-    }
-
-    private AoCPoint moveStraight(AoCPoint p, AoCVector d) {
-        AoCPoint p1 = p.traslateNew(d);
-        while (board.getSafe(p1) != null && board.getSafe(p1) != '#') {
-            p = p1;
-            updateVisited(p, d);
-            p1 = p.traslateNew(d);
-        }
-        return p;
-    }
-
-    private void updateVisited(AoCPoint p, AoCVector d) {
-        visited.computeIfAbsent(p.toString(), (k) -> new HashSet<>())
-               .add(d.toString());
     }
 
     /**
@@ -76,6 +59,7 @@ public class Problem06 extends AoCProblem<Long> {
         final AoCPoint p0 = board.searchFor('^');
         long loopsCount = board.forEach((p, c) -> {
             if (c == '#' || c == '^') return 0;
+            if (!visited.contains(p.toString())) return 0;
             board.set(p, '#');
             try {
                 return findLoops(p0, d0) ? 1 : 0;
@@ -87,16 +71,17 @@ public class Problem06 extends AoCProblem<Long> {
     }
 
     private boolean findLoops(AoCPoint p, AoCVector d) {
-        visited.clear();
-        updateVisited(p, d);
+        Set<String> directions = new HashSet<>(); // visit cells with directions
+        directions.add(p + "-" + d);
         for (; ; ) {
-            p = moveStraight(p, d);
-            if (board.getSafe(p.traslateNew(d)) == null) {
-                break;
+            while (board.getSafeWithDeafult(p, d, '#') != '#') {
+                p = p.traslate(d);
+                directions.add(p + "-" + d);
             }
+            if (board.getSafe(p.traslate(d)) == null)
+                break;
             d = d.rotate90L();
-            AoCPoint p1 = p.traslateNew(d);
-            if (visited.getOrDefault(p1.toString(), emptySet()).contains(d.toString()))
+            if (directions.contains(p.traslate(d) + "-" + d))
                 return true;
         }
         return false;
