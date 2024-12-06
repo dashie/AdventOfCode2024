@@ -191,11 +191,13 @@ public class AoCBoard<T> {
      */
     public class Cell {
 
+        public final AoCPoint p;
         public final int n;
         public final int m;
         public final T v;
 
         public Cell(int n, int m, T v) {
+            this.p = new AoCPoint(n, m);
             this.n = n;
             this.m = m;
             this.v = v;

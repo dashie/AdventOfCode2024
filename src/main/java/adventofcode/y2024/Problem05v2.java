@@ -3,14 +3,16 @@ package adventofcode.y2024;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.lang.Long.parseLong;
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 /**
  * Day 5: Print Queue
- * https://adventofcode.com/2024/day/4
+ * https://adventofcode.com/2024/day/5
  */
 public class Problem05v2 extends AoCProblem<Long> {
 
@@ -23,14 +25,12 @@ public class Problem05v2 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        for (String line : input) {
+        for (String line : input.iterateLines()) {
             if (line.isEmpty()) break;
             orderSet.add(line);
         }
-        for (String line : input) {
-            updates.add(Arrays
-                .stream(line.split(","))
-                .collect(toUnmodifiableList()));
+        for (List<String> list : input.iterateAndSplit(",")) {
+            updates.add(list);
         }
     }
 

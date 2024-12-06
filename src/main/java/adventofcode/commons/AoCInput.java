@@ -1,14 +1,17 @@
 package adventofcode.commons;
 
 import java.io.BufferedReader;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  */
-public class AoCInput implements Iterable<String>, AutoCloseable {
+public class AoCInput {
 
     private final BufferedReader reader;
 
@@ -50,13 +53,48 @@ public class AoCInput implements Iterable<String>, AutoCloseable {
         return reader;
     }
 
-    @Override
-    public void close() throws Exception {
-        reader.close();
+    public Iterable<String> iterateLines() {
+        return () -> lines().iterator();
     }
 
-    @Override
-    public Iterator<String> iterator() {
-        return lines().iterator();
+    public Iterable<Integer> iterateInt() {
+        return () -> lines()
+            .map(Integer::parseInt)
+            .iterator();
+    }
+
+    public Iterable<Long> iterateLong() {
+        return () -> lines()
+            .map(Long::parseLong)
+            .iterator();
+    }
+
+    public Iterable<List<String>> iterateAndSplit(String splitter) {
+        return () ->
+            lines()
+                .map(str -> Arrays
+                    .stream(str.split(splitter))
+                    .collect(toList()))
+                .iterator();
+    }
+
+    public Iterable<List<Integer>> iterateAndSplitInt(String splitter) {
+        return () ->
+            lines()
+                .map(str -> Arrays
+                    .stream(str.split(splitter))
+                    .map(Integer::parseInt)
+                    .collect(toList()))
+                .iterator();
+    }
+
+    public Iterable<List<Long>> iterateAndSplitLong(String splitter) {
+        return () ->
+            lines()
+                .map(str -> Arrays
+                    .stream(str.split(splitter))
+                    .map(Long::parseLong)
+                    .collect(toList()))
+                .iterator();
     }
 }
