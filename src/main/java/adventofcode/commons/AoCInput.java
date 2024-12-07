@@ -45,6 +45,26 @@ public class AoCInput {
         return new AoCBoard<>(toCharMatrix());
     }
 
+    public List<String[]> toListOfStringSplits(String splitter) {
+        return lines()
+            .map(line -> Arrays
+                .stream(line.split(splitter))
+                .map(String::trim)
+                .toArray(String[]::new))
+            .collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<long[]> toListOfLongSplits(String splitter) {
+        return lines()
+            .map(line -> Arrays
+                .stream(line.split(splitter))
+                .map(String::trim)
+                .map(Long::parseLong)
+                .mapToLong(n -> n)
+                .toArray())
+            .collect(Collectors.toUnmodifiableList());
+    }
+
     public Stream<String> lines() {
         return reader.lines();
     }
