@@ -30,6 +30,10 @@ public class PatternEx {
         this.pattern = pattern;
     }
 
+    public String patternString() {
+        return pattern.pattern();
+    }
+
     public Stream<String> results(String str, int group) {
         return pattern
             .matcher(str)

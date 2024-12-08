@@ -1,14 +1,25 @@
 package adventofcode.commons;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
+/**
+ *
+ */
 public class MatcherExTest {
 
-    // TODO test compile
-    private static final PatternEx PATTERN = PatternEx.compile("^(\\w{3}) ([ab]|(?:[+-]\\d+))(?:, ([+-]\\d+|t|f|0|false))?$", Pattern.CASE_INSENSITIVE);
+    private static PatternEx PATTERN;
+
+    @BeforeAll
+    public static void testCompile() {
+        PATTERN = PatternEx.compile(
+            "^(\\w{3}) ([ab]|(?:[+-]\\d+))(?:, ([+-]\\d+|1|t|true|f|0|false))?$",
+            Pattern.CASE_INSENSITIVE);
+        System.out.printf("compile pattern: %s%n", PATTERN.patternString());
+    }
 
     @Test
     public void testError() {
@@ -50,11 +61,28 @@ public class MatcherExTest {
         Assertions.assertEquals("a", m.get(2));
         Assertions.assertEquals(null, m.get(3));
 
+        m = PATTERN.matches("jmp b");
+        Assertions.assertEquals(4, m.count());
+        Assertions.assertEquals("jmp", m.get(1));
+        Assertions.assertEquals("b", m.get(2));
+        Assertions.assertEquals(null, m.get(3));
+    }
+
+    @Test
+    public void test3Params() {
+        MatcherEx m;
+
         m = PATTERN.matches("tpl b, +6");
         Assertions.assertEquals(4, m.count());
         Assertions.assertEquals("tpl", m.get(1));
         Assertions.assertEquals("b", m.get(2));
         Assertions.assertEquals(6, m.getInt(3));
+
+        m = PATTERN.matches("tpl b, -236");
+        Assertions.assertEquals(4, m.count());
+        Assertions.assertEquals("tpl", m.get(1));
+        Assertions.assertEquals("b", m.get(2));
+        Assertions.assertEquals(-236, m.getInt(3));
 
         m = PATTERN.matches("jmp b, F");
         Assertions.assertEquals(4, m.count());

@@ -12,7 +12,7 @@ import static java.lang.Long.parseLong;
  */
 public class MatcherEx {
 
-    private static final Pattern BOOLEAN_PATTERN = Pattern.compile("0|f|false", Pattern.CASE_INSENSITIVE);
+    public static final Pattern BOOLEAN_PATTERN = Pattern.compile("0|f|false|n|no", Pattern.CASE_INSENSITIVE);
 
     private final String[] groups;
 
@@ -32,6 +32,17 @@ public class MatcherEx {
         String group = groups[i];
         if (group == null) return null;
         return parseInt(group);
+    }
+
+    public boolean isInt(int i) {
+        String group = groups[i];
+        if (group == null) return false;
+        try {
+            parseInt(group);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public Long getLong(int i) {

@@ -139,4 +139,9 @@ public class AoCInput {
                                   .collect(toList()))
                 .iterator();
     }
+
+    public Stream<MatcherEx> patter(PatternEx pattern) {
+        return lines()
+            .map(pattern::matches);
+    }
 }
