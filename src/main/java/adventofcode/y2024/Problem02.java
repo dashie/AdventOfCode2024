@@ -4,12 +4,10 @@ import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 /**
  * Day 2: Red-Nosed Reports
@@ -25,14 +23,7 @@ public class Problem02 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        input.lines()
-             .forEach(line -> {
-                 reports.add(Arrays
-                     .stream(line.split(" "))
-                     .map(Long::parseLong)
-                     .collect(toUnmodifiableList()));
-             });
-
+        reports = input.toListOfLongList(" ");
     }
 
     /**

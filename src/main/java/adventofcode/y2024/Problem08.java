@@ -23,7 +23,7 @@ public class Problem08 extends AoCProblem<Long> {
         board = input.toCharBoard();
         board.forEach((p, v) -> {
             if (v != '.') {
-                antennas.compute(v, (k, s) -> s == null ? new ArrayList<>() {} : s)
+                antennas.compute(v, AoCCollectionUtils::remapList)
                         .add(p);
             }
             return 0;
@@ -43,7 +43,7 @@ public class Problem08 extends AoCProblem<Long> {
                 antinodes.add(antinode);
             }
         });
-        // dumpBoard();
+        // dumpBoard(antinodes);
         return (long) antinodes.size();
     }
 
@@ -53,7 +53,7 @@ public class Problem08 extends AoCProblem<Long> {
             for (AoCPoint p0 : group) {
                 for (AoCPoint p1 : group) {
                     if (p0.equals(p1)) continue;
-                    AoCVector v = p1.distance(p0).rotate180();
+                    AoCVector v = p0.distance(p1);
                     fn.accept(p0, v);
                 }
             }
@@ -62,9 +62,8 @@ public class Problem08 extends AoCProblem<Long> {
 
     private void dumpBoard(Set<AoCPoint> antinodes) {
         board.dumpBoard("%s", (c) -> {
-            if (antinodes.contains(c.p)) {
+            if (antinodes.contains(c.p))
                 return '#';
-            }
             return c.v;
         });
     }
