@@ -12,7 +12,11 @@ import static java.util.stream.Collectors.toList;
 public class PatternEx {
 
     public final static PatternEx compile(String regex) {
-        return new PatternEx(Pattern.compile(regex));
+        return compile(regex, 0);
+    }
+
+    public final static PatternEx compile(String regex, int flags) {
+        return new PatternEx(Pattern.compile(regex, flags));
     }
 
     private static final Pattern INT_PATTERN = Pattern.compile("-?[0-9]+");
@@ -34,6 +38,7 @@ public class PatternEx {
     }
 
     public String[] findGroups(String str) {
+        if (str == null) return null;
         Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {
             String[] groups = new String[matcher.groupCount() + 1];
@@ -43,6 +48,12 @@ public class PatternEx {
             return groups;
         }
         return null;
+    }
+
+    public MatcherEx matches(String str) {
+        String[] groups = findGroups(str);
+        if (groups == null) return null;
+        return new MatcherEx(groups);
     }
 
     public int toInt(String str) {
@@ -90,4 +101,5 @@ public class PatternEx {
         }
         return null;
     }
+
 }
