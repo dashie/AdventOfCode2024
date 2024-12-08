@@ -3,6 +3,7 @@ package adventofcode.y2024;
 import adventofcode.commons.*;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 /**
  * Day 8: Resonant Collinearity
@@ -15,15 +16,15 @@ public class Problem08 extends AoCProblem<Long> {
     }
 
     AoCBoard<Character> board;
-    Map<Character, List<AoCPoint>> signals = new HashMap<>();
+    Map<Character, List<AoCPoint>> antennas = new HashMap<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
         board = input.toCharBoard();
         board.forEach((p, v) -> {
             if (v != '.') {
-                signals.compute(v, (k, s) -> s == null ? new ArrayList<>() {} : s)
-                       .add(p);
+                antennas.compute(v, (k, s) -> s == null ? new ArrayList<>() {} : s)
+                        .add(p);
             }
             return 0;
         });
@@ -36,23 +37,27 @@ public class Problem08 extends AoCProblem<Long> {
     @Override
     public Long partOne() throws Exception {
         Set<AoCPoint> antinodes = new HashSet<>();
-        for (List<AoCPoint> group : signals.values()) {
+        searchForAntinodes((p, v) -> {
+            AoCPoint antinode = p.translate(v);
+            if (board.getOrBlank(p, v) != ' ') {
+                antinodes.add(antinode);
+            }
+        });
+        // dumpBoard();
+        return (long) antinodes.size();
+    }
+
+    private void searchForAntinodes(BiConsumer<AoCPoint, AoCVector> fn) {
+        for (List<AoCPoint> group : antennas.values()) {
             if (group.size() < 2) continue;
-            for (int i = 0; i < group.size(); i++) {
-                for (int j = 0; j < group.size(); j++) {
-                    if (i == j) continue;
-                    AoCPoint p0 = group.get(i);
-                    AoCPoint p1 = group.get(j);
-                    AoCVector v = p1.distanceVector(p0);
-                    AoCPoint antinode = p0.translate(v.rotate180());
-                    if (board.getOrBlank(antinode) != ' ') {
-                        antinodes.add(antinode);
-                    }
+            for (AoCPoint p0 : group) {
+                for (AoCPoint p1 : group) {
+                    if (p0.equals(p1)) continue;
+                    AoCVector v = p1.distance(p0).rotate180();
+                    fn.accept(p0, v);
                 }
             }
         }
-        // dumpBoard();
-        return (long) antinodes.size();
     }
 
     private void dumpBoard(Set<AoCPoint> antinodes) {
@@ -75,24 +80,13 @@ public class Problem08 extends AoCProblem<Long> {
     @Override
     public Long partTwo() throws Exception {
         Set<AoCPoint> antinodes = new HashSet<>();
-        for (List<AoCPoint> group : signals.values()) {
-            if (group.size() < 2) continue;
-            for (int i = 0; i < group.size(); i++) {
-                for (int j = 0; j < group.size(); j++) {
-                    if (i == j) continue;
-                    AoCPoint p0 = group.get(i);
-                    AoCPoint p1 = group.get(j);
-                    antinodes.add(p0);
-                    antinodes.add(p1);
-                    AoCVector v = p1.distanceVector(p0).rotate180();
-                    AoCPoint antinode = p0.translate(v);
-                    while (board.getOrBlank(antinode) != ' ') {
-                        antinodes.add(antinode);
-                        antinode = antinode.translate(v);
-                    }
-                }
+        searchForAntinodes((p, v) -> {
+            antinodes.add(p);
+            while (board.getOrBlank(p, v) != ' ') {
+                p = p.translate(v);
+                antinodes.add(p);
             }
-        }
+        });
         // dumpBoard(antinodes);
         return (long) antinodes.size();
     }

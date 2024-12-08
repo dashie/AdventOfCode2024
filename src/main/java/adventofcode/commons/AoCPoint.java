@@ -55,11 +55,11 @@ public class AoCPoint {
             parseInt(z));
     }
 
-    public AoCVector distanceVector(AoCPoint p) {
+    public AoCVector distance(AoCPoint p) {
         return new AoCVector(x - p.x, y - p.y, z - p.z);
     }
 
-    public AoCVector distanceVector(int x1, int y1) {
+    public AoCVector distance(int x1, int y1) {
         return new AoCVector(x - x1, y - y1, z - 0);
     }
 
