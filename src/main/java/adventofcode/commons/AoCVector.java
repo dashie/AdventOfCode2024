@@ -1,5 +1,6 @@
 package adventofcode.commons;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AoCVector {
@@ -13,6 +14,9 @@ public class AoCVector {
     public static final AoCVector NW = new AoCVector(-1, 1);
     public static final AoCVector SE = new AoCVector(1, -1);
     public static final AoCVector SW = new AoCVector(-1, -1);
+
+    public static final List<AoCVector> DIRECTIONS = List.of(NORTH, EAST, SOUTH, WEST);
+    public static final List<AoCVector> DIRECTIONS_EXT = List.of(NORTH, NE, EAST, SE, SOUTH, SW, WEST, NW);
 
     public final int x;
     public final int y;

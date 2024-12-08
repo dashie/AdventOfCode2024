@@ -21,7 +21,7 @@ public class Problem07 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        paramsList = input.toListOfLongSplits(":\s|\s");
+        paramsList = input.toListOfLongArray(":\s|\s");
     }
 
     /**
@@ -47,7 +47,7 @@ public class Problem07 extends AoCProblem<Long> {
      * What is their total calibration result?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = 0;
         for (long[] params : paramsList) {
             if (isSolvable(params, List.of(ADD, MUL))) {
@@ -86,7 +86,7 @@ public class Problem07 extends AoCProblem<Long> {
      * What is their total calibration result?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         long result = 0;
         for (long[] params : paramsList) {
             if (isSolvable(params, List.of(ADD, MUL, CAT))) {

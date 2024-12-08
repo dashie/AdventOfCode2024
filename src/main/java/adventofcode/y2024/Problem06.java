@@ -28,7 +28,7 @@ public class Problem06 extends AoCProblem<Long> {
      * visit before leaving the mapped area?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         AoCVector d0 = AoCVector.SOUTH;
         AoCPoint p0 = board.searchFor('^');
         return (long) countCells(p0, d0);
@@ -52,7 +52,7 @@ public class Problem06 extends AoCProblem<Long> {
      * How many different positions could you choose for this obstruction?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         final AoCVector d0 = AoCVector.SOUTH;
         final AoCPoint p0 = board.searchFor('^');
         long loopsCount = board.forEach((p, c) -> {

@@ -39,7 +39,7 @@ public class Problem02 extends AoCProblem<Long> {
      * ...Analyze the unusual data from the engineers. How many reports are safe?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = 0;
         for (List<Long> report : reports) {
             if (isSafe(report)) {
@@ -71,7 +71,7 @@ public class Problem02 extends AoCProblem<Long> {
      * can remove a single level from unsafe reports. How many reports are now safe?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         long result = 0;
         next:
         for (List<Long> report : reports) {

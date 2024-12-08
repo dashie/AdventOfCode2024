@@ -3,9 +3,10 @@ package adventofcode.commons;
 import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Character.getNumericValue;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -19,58 +20,82 @@ public class AoCInput {
         this.reader = reader;
     }
 
-    @Override
-    public String toString() {
-        return reader
-            .lines()
-            .collect(Collectors.joining("\n"));
-    }
-
-    public String[] toArray() {
-        return reader
-            .lines()
-            .toArray(String[]::new);
-    }
-
-    public Character[][] toCharMatrix() {
-        return lines()
-            .map(str -> str
-                .chars()
-                .mapToObj(c -> (char) c)
-                .toArray(Character[]::new))
-            .toArray(Character[][]::new);
-    }
-
-    public AoCBoard<Character> toCharBoard() {
-        return new AoCBoard<>(toCharMatrix());
-    }
-
-    public List<String[]> toListOfStringSplits(String splitter) {
-        return lines()
-            .map(line -> Arrays
-                .stream(line.split(splitter))
-                .map(String::trim)
-                .toArray(String[]::new))
-            .collect(Collectors.toUnmodifiableList());
-    }
-
-    public List<long[]> toListOfLongSplits(String splitter) {
-        return lines()
-            .map(line -> Arrays
-                .stream(line.split(splitter))
-                .map(String::trim)
-                .map(Long::parseLong)
-                .mapToLong(n -> n)
-                .toArray())
-            .collect(Collectors.toUnmodifiableList());
-    }
-
     public Stream<String> lines() {
         return reader.lines();
     }
 
     public BufferedReader reader() {
         return reader;
+    }
+
+    @Override
+    public String toString() {
+        return lines()
+            .collect(joining("\n"));
+    }
+
+    public String[] toArray() {
+        return lines()
+            .toArray(String[]::new);
+    }
+
+    public Character[][] toCharMatrix() {
+        return lines()
+            .map(str -> str.chars()
+                           .mapToObj(c -> (char) c)
+                           .toArray(Character[]::new))
+            .toArray(Character[][]::new);
+    }
+
+    public Integer[][] toIntegerMatrix() {
+        return lines()
+            .map(str -> str.chars()
+                           .mapToObj(c -> getNumericValue(c))
+                           .toArray(Integer[]::new))
+            .toArray(Integer[][]::new);
+    }
+
+    public AoCBoard<Character> toCharBoard() {
+        return new AoCBoard<>(toCharMatrix());
+    }
+
+    public AoCBoard<Integer> toIntBoard() {
+        return new AoCBoard<>(toIntegerMatrix());
+    }
+
+    public List<String[]> toListOfStringArray(String splitRule) {
+        return lines()
+            .map(line -> Arrays.stream(line.split(splitRule))
+                               .map(String::trim)
+                               .toArray(String[]::new))
+            .collect(toList());
+    }
+
+    public List<List<String>> toListOfStringList(String splitRule) {
+        return lines()
+            .map(line -> Arrays.stream(line.split(splitRule))
+                               .map(String::trim)
+                               .toList())
+            .collect(toList());
+    }
+
+    public List<long[]> toListOfLongArray(String splitRule) {
+        return lines()
+            .map(line -> Arrays.stream(line.split(splitRule))
+                               .map(String::trim)
+                               .map(Long::parseLong)
+                               .mapToLong(n -> n)
+                               .toArray())
+            .collect(toList());
+    }
+
+    public List<List<Long>> toListOfLongList(String splitRule) {
+        return lines()
+            .map(line -> Arrays.stream(line.split(splitRule))
+                               .map(String::trim)
+                               .map(Long::parseLong)
+                               .toList())
+            .collect(toList());
     }
 
     public Iterable<String> iterateLines() {
@@ -89,32 +114,29 @@ public class AoCInput {
             .iterator();
     }
 
-    public Iterable<List<String>> iterateAndSplit(String splitter) {
+    public Iterable<List<String>> iterateAndSplit(String splitRule) {
         return () ->
             lines()
-                .map(str -> Arrays
-                    .stream(str.split(splitter))
-                    .collect(toList()))
+                .map(str -> Arrays.stream(str.split(splitRule))
+                                  .collect(toList()))
                 .iterator();
     }
 
-    public Iterable<List<Integer>> iterateAndSplitInt(String splitter) {
+    public Iterable<List<Integer>> iterateAndSplitInt(String splitRule) {
         return () ->
             lines()
-                .map(str -> Arrays
-                    .stream(str.split(splitter))
-                    .map(Integer::parseInt)
-                    .collect(toList()))
+                .map(str -> Arrays.stream(str.split(splitRule))
+                                  .map(Integer::parseInt)
+                                  .collect(toList()))
                 .iterator();
     }
 
-    public Iterable<List<Long>> iterateAndSplitLong(String splitter) {
+    public Iterable<List<Long>> iterateAndSplitLong(String splitRule) {
         return () ->
             lines()
-                .map(str -> Arrays
-                    .stream(str.split(splitter))
-                    .map(Long::parseLong)
-                    .collect(toList()))
+                .map(str -> Arrays.stream(str.split(splitRule))
+                                  .map(Long::parseLong)
+                                  .collect(toList()))
                 .iterator();
     }
 }

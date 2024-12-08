@@ -40,7 +40,7 @@ public class Problem05v2 extends AoCProblem<Long> {
      * correctly-ordered updates?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = 0;
         for (List<String> update : updates) {
             if (isCorrect(update)) {
@@ -69,7 +69,7 @@ public class Problem05v2 extends AoCProblem<Long> {
      * correctly ordering just those updates?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         long result = 0;
         for (List<String> update : updates) {
             if (!isCorrect(update)) {

@@ -11,7 +11,7 @@ https://adventofcode.com/2024
 - [x] Day 5: Print Queue
 - [x] Day 6: Guard Gallivant
 - [x] Day 7: Bridge Repair
-- [ ] Day 8
+- [x] Day 8: Resonant Collinearity
 - [ ] Day 9
 - [ ] Day 10
 - [ ] Day 11
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/8/input" \
+curl -s "https://adventofcode.com/2024/day/9/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem08.txt
+  > src/main/resources/adventofcode/y2024/Problem09.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`

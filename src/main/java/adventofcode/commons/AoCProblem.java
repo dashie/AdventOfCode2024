@@ -12,19 +12,10 @@ public class AoCProblem<T> {
     public AoCProblem() {
     }
 
-    public final void solve() throws Exception {
-        solve(false);
-    }
-
-    public void solve(boolean useSample) throws Exception {
-        String useSampleSuffix = useSample ? "-sample" : "";
-        this.solve(useSampleSuffix);
-    }
-
     /**
      *
      */
-    private void solve(String fileSuffix) throws Exception {
+    public final void loadInputData(String fileSuffix) throws Exception {
         if (fileSuffix == null) {
             fileSuffix = "";
         } else if (!fileSuffix.isEmpty() && !fileSuffix.startsWith("-")) {
@@ -42,6 +33,28 @@ public class AoCProblem<T> {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             processInput(new AoCInput(reader));
         }
+    }
+
+    /**
+     *
+     */
+    public final void solve() throws Exception {
+        solve(false);
+    }
+
+    /**
+     *
+     */
+    public void solve(boolean useSample) throws Exception {
+        String useSampleSuffix = useSample ? "-sample" : "";
+        this.solve(useSampleSuffix);
+    }
+
+    /**
+     *
+     */
+    private void solve(String fileSuffix) throws Exception {
+        loadInputData(fileSuffix);
 
         System.out.println(getClass().getName());
         T result1 = partOne();
@@ -53,15 +66,24 @@ public class AoCProblem<T> {
         System.out.println();
     }
 
+    /**
+     *
+     */
     public void processInput(AoCInput input) throws Exception {
 
     }
 
-    protected T partOne() throws Exception {
+    /**
+     *
+     */
+    public T partOne() throws Exception {
         return null;
     }
 
-    protected T partTwo() throws Exception {
+    /**
+     *
+     */
+    public T partTwo() throws Exception {
         return null;
     }
 }

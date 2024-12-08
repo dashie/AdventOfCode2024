@@ -16,13 +16,13 @@ public class Problem00 extends AoCProblem<Long> {
     }
 
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = 0;
         return result;
     }
 
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         long result = 0;
         return result;
     }

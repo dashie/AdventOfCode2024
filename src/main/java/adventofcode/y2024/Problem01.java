@@ -44,7 +44,7 @@ public class Problem01 extends AoCProblem<Long> {
      * What is the total distance between your lists?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = 0;
         for (int i = 0; i < list1.size(); i++) {
             result += abs(list1.get(i) - list2.get(i));
@@ -60,7 +60,7 @@ public class Problem01 extends AoCProblem<Long> {
      * What is their similarity score?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         HashMap<Long, Long> map = new HashMap<>();
         for (int i = 0; i < list2.size(); i++) {
             long n = list2.get(i);

@@ -23,7 +23,7 @@ public class Problem04 extends AoCProblem<Long> {
      * ...Take a look at the little Elf's word search. How many times does XMAS appear?
      */
     @Override
-    protected Long partOne() throws Exception {
+    public Long partOne() throws Exception {
         long result = board.forEach((p, c) -> {
             int n = 0;
             if (c == 'X') {
@@ -53,7 +53,7 @@ public class Problem04 extends AoCProblem<Long> {
      * How many times does an X-MAS appear?
      */
     @Override
-    protected Long partTwo() throws Exception {
+    public Long partTwo() throws Exception {
         long result = board.forEach((p, c) -> {
             return c == 'A' && checkMaxCross(p) ? 1 : 0;
         });
