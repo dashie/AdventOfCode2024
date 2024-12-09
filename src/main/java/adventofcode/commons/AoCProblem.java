@@ -47,7 +47,7 @@ public class AoCProblem<T> {
      */
     public void solve(boolean useSample) throws Exception {
         String useSampleSuffix = useSample ? "-sample" : "";
-        this.solve(useSampleSuffix);
+        solve(useSampleSuffix);
     }
 
     /**

@@ -79,7 +79,7 @@ public class Problem23 extends AoCProblem<Long> {
                     }
                     break;
                 default:
-                    break endOfProgram;
+                    throw new IllegalStateException("Unexpected value: " + instruction.id);
             }
             pc++;
         }
