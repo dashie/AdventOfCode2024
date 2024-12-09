@@ -12,7 +12,7 @@ https://adventofcode.com/2024
 - [x] Day 6: Guard Gallivant
 - [x] Day 7: Bridge Repair
 - [x] Day 8: Resonant Collinearity
-- [ ] Day 9
+- [x] Day 9: Disk Fragmenter
 - [ ] Day 10
 - [ ] Day 11
 - [ ] Day 12
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/9/input" \
+curl -s "https://adventofcode.com/2024/day/10/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem09.txt
+  > src/main/resources/adventofcode/y2024/Problem10.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
