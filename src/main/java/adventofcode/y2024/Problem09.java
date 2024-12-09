@@ -20,11 +20,7 @@ public class Problem09 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        data = input.reader().readLine()
-                    .chars()
-                    .map(Character::getNumericValue)
-                    .toArray();
-
+        data = input.toIntArrays()[0];
     }
 
     /**
@@ -59,14 +55,6 @@ public class Problem09 extends AoCProblem<Long> {
         return result;
     }
 
-    private static void dump(List<Long> expanded) {
-        for (long n : expanded) {
-            if (n == -1) System.out.print(".");
-            else System.out.print(n);
-        }
-        System.out.println();
-    }
-
     private List<Long> expand() {
         List<Long> result = new ArrayList<>();
         for (int i = 0; i < data.length; i++) {
@@ -79,6 +67,15 @@ public class Problem09 extends AoCProblem<Long> {
             }
         }
         return result;
+    }
+
+    // usefull only with short samples
+    private static void dump(List<Long> expanded) {
+        for (long n : expanded) {
+            if (n == -1) System.out.print(".");
+            else System.out.print(n);
+        }
+        System.out.println();
     }
 
     /**
@@ -108,7 +105,7 @@ public class Problem09 extends AoCProblem<Long> {
             int freeSize = 0;
             while (freeSize < fileSize) {
                 while (disk.get(++freeIndex) != -1) ;
-                if (freeIndex >= fileIndex) continue end;
+                if (freeIndex >= fileIndex) continue end; // eval next file
                 freeSize = 1;
                 int freeIndexEnd = freeIndex;
                 while (disk.get(freeIndexEnd + 1) == -1) {

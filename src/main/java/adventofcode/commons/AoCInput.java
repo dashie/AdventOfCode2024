@@ -39,6 +39,14 @@ public class AoCInput {
             .toArray(String[]::new);
     }
 
+    public int[][] toIntArrays() {
+        return lines()
+            .map(s -> s.chars()
+                       .map(Character::getNumericValue)
+                       .toArray())
+            .toArray(int[][]::new);
+    }
+
     public Character[][] toCharMatrix() {
         return lines()
             .map(str -> str.chars()

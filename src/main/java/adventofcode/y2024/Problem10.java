@@ -1,12 +1,12 @@
-package adventofcode.templates.y0000;
+package adventofcode.y2024;
 
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
-public class Problem00 extends AoCProblem<Long> {
+public class Problem10 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem00().solve(false);
+        new Problem10().solve(false);
     }
 
     @Override
