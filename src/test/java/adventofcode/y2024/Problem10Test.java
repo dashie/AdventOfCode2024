@@ -10,11 +10,11 @@ public class Problem10Test extends AbstractProblemTest {
 
     @Test
     public void testSample() throws Exception {
-        _testSample(0, 0);
+        _testSample(1, 5);
     }
 
     @Test
     public void testProblem() throws Exception {
-        _testProblem(0, 0);
+        _testProblem(624, 1483);
     }
 }

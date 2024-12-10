@@ -28,18 +28,18 @@ public class AoCInput {
         return reader;
     }
 
-    @Override
-    public String toString() {
-        return lines()
-            .collect(joining("\n"));
-    }
-
     public String[] toArray() {
         return lines()
             .toArray(String[]::new);
     }
 
-    public int[][] toIntArrays() {
+    // I cannot use toString or when I am in debug and the IDE try call toString then I consume all the reader
+    public String toSingleString() {
+        return lines()
+            .collect(joining("\n"));
+    }
+
+    public int[][] toIntMatrix() {
         return lines()
             .map(s -> s.chars()
                        .map(Character::getNumericValue)
@@ -108,6 +108,12 @@ public class AoCInput {
 
     public Iterable<String> iterateLines() {
         return () -> lines().iterator();
+    }
+
+    public Iterable<LineEx> iterateLineExs() {
+        return () -> lines()
+            .map(LineEx::new)
+            .iterator();
     }
 
     public Iterable<Integer> iterateInt() {

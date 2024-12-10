@@ -20,7 +20,7 @@ public class Problem09 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        data = input.toIntArrays()[0];
+        data = input.toIntMatrix()[0];
     }
 
     /**
