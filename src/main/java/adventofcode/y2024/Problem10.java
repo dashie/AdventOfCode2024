@@ -31,12 +31,12 @@ public class Problem10 extends AoCProblem<Long> {
     @Override
     public Long partOne() throws Exception {
         return (long) board.forEach((p, v) ->
-            (v == 0) ? countTrailheads(p, false) : 0
+            (v == 0) ? countTrails(p, false) : 0
         );
     }
 
-    private int countTrailheads(AoCPoint p0, boolean distinctPath) {
-        int trailheads = 0;
+    private int countTrails(AoCPoint p0, boolean distinctPath) {
+        int trails = 0;
         Set<AoCPoint> visited = new HashSet<>();
         Deque<AoCPoint> stack = new LinkedList<>();
         stack.push(p0);
@@ -45,7 +45,7 @@ public class Problem10 extends AoCProblem<Long> {
             visited.add(p);
             int level = board.get(p, -1);
             if (level == 9) {
-                trailheads++;
+                trails++;
             } else {
                 for (AoCVector dir : AoCVector.DIRECTIONS) {
                     AoCPoint next = p.translate(dir);
@@ -56,7 +56,7 @@ public class Problem10 extends AoCProblem<Long> {
                 }
             }
         }
-        return trailheads;
+        return trails;
     }
 
     /**
@@ -68,7 +68,7 @@ public class Problem10 extends AoCProblem<Long> {
     @Override
     public Long partTwo() throws Exception {
         return (long) board.forEach((p, v) ->
-            (v == 0) ? countTrailheads(p, true) : 0
+            (v == 0) ? countTrails(p, true) : 0
         );
     }
 }

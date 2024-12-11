@@ -14,7 +14,7 @@ https://adventofcode.com/2024
 - [x] Day 8: Resonant Collinearity
 - [x] Day 9: Disk Fragmenter
 - [x] Day 10: Hoof It
-- [ ] Day 11
+- [x] Day 11: Plutonian Pebbles
 - [ ] Day 12
 - [ ] Day 13
 - [ ] Day 14
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/11/input" \
+curl -s "https://adventofcode.com/2024/day/12/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem11.txt
+  > src/main/resources/adventofcode/y2024/Problem12.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
