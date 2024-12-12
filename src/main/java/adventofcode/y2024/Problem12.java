@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.function.Function;
 
+import static adventofcode.commons.AoCVector.*;
+
 /**
  * Day 12: Garden Groups
  * https://adventofcode.com/2024/day/12
@@ -65,28 +67,24 @@ public class Problem12 extends AoCProblem<Long> {
             if (visited.contains(p)) continue;
             visited.add(p);
             region.area += 1;
+            // eval perimeter
+            AoCBoard.Cell c = board.cell(p, ' ');
             for (AoCVector d : AoCVector.DIRECTIONS) {
-                if (board.get(p, d, '.') == id)
+                if (c.getChar(d) == id)
                     stack.add(p.translate(d));
                 else
                     region.perimeter += 1;
             }
-            if (board.get(p, AoCVector.NORTH, '.') != id && board.get(p, AoCVector.EAST, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.NORTH, '.') != id && board.get(p, AoCVector.WEST, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.SOUTH, '.') != id && board.get(p, AoCVector.EAST, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.SOUTH, '.') != id && board.get(p, AoCVector.WEST, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.NORTH, '.') == id
-                && board.get(p, AoCVector.EAST, '.') == id
-                && board.get(p, AoCVector.NE, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.NORTH, '.') == id
-                && board.get(p, AoCVector.WEST, '.') == id
-                && board.get(p, AoCVector.NW, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.SOUTH, '.') == id
-                && board.get(p, AoCVector.EAST, '.') == id
-                && board.get(p, AoCVector.SE, '.') != id) region.sides += 1;
-            if (board.get(p, AoCVector.SOUTH, '.') == id
-                && board.get(p, AoCVector.WEST, '.') == id
-                && board.get(p, AoCVector.SW, '.') != id) region.sides += 1;
+            // open angles (for sides evaluation)
+            if (c.getChar(NORTH) != id && c.getChar(EAST) != id) region.sides += 1;
+            if (c.getChar(NORTH) != id && c.getChar(WEST) != id) region.sides += 1;
+            if (c.getChar(SOUTH) != id && c.getChar(EAST) != id) region.sides += 1;
+            if (c.getChar(SOUTH) != id && c.getChar(WEST) != id) region.sides += 1;
+            // closed angles (for sides evaluation)
+            if (c.getChar(NORTH) == id && c.getChar(EAST) == id && c.getChar(NE) != id) region.sides += 1;
+            if (c.getChar(NORTH) == id && c.getChar(WEST) == id && c.getChar(NW) != id) region.sides += 1;
+            if (c.getChar(SOUTH) == id && c.getChar(EAST) == id && c.getChar(SE) != id) region.sides += 1;
+            if (c.getChar(SOUTH) == id && c.getChar(WEST) == id && c.getChar(SW) != id) region.sides += 1;
         }
         return region;
     }

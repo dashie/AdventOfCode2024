@@ -8,12 +8,12 @@ import java.util.function.Function;
 public class AoCBoard<T> {
 
     public T[][] buffer; // create a safe method to replace
-    public final int N;
-    public final int M;
+    public final int N; // rows
+    public final int M; // cols
 
     public AoCBoard(Class<T> clazz, int n, int m) {
-        N = n;
-        M = m;
+        N = n; // rows
+        M = m; // cols
         buffer = (T[][]) Array.newInstance(clazz, M, N);
     }
 
@@ -49,8 +49,23 @@ public class AoCBoard<T> {
     }
 
     public boolean isValidCell(AoCPoint p) {
-        return p.x >= 0 && p.x < N
-            && p.y >= 0 && p.y < M;
+        return p.x >= 0 && p.x < N && p.y >= 0 && p.y < M;
+    }
+
+    public Cell cell(AoCPoint p) {
+        if (isValidCell(p)) {
+            return new Cell(p.x, p.y, buffer[p.y][p.x]);
+        } else {
+            return null;
+        }
+    }
+
+    public Cell cell(AoCPoint p, T defaultValue) {
+        if (isValidCell(p)) {
+            return new Cell(p.x, p.y, buffer[p.y][p.x], defaultValue);
+        } else {
+            return new Cell(p.x, p.y, defaultValue, defaultValue);
+        }
     }
 
     public T get(int x, int y, T defaultValue) {
@@ -182,12 +197,26 @@ public class AoCBoard<T> {
         public final int n;
         public final int m;
         public final T v;
+        public final T defaultValue;
 
         public Cell(int n, int m, T v) {
+            this(n, m, v, null);
+        }
+
+        public Cell(int n, int m, T v, T defaultValue) {
             this.p = new AoCPoint(n, m);
             this.n = n;
             this.m = m;
             this.v = v;
+            this.defaultValue = defaultValue;
+        }
+
+        public char getChar(AoCVector dir) {
+            return (char) AoCBoard.this.get(p, dir, defaultValue);
+        }
+
+        public int getInt(AoCVector dir) {
+            return (int) AoCBoard.this.get(p, dir, defaultValue);
         }
     }
 }
