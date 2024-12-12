@@ -1,6 +1,7 @@
 package adventofcode.commons;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +29,7 @@ public class LineEx {
         return m.group(0);
     }
 
-    public int[] getIntArray(String regex, String splitRegex) {
+    public int[] getArrayOfInt(String regex, String splitRegex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
@@ -37,12 +38,21 @@ public class LineEx {
                      .toArray();
     }
 
-    public Integer[] getIntegerArray(String regex, String splitRegex) {
+    public Integer[] getArrayOfIntegers(String regex, String splitRegex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
         return Arrays.stream(m.group(0).split(splitRegex))
                      .map(Integer::parseInt)
                      .toArray(Integer[]::new);
+    }
+
+    public List<Integer> getListOfIntegers(String regex, String splitRegex) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(line);
+        if (!m.find()) throw new IllegalArgumentException();
+        return Arrays.stream(m.group(0).split(splitRegex))
+                     .map(Integer::parseInt)
+                     .toList();
     }
 }

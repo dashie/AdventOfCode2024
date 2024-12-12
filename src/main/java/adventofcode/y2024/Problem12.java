@@ -69,7 +69,7 @@ public class Problem12 extends AoCProblem<Long> {
             region.area += 1;
             // eval perimeter
             AoCBoard.Cell c = board.cell(p, ' ');
-            for (AoCVector d : AoCVector.DIRECTIONS) {
+            for (AoCVector d : DIRECTIONS) {
                 if (c.getChar(d) == id)
                     stack.add(p.translate(d));
                 else
