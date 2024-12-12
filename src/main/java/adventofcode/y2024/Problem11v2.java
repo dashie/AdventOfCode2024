@@ -39,17 +39,15 @@ public class Problem11v2 extends AoCProblem<Long> {
     private long count(int round) {
         Map<Long, Long> bag = toBag(data0);
         while (round > 0) {
-            Map<Long, Long> bagAfterBlink = new HashMap<>();
-            bag.entrySet().forEach(e -> {
-                long[] newStones = blink(e.getKey());
-                long n = e.getValue();
-                bagAfterBlink.compute(newStones[0], (k, v) -> v == null ? n : v + n);
-                if (newStones.length > 1) bagAfterBlink.compute(newStones[1], (k, v) -> v == null ? n : v + n);
+            Map<Long, Long> bagAfterBlink = new HashMap<>(bag.size() * 2);
+            bag.forEach((n, count) -> {
+                for (var newStone : blink(n)) {
+                    bagAfterBlink.compute(newStone, (k, v) -> v == null ? count : v + count);
+                }
             });
             bag = bagAfterBlink;
             round--;
         }
-
         return bag.values().stream().mapToLong(n -> n).sum();
     }
 
