@@ -3,20 +3,21 @@ package adventofcode.y2024;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 import adventofcode.commons.LineEx;
+import adventofcode.commons.MatcherEx;
 import org.apache.commons.math3.linear.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
 
-import static java.lang.Double.parseDouble;
 import static java.lang.Math.abs;
 import static java.lang.Math.rint;
 
 /**
  * Day 13: Claw Contraption
  * https://adventofcode.com/2024/day/13
+ *
+ * Solve using Apache Commons Math
  */
 public class Problem13v2 extends AoCProblem<Long> {
 
@@ -26,24 +27,24 @@ public class Problem13v2 extends AoCProblem<Long> {
 
     record Machine(double prizeX, double prizeY, double[][] buttons) {}
 
-    public List<Machine> data = new ArrayList<>();
+    public List<Machine> machines = new ArrayList<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
 
         Iterator<LineEx> it = input.iterateLineExs().iterator();
         while (it.hasNext()) {
-            Matcher m;
+            MatcherEx m;
             m = it.next().match("X([+-][0-9]+), Y([+-][0-9]+)");
-            double ax = parseDouble(m.group(1));
-            double ay = parseDouble(m.group(2));
+            double ax = m.getDouble(1);
+            double ay = m.getDouble(2);
             m = it.next().match("X([+-][0-9]+), Y([+-][0-9]+)");
-            double bx = parseDouble(m.group(1));
-            double by = parseDouble(m.group(2));
+            double bx = m.getDouble(1);
+            double by = m.getDouble(2);
             m = it.next().match("X=([0-9]+), Y=([0-9]+)");
-            double x = parseDouble(m.group(1));
-            double y = parseDouble(m.group(2));
-            data.add(new Machine(x, y, new double[][]{{ax, ay}, {bx, by}}));
+            double x = m.getDouble(1);
+            double y = m.getDouble(2);
+            machines.add(new Machine(x, y, new double[][]{{ax, ay}, {bx, by}}));
             if (it.hasNext()) it.next(); // skip empty line
         }
     }
@@ -55,8 +56,8 @@ public class Problem13v2 extends AoCProblem<Long> {
     @Override
     public Long partOne() throws Exception {
         long result = 0;
-        for (Machine r : data) {
-            result += solve(r, 0L);
+        for (Machine m : machines) {
+            result += solve(m, 0L);
         }
         return result;
     }
@@ -77,7 +78,7 @@ public class Problem13v2 extends AoCProblem<Long> {
         return a * 3 + b;
     }
 
-    public long toLong(double v) {
+    private long toLong(double v) {
         double vRounded = rint(v);
         if (abs(v - vRounded) < 0.0000000001) {
             // because I can't find a solver for integer solutions
@@ -96,8 +97,8 @@ public class Problem13v2 extends AoCProblem<Long> {
     @Override
     public Long partTwo() throws Exception {
         long result = 0L;
-        for (Machine r : data) {
-            result += solve(r, 10000000000000L);
+        for (Machine m : machines) {
+            result += solve(m, 10000000000000L);
         }
         return result;
     }

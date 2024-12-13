@@ -29,11 +29,15 @@ public class LineEx {
         return m.group(0);
     }
 
-    public Matcher match(String regex) {
+    public MatcherEx match(String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
-        return m;
+        String[] groups = new String[m.groupCount() + 1];
+        for (int i = 0; i < groups.length; ++i) {
+            groups[i] = m.group(i);
+        }
+        return new MatcherEx(groups);
     }
 
     public int[] getArrayOfInt(String regex, String splitRegex) {
