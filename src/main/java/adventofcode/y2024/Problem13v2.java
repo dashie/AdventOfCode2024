@@ -1,0 +1,106 @@
+package adventofcode.y2024;
+
+import adventofcode.commons.AoCInput;
+import adventofcode.commons.AoCProblem;
+import adventofcode.commons.LineEx;
+import org.apache.commons.math3.linear.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.Math.abs;
+import static java.lang.Math.rint;
+
+/**
+ * Day 13: Claw Contraption
+ * https://adventofcode.com/2024/day/13
+ */
+public class Problem13v2 extends AoCProblem<Long> {
+
+    public static void main(String[] args) throws Exception {
+        new Problem13v2().solve(false);
+    }
+
+    record Machine(double prizeX, double prizeY, double[][] buttons) {}
+
+    public List<Machine> data = new ArrayList<>();
+
+    @Override
+    public void processInput(AoCInput input) throws Exception {
+
+        Iterator<LineEx> it = input.iterateLineExs().iterator();
+        while (it.hasNext()) {
+            Matcher m;
+            m = it.next().match("X([+-][0-9]+), Y([+-][0-9]+)");
+            double ax = parseDouble(m.group(1));
+            double ay = parseDouble(m.group(2));
+            m = it.next().match("X([+-][0-9]+), Y([+-][0-9]+)");
+            double bx = parseDouble(m.group(1));
+            double by = parseDouble(m.group(2));
+            m = it.next().match("X=([0-9]+), Y=([0-9]+)");
+            double x = parseDouble(m.group(1));
+            double y = parseDouble(m.group(2));
+            data.add(new Machine(x, y, new double[][]{{ax, ay}, {bx, by}}));
+            if (it.hasNext()) it.next(); // skip empty line
+        }
+    }
+
+    /**
+     * ...Figure out how to win as many prizes as possible.
+     * What is the fewest tokens you would have to spend to win all possible prizes?
+     */
+    @Override
+    public Long partOne() throws Exception {
+        long result = 0;
+        for (Machine r : data) {
+            result += solve(r, 0L);
+        }
+        return result;
+    }
+
+    // FIXME it is still not working with big numbers
+    public long solve(Machine machine, long fix) {
+        RealMatrix coefficients = MatrixUtils.createRealMatrix(new double[][]{
+            {machine.buttons[0][0], machine.buttons[1][0]},
+            {machine.buttons[0][1], machine.buttons[1][1]}});
+        DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+        RealVector constants = MatrixUtils.createRealVector(new double[]{
+            machine.prizeX + fix,
+            machine.prizeY + fix});
+        RealVector solutions = solver.solve(constants);
+        long a = toLong(solutions.getEntry(0));
+        long b = toLong(solutions.getEntry(1));
+        if (a < 0 || b < 0) return 0;
+        return a * 3 + b;
+    }
+
+    public long toLong(double v) {
+        double vRounded = rint(v);
+        if (abs(v - vRounded) < 0.0000000001) {
+            // because I can't find a solver for integer solutions
+            // I need to approximate to integer solutions values with
+            // very near to integer values
+            return (long) vRounded;
+        } else {
+            return -1; // means error
+        }
+    }
+
+    /**
+     * ...Using the corrected prize coordinates, figure out how to win as many prizes as possible.
+     * What is the fewest tokens you would have to spend to win all possible prizes?
+     */
+    @Override
+    public Long partTwo() throws Exception {
+        long result = 0L;
+        for (Machine r : data) {
+            result += solve(r, 10000000000000L);
+        }
+        return result;
+    }
+}
+
+
