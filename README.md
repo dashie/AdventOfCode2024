@@ -16,7 +16,7 @@ https://adventofcode.com/2024
 - [x] Day 10: Hoof It
 - [x] Day 11: Plutonian Pebbles
 - [x] Day 12: Garden Groups
-- [ ] Day 13
+- [x] Day 13: Claw Contraption
 - [ ] Day 14
 - [ ] Day 15
 - [ ] Day 16
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/13/input" \
+curl -s "https://adventofcode.com/2024/day/14/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem13.txt
+  > src/main/resources/adventofcode/y2024/Problem14.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`

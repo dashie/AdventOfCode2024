@@ -29,6 +29,13 @@ public class LineEx {
         return m.group(0);
     }
 
+    public Matcher match(String regex) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(line);
+        if (!m.find()) throw new IllegalArgumentException();
+        return m;
+    }
+
     public int[] getArrayOfInt(String regex, String splitRegex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);

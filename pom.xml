@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>AdventOfCode</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2024.13.0</version>
 
     <properties>
         <maven.compiler.source>23</maven.compiler.source>
@@ -14,7 +14,39 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <plugins>
+            <!--            <plugin>-->
+            <!--                <groupId>org.codehaus.mojo</groupId>-->
+            <!--                <artifactId>aspectj-maven-plugin</artifactId>-->
+            <!--                <version>1.15.0</version>-->
+            <!--                <configuration>-->
+            <!--                    <complianceLevel>16</complianceLevel>-->
+            <!--                    <source>16</source>-->
+            <!--                    <target>16</target>-->
+            <!--                    <showWeaveInfo>true</showWeaveInfo>-->
+            <!--                    <verbose>true</verbose>-->
+            <!--                    <Xlint>ignore</Xlint>-->
+            <!--                    <encoding>UTF-8</encoding>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <goals>-->
+            <!--                            <goal>compile</goal>-->
+            <!--                            <goal>test-compile</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+        </plugins>
+    </build>
+
     <dependencies>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.22.1</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
