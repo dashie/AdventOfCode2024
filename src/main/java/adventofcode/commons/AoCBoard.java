@@ -1,6 +1,7 @@
 package adventofcode.commons;
 
 import java.lang.reflect.Array;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -174,6 +175,7 @@ public class AoCBoard<T> {
     }
 
     public void dumpBoard(String cellFormat, Function<Cell, T> transformer) {
+        System.out.println();
         System.out.println("---");
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
@@ -182,6 +184,28 @@ public class AoCBoard<T> {
                     v = transformer.apply(new Cell(n, m, v));
                 }
                 System.out.printf(cellFormat, v);
+            }
+            System.out.println();
+        }
+        System.out.println("---");
+    }
+
+    public static <T> void dumpBoard(String title, int N, int M, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+        System.out.println();
+        System.out.println("--- %s".formatted(title));
+        for (int m = 0; m < M; ++m) {
+            for (int n = 0; n < N; ++n) {
+                AoCPoint p = new AoCPoint(n, m);
+                T v = points.get(p);
+                String vs;
+                if (transformer != null) {
+                    vs = transformer.apply(p, v);
+                } else if (v != null) {
+                    vs = v.toString();
+                } else {
+                    vs = " ";
+                }
+                System.out.print(vs);
             }
             System.out.println();
         }

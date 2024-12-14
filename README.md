@@ -17,7 +17,7 @@ https://adventofcode.com/2024
 - [x] Day 11: Plutonian Pebbles
 - [x] Day 12: Garden Groups
 - [x] Day 13: Claw Contraption
-- [ ] Day 14
+- [x] Day 14: Restroom Redoubt
 - [ ] Day 15
 - [ ] Day 16
 - [ ] Day 17
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/14/input" \
+curl -s "https://adventofcode.com/2024/day/15/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem14.txt
+  > src/main/resources/adventofcode/y2024/Problem15.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`

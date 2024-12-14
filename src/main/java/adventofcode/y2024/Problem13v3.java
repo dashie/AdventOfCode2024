@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.lang.Math.*;
+
 /**
  * Day 13: Claw Contraption
  * https://adventofcode.com/2024/day/13
@@ -74,18 +76,22 @@ public class Problem13v3 extends AoCProblem<Long> {
         long bx = machine.buttons[1][0];
         long by = machine.buttons[1][1];
 
-        long inc = Math.max(1, fix / 100);
-        double lastDelta = Long.MAX_VALUE;
-        long staleGuard = 0;
-        boolean converging = false;
+        // start with increment of 1 or the 10% of prize
+        long ratio = (long) pow(10, floor(log10(prizeX / ax)));
+        long inc = max(1, ratio / 10);
+
+        // linear search
+        double lastDelta = Long.MAX_VALUE; // distance from target
+        long staleGuard = 0; // count the numbers of iteration where the distance from target does not change
+        boolean converging = false; // we are close to the target and we try to oscillate around it
         for (long a = 0; staleGuard < 100; a += inc, staleGuard++) {
-            double bX = (prizeX - a * ax) / (double) bx; // a•ax + b•bx = pX -> b = (pX - a•ax) / bx
-            double bY = (prizeY - a * ay) / (double) by; // a•ay + b•by = pY
+            double bX = (prizeX - a * ax) / (double) bx; // solve x : a•ax + b•bx = pX -> b = (pX - a•ax) / bx
+            double bY = (prizeY - a * ay) / (double) by; // solve y : a•ay + b•by = pY
             boolean checkX = ax * a + bx * (long) bY == prizeX; // check with bY as integer
             boolean checkY = ay * a + by * (long) bX == prizeY; // check with bX as integer
-            double delta = Math.abs(bX - bY);
+            double delta = abs(bX - bY);
             if (bX == bY && bX >= 0 && bY >= 0 && checkX && checkY) {
-                return a * 3 + (long) bX;
+                return a * 3 + (long) bX; // min cost to reach the target
             } else if (delta > lastDelta) {
                 if (converging) break;
                 if (inc == 1 || inc == -1) {

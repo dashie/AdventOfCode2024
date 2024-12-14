@@ -9,7 +9,13 @@ import java.io.InputStreamReader;
  */
 public class AoCProblem<T> {
 
+    private boolean isUsingSample = false;
+
     public AoCProblem() {
+    }
+
+    public boolean isUsingSample() {
+        return isUsingSample;
     }
 
     /**
@@ -46,6 +52,7 @@ public class AoCProblem<T> {
      *
      */
     public void solve(boolean useSample) throws Exception {
+        isUsingSample = useSample;
         String useSampleSuffix = useSample ? "-sample" : "";
         solve(useSampleSuffix);
     }
