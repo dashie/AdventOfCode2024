@@ -1,6 +1,7 @@
 package adventofcode.commons;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -53,6 +54,19 @@ public class AoCInput {
                            .mapToObj(c -> (char) c)
                            .toArray(Character[]::new))
             .toArray(Character[][]::new);
+    }
+
+    public Character[][] toCharMatrixEmptyLine() throws Exception {
+        List<String> boardLines = new ArrayList<>();
+        String line;
+        while (!(line = reader().readLine()).isEmpty()) {
+            boardLines.add(line);
+        }
+        return boardLines.stream()
+                         .map(str -> str.chars()
+                                        .mapToObj(c -> (char) c)
+                                        .toArray(Character[]::new))
+                         .toArray(Character[][]::new);
     }
 
     public Integer[][] toIntegerMatrix() {

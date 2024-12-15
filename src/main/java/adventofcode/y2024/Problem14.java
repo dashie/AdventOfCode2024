@@ -98,22 +98,34 @@ public class Problem14 extends AoCProblem<Long> {
      */
     @Override
     public Long partTwo() throws Exception {
-        for (int time = 1; time < 100000; ++time) {
+        int cycleLength = areaX * areaY;
+        double easterEggSpreadFactor = 1.0;
+        double easterEggTime = -1;
+        Map<AoCPoint, Integer> easterEggPoints = null;
+
+        for (int time = 1; time < cycleLength; ++time) {
             Map<AoCPoint, Integer> points = moveRobots(time);
-            if (evalSparseFactor(points) < 0.3) {
-                AoCBoard.dumpBoard("%s".formatted(time), areaX, areaY, points,
-                    (p, v) -> (v == null) ? " " : v.toString());
-                return (long) time;
+            // if there is a shape the spread factor should be low
+            double spreadFactor = evalSpreadFactor(points);
+            if (spreadFactor < easterEggSpreadFactor) {
+                easterEggSpreadFactor = spreadFactor;
+                easterEggTime = time;
+                easterEggPoints = points;
             }
         }
-        throw new IllegalStateException("Solution not found");
+
+        AoCBoard.dumpBoard("time=%s spread factor=%s".formatted(easterEggTime, easterEggSpreadFactor),
+            areaX, areaY, easterEggPoints,
+            (p, v) -> (v == null) ? " " : "*");
+        return (long) easterEggTime;
     }
 
-    public double evalSparseFactor(Map<AoCPoint, Integer> points) {
-        // every robots scores 4 if all adjacent cells are free
-        //              scores 1 if only one adjacent cells is filled
-        //              scores 0 if more then one adjacent cells is filled
-        double max = robots.size() * 4.0;
+    public double evalSpreadFactor(Map<AoCPoint, Integer> points) {
+        // every robots scores 16 if all adjacent cells are free
+        //              scores  4 if only one adjacent cells is filled
+        //              scores  2 if only two adjacents cells is filled
+        //              scores  0 if more then two adjacent cells is filled
+        double max = robots.size() * 16.0;
         int score = 0;
         for (Robot robot : robots) {
             int count = 0;
@@ -122,8 +134,9 @@ public class Problem14 extends AoCProblem<Long> {
                 if (points.containsKey(p)) count++;
             }
             switch (count) {
-                case 0 -> score += 4;
-                case 1 -> score += 1;
+                case 0 -> score += 16;
+                case 1 -> score += 2;
+                case 2 -> score += 1;
             }
         }
         return score / max;

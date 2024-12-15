@@ -101,6 +101,16 @@ public class AoCVector {
         return a;
     }
 
+    public static AoCVector charToDirection(int c) {
+        return switch (c) {
+            case '^' -> AoCVector.SOUTH;
+            case '>' -> AoCVector.EAST;
+            case 'v' -> AoCVector.NORTH;
+            case '<' -> AoCVector.WEST;
+            default -> throw new IllegalStateException();
+        };
+    }
+
     private static int parseInt(String s) {
         if (s == null
             || s.trim()

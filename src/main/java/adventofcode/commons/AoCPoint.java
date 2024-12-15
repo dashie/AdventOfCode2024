@@ -71,6 +71,22 @@ public class AoCPoint {
         return new AoCPoint(x + dx, y + dy);
     }
 
+    public AoCPoint up() {
+        return this.translate(AoCVector.NORTH);
+    }
+
+    public AoCPoint down() {
+        return this.translate(AoCVector.SOUTH);
+    }
+
+    public AoCPoint right() {
+        return this.translate(AoCVector.EAST);
+    }
+
+    public AoCPoint left() {
+        return this.translate(AoCVector.WEST);
+    }
+
     public AoCPoint module(int modX, int modY) {
         int x1 = x % modX;
         if (x1 < 0)

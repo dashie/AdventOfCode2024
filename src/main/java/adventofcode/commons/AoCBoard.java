@@ -21,12 +21,22 @@ public class AoCBoard<T> {
     public AoCBoard(T[][] data) {
         N = data[0].length;
         M = data.length;
-        buffer = data;
+        buffer = cloneBuffer(data); // create a clone to not to alter original data
     }
 
     @Override
     public AoCBoard<T> clone() throws CloneNotSupportedException {
-        return new AoCBoard<>(buffer.clone());
+        return new AoCBoard<>(cloneBuffer(buffer));
+    }
+
+    private T[][] cloneBuffer(T[][] data) {
+        T[][] clone = data.clone();
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] != null) {
+                clone[i] = data[i].clone();
+            }
+        }
+        return clone;
     }
 
     public void fill(T value) {
@@ -115,15 +125,15 @@ public class AoCBoard<T> {
     }
 
     public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
-        int count = 0;
+        int result = 0;
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
                 AoCPoint p = new AoCPoint(n, m);
                 T value = buffer[m][n];
-                count += fn.apply(p, value);
+                result += fn.apply(p, value);
             }
         }
-        return count;
+        return result;
     }
 
     public AoCPoint searchFor(T value) {
@@ -171,12 +181,20 @@ public class AoCBoard<T> {
     }
 
     public void dumpBoard(String cellFormat) {
-        dumpBoard(cellFormat, null);
+        dumpBoard("", cellFormat, null);
+    }
+
+    public void dumpBoard(String title, String cellFormat) {
+        dumpBoard(title, cellFormat, null);
     }
 
     public void dumpBoard(String cellFormat, Function<Cell, T> transformer) {
+        dumpBoard("", cellFormat, transformer);
+    }
+
+    public void dumpBoard(String title, String cellFormat, Function<Cell, T> transformer) {
         System.out.println();
-        System.out.println("---");
+        System.out.println("--- " + title);
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
                 T v = buffer[m][n];
