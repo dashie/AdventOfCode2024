@@ -22,7 +22,7 @@ public class Problem15 extends AoCProblem<Long> {
     @Override
     public void processInput(AoCInput input) throws Exception {
         boardData = input.toCharMatrixUntilEmptyLine();
-        movements = input.toSingleString().chars().filter(c -> c != '\n').toArray();
+        movements = input.toSingleString().split("\n\n")[1].chars().filter(c -> c != '\n').toArray();
     }
 
     /**

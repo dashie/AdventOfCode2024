@@ -32,13 +32,15 @@ public class AoCProblem<T> {
         String dataURL = String.format("%s%s.txt", clasName, fileSuffix);
         dataURL = dataURL.replaceAll("v\\d+([.-])", "$1");
 
+        AoCInput input;
         try (InputStream is = thisClass.getResourceAsStream(dataURL)) {
             if (is == null) {
                 throw new IllegalStateException(String.format("Missing input data: %s", dataURL));
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            processInput(new AoCInput(reader));
+            input = AoCInput.fromReader(reader);
         }
+        processInput(input);
     }
 
     /**

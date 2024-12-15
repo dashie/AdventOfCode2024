@@ -1,7 +1,9 @@
 package adventofcode.commons;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,18 +17,28 @@ import static java.util.stream.Collectors.toList;
  */
 public class AoCInput {
 
-    private final BufferedReader reader;
+    private final String inputText;
 
-    public AoCInput(BufferedReader reader) {
-        this.reader = reader;
+    private AoCInput(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public static AoCInput fromReader(Reader reader) throws IOException {
+        StringBuilder sb = new StringBuilder(65536);
+        char[] buffer = new char[65536];
+        int len = 0;
+        while ((len = reader.read(buffer)) != -1) {
+            sb.append(buffer, 0, len);
+        }
+        return new AoCInput(sb.toString());
     }
 
     public Stream<String> lines() {
-        return reader.lines();
+        return inputText.lines();
     }
 
-    public BufferedReader reader() {
-        return reader;
+    public BufferedReader newReader() {
+        return new BufferedReader(new StringReader(inputText));
     }
 
     public String[] toArray() {
@@ -57,16 +69,12 @@ public class AoCInput {
     }
 
     public Character[][] toCharMatrixUntilEmptyLine() throws Exception {
-        List<String> boardLines = new ArrayList<>();
-        String line;
-        while (!(line = reader().readLine()).isEmpty()) {
-            boardLines.add(line);
-        }
-        return boardLines.stream()
-                         .map(str -> str.chars()
-                                        .mapToObj(c -> (char) c)
-                                        .toArray(Character[]::new))
-                         .toArray(Character[][]::new);
+        return lines()
+            .takeWhile(line -> !line.isEmpty())
+            .map(str -> str.chars()
+                           .mapToObj(c -> (char) c)
+                           .toArray(Character[]::new))
+            .toArray(Character[][]::new);
     }
 
     public Integer[][] toIntegerMatrix() {

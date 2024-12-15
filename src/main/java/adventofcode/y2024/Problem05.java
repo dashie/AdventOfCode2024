@@ -3,6 +3,7 @@ package adventofcode.y2024;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
+import java.io.BufferedReader;
 import java.util.*;
 
 import static java.lang.Long.parseLong;
@@ -23,15 +24,16 @@ public class Problem05 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
+        BufferedReader reader = input.newReader();
         String line;
-        while (!(line = input.reader().readLine()).isEmpty()) {
+        while (!(line = reader.readLine()).isEmpty()) {
             String[] tokens = line.split("\\|");
             long n = parseLong(tokens[0]);
             long u = parseLong(tokens[1]);
             orderMap.compute(n, (k, v) -> v == null ? new HashSet<>() : v)
                     .add(u);
         }
-        while ((line = input.reader().readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             updates.add(Arrays
                 .stream(line.split(","))
                 .map(Long::parseLong)
