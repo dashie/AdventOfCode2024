@@ -121,21 +121,19 @@ public class Problem15 extends AoCProblem<Long> {
         Character c = board.get(p);
         if (c == '.') return true;
         if (c == '#') return false;
-        AoCPoint nextPoint = p.translate(d);
-        if (d.equals(AoCVector.EAST) || d.equals(AoCVector.WEST)) {
-            // left/right movement does not change
-            if (!checkMoveComplex(nextPoint, d, board)) return false;
+        AoCPoint next = p.translate(d);
+        if (d.isEast() || d.isWest()) {
+            // left/right movement does not change in the complex scenario
+            if (!checkMoveComplex(next, d, board)) return false;
         } else {
             if (c == '[') {
-                if (!checkMoveComplex(nextPoint, d, board)
-                    || !checkMoveComplex(nextPoint.right(), d, board))
+                if (!checkMoveComplex(next, d, board) || !checkMoveComplex(next.east(), d, board))
                     return false;
             } else if (c == ']') {
-                if (!checkMoveComplex(nextPoint, d, board)
-                    || !checkMoveComplex(nextPoint.left(), d, board))
+                if (!checkMoveComplex(next, d, board) || !checkMoveComplex(next.west(), d, board))
                     return false;
             } else if (c == '@') {
-                if (!checkMoveComplex(nextPoint, d, board)) return false;
+                if (!checkMoveComplex(next, d, board)) return false;
             }
         }
         return true;
@@ -145,29 +143,29 @@ public class Problem15 extends AoCProblem<Long> {
         Character c = board.get(p);
         if (c == '.') return;
         if (c == '#') return;
-        AoCPoint nextPoint = p.translate(d);
-        if (d.equals(AoCVector.EAST) || d.equals(AoCVector.WEST)) {
-            moveBlockComplex(nextPoint, d, board);
-            board.set(nextPoint, board.get(p));
+        AoCPoint next = p.translate(d);
+        if (d.isEast() || d.isWest()) {
+            moveBlockComplex(next, d, board);
+            board.set(next, board.get(p));
             board.set(p, '.');
         } else {
             if (c == '[') {
-                moveBlockComplex(nextPoint, d, board);
-                moveBlockComplex(nextPoint.right(), d, board);
-                board.set(nextPoint, '[');
-                board.set(nextPoint.right(), ']');
+                moveBlockComplex(next, d, board);
+                moveBlockComplex(next.east(), d, board);
+                board.set(next, '[');
+                board.set(next.east(), ']');
                 board.set(p, '.');
-                board.set(p.right(), '.');
+                board.set(p.east(), '.');
             } else if (c == ']') {
-                moveBlockComplex(nextPoint, d, board);
-                moveBlockComplex(nextPoint.left(), d, board);
-                board.set(nextPoint, ']');
-                board.set(nextPoint.left(), '[');
+                moveBlockComplex(next, d, board);
+                moveBlockComplex(next.west(), d, board);
+                board.set(next, ']');
+                board.set(next.west(), '[');
                 board.set(p, '.');
-                board.set(p.left(), '.');
+                board.set(p.west(), '.');
             } else if (c == '@') {
-                moveBlockComplex(nextPoint, d, board);
-                board.set(nextPoint, board.get(p));
+                moveBlockComplex(next, d, board);
+                board.set(next, board.get(p));
                 board.set(p, '.');
             }
         }

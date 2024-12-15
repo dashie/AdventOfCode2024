@@ -71,19 +71,19 @@ public class AoCPoint {
         return new AoCPoint(x + dx, y + dy);
     }
 
-    public AoCPoint up() {
+    public AoCPoint north() {
         return this.translate(AoCVector.NORTH);
     }
 
-    public AoCPoint down() {
+    public AoCPoint south() {
         return this.translate(AoCVector.SOUTH);
     }
 
-    public AoCPoint right() {
+    public AoCPoint east() {
         return this.translate(AoCVector.EAST);
     }
 
-    public AoCPoint left() {
+    public AoCPoint west() {
         return this.translate(AoCVector.WEST);
     }
 

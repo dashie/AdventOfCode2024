@@ -93,6 +93,22 @@ public class AoCVector {
             z > 0 ? 1 : z < 0 ? -1 : 0);
     }
 
+    public boolean isNorth() {
+        return this.equals(NORTH);
+    }
+
+    public boolean isSouth() {
+        return this.equals(SOUTH);
+    }
+
+    public boolean isEast() {
+        return this.equals(EAST);
+    }
+
+    public boolean isWest() {
+        return this.equals(WEST);
+    }
+
     public static AoCVector[] newArray(int size, int x, int y, int z) {
         AoCVector[] a = new AoCVector[size];
         for (int i = 0; i < a.length; ++i) {
