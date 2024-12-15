@@ -38,7 +38,7 @@ public class Problem15 extends AoCProblem<Long> {
         AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
             AoCVector d = charToMatrixDirection(movement);
-            if (moveBlockSimple(p, d, board)) p = p.translate(d);
+            if (pushSimple(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, 'O');
     }
@@ -48,12 +48,12 @@ public class Problem15 extends AoCProblem<Long> {
         return result;
     }
 
-    private boolean moveBlockSimple(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private boolean pushSimple(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
         Character c = board.get(p);
         if (c == '.') return true;
         if (c == '#') return false;
         AoCPoint nextPoint = p.translate(d);
-        if (!moveBlockSimple(nextPoint, d, board)) return false;
+        if (!pushSimple(nextPoint, d, board)) return false;
         board.set(nextPoint, board.get(p));
         board.set(p, '.');
         return true;
@@ -70,7 +70,7 @@ public class Problem15 extends AoCProblem<Long> {
         AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
             AoCVector d = charToMatrixDirection(movement);
-            if (checkAndMoveBlockComplex(p, d, board)) p = p.translate(d);
+            if (checkAndPushComplex(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, '[');
     }
@@ -107,63 +107,63 @@ public class Problem15 extends AoCProblem<Long> {
             .toArray(Character[][]::new);
     }
 
-    private boolean checkAndMoveBlockComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
-        if (checkMoveComplex(p, d, board)) {
-            moveBlockComplex(p, d, board);
+    private boolean checkAndPushComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+        if (checkComplex(p, d, board)) {
+            pushComplex(p, d, board);
             return true;
         }
         return false;
     }
 
-    private boolean checkMoveComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private boolean checkComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
         Character c = board.get(p);
         if (c == '.') return true;
         if (c == '#') return false;
         AoCPoint next = p.translate(d);
         if (d.isEast() || d.isWest()) {
             // left/right movement does not change in the complex scenario
-            if (!checkMoveComplex(next, d, board)) return false;
+            if (!checkComplex(next, d, board)) return false;
         } else {
             if (c == '[') {
-                if (!checkMoveComplex(next, d, board) || !checkMoveComplex(next.east(), d, board))
+                if (!checkComplex(next, d, board) || !checkComplex(next.east(), d, board))
                     return false;
             } else if (c == ']') {
-                if (!checkMoveComplex(next, d, board) || !checkMoveComplex(next.west(), d, board))
+                if (!checkComplex(next, d, board) || !checkComplex(next.west(), d, board))
                     return false;
             } else if (c == '@') {
-                if (!checkMoveComplex(next, d, board)) return false;
+                if (!checkComplex(next, d, board)) return false;
             }
         }
         return true;
     }
 
-    private void moveBlockComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private void pushComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
         Character c = board.get(p);
         if (c == '.') return;
         if (c == '#') return;
         AoCPoint next = p.translate(d);
         if (d.isEast() || d.isWest()) {
             // left/right movement does not change in the complex scenario
-            moveBlockComplex(next, d, board);
+            pushComplex(next, d, board);
             board.set(next, board.get(p));
             board.set(p, '.');
         } else {
             if (c == '[') {
-                moveBlockComplex(next, d, board);
-                moveBlockComplex(next.east(), d, board);
+                pushComplex(next, d, board);
+                pushComplex(next.east(), d, board);
                 board.set(next, '[');
                 board.set(next.east(), ']');
                 board.set(p, '.');
                 board.set(p.east(), '.');
             } else if (c == ']') {
-                moveBlockComplex(next, d, board);
-                moveBlockComplex(next.west(), d, board);
+                pushComplex(next, d, board);
+                pushComplex(next.west(), d, board);
                 board.set(next, ']');
                 board.set(next.west(), '[');
                 board.set(p, '.');
                 board.set(p.west(), '.');
             } else if (c == '@') {
-                moveBlockComplex(next, d, board);
+                pushComplex(next, d, board);
                 board.set(next, board.get(p));
                 board.set(p, '.');
             }
