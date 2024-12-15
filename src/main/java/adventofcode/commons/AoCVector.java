@@ -117,7 +117,10 @@ public class AoCVector {
         return a;
     }
 
-    public static AoCVector charToDirection(int c) {
+    /**
+     * North and South are inverted in a matrix
+     */
+    public static AoCVector charToMatrixDirection(int c) {
         return switch (c) {
             case '^' -> AoCVector.SOUTH;
             case '>' -> AoCVector.EAST;
@@ -129,8 +132,7 @@ public class AoCVector {
 
     private static int parseInt(String s) {
         if (s == null
-            || s.trim()
-                .isEmpty()) {
+            || s.trim().isEmpty()) {
             return 0;
         } else {
             return Integer.parseInt(s);

@@ -56,7 +56,7 @@ public class AoCInput {
             .toArray(Character[][]::new);
     }
 
-    public Character[][] toCharMatrixEmptyLine() throws Exception {
+    public Character[][] toCharMatrixUntilEmptyLine() throws Exception {
         List<String> boardLines = new ArrayList<>();
         String line;
         while (!(line = reader().readLine()).isEmpty()) {

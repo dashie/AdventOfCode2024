@@ -4,7 +4,7 @@ import adventofcode.commons.*;
 
 import java.util.Arrays;
 
-import static adventofcode.commons.AoCVector.charToDirection;
+import static adventofcode.commons.AoCVector.charToMatrixDirection;
 
 /**
  * Day 15: Warehouse Woes
@@ -21,7 +21,7 @@ public class Problem15 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        boardData = input.toCharMatrixEmptyLine();
+        boardData = input.toCharMatrixUntilEmptyLine();
         movements = input.toSingleString().chars().filter(c -> c != '\n').toArray();
     }
 
@@ -35,10 +35,9 @@ public class Problem15 extends AoCProblem<Long> {
     @Override
     public Long partOne() throws Exception {
         AoCBoard<Character> board = new AoCBoard<>(boardData);
-        AoCPoint p0 = board.searchFor('@');
-        AoCPoint p = p0;
+        AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charToDirection(movement);
+            AoCVector d = charToMatrixDirection(movement);
             if (moveBlockSimple(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, 'O');
@@ -68,10 +67,9 @@ public class Problem15 extends AoCProblem<Long> {
     public Long partTwo() throws Exception {
         Character[][] boardDataExpanded = expandBoardData();
         AoCBoard<Character> board = new AoCBoard<>(boardDataExpanded);
-        AoCPoint p0 = board.searchFor('@');
-        AoCPoint p = p0;
+        AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charToDirection(movement);
+            AoCVector d = charToMatrixDirection(movement);
             if (checkAndMoveBlockComplex(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, '[');
@@ -145,6 +143,7 @@ public class Problem15 extends AoCProblem<Long> {
         if (c == '#') return;
         AoCPoint next = p.translate(d);
         if (d.isEast() || d.isWest()) {
+            // left/right movement does not change in the complex scenario
             moveBlockComplex(next, d, board);
             board.set(next, board.get(p));
             board.set(p, '.');
