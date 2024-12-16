@@ -28,18 +28,18 @@ public class Problem16 extends AoCProblem<Long> {
     @Override
     public Long partOne() throws Exception {
         var p = board.searchFor('S');
-        List<SearchState> bestPaths = searchBestPaths(p, AoCVector.EAST);
+        List<SearchState> bestPaths = evalBestPaths(p, AoCVector.EAST);
         return bestPaths.getFirst().score();
     }
 
-    record SearchState(AoCPoint p, AoCVector d, long score, SearchState prevState) {}
+    record SearchState(AoCDirectedPoint dp, long score, SearchState prevState) {}
 
-    private List<SearchState> searchBestPaths(AoCPoint p0, AoCVector d0) {
-        Map<String, Long> visitsWithScore = new HashMap<>();
+    private List<SearchState> evalBestPaths(AoCPoint p0, AoCVector d0) {
+        Map<AoCDirectedPoint, Long> visitsWithScore = new HashMap<>();
         // if we use a priority queue based on position to be visited sorted by score
         // is more probable to visits a cell the first time at the lowest score possible
         PriorityQueue<SearchState> pqueue = new PriorityQueue<>(Comparator.comparingLong(a -> a.score));
-        pqueue.add(new SearchState(p0, d0, 0, null));
+        pqueue.add(new SearchState(new AoCDirectedPoint(p0, d0), 0, null));
         long bestScore = Integer.MAX_VALUE;
         List<SearchState> bestPaths = new ArrayList<>();
 
@@ -47,7 +47,7 @@ public class Problem16 extends AoCProblem<Long> {
             SearchState state = pqueue.poll();
 
             if (state.score > bestScore) continue; // discard this option
-            char c = board.get(state.p);
+            char c = board.get(state.dp.p);
             if (c == '#') continue; // if hits a wall continue
             if (c == 'E') {
                 if (state.score <= bestScore) { // best option
@@ -58,14 +58,13 @@ public class Problem16 extends AoCProblem<Long> {
                 continue;
             }
 
-            String visitedKey = state.p + "-" + state.d;
-            long lastScore = visitsWithScore.getOrDefault(visitedKey, Long.MAX_VALUE);
+            long lastScore = visitsWithScore.getOrDefault(state.dp, Long.MAX_VALUE);
             if (state.score > lastScore) continue; // cell already visited with a best score
-            visitsWithScore.put(visitedKey, state.score);
+            visitsWithScore.put(state.dp, state.score);
 
-            pqueue.add(new SearchState(state.p.translate(state.d.rotate90R()), state.d.rotate90R(), state.score + 1001, state));
-            pqueue.add(new SearchState(state.p.translate(state.d.rotate90L()), state.d.rotate90L(), state.score + 1001, state));
-            pqueue.add(new SearchState(state.p.translate(state.d), state.d, state.score + 1, state));
+            pqueue.add(new SearchState(state.dp.moveRight(), state.score + 1001, state));
+            pqueue.add(new SearchState(state.dp.moveLeft(), state.score + 1001, state));
+            pqueue.add(new SearchState(state.dp.moveFront(), state.score + 1, state));
         }
 
         return bestPaths;
@@ -78,16 +77,16 @@ public class Problem16 extends AoCProblem<Long> {
     @Override
     public Long partTwo() throws Exception {
         var p = board.searchFor('S');
-        long score = searchBestTiles(p, AoCVector.EAST);
+        long score = countBestTiles(p, AoCVector.EAST);
         return score;
     }
 
-    private long searchBestTiles(AoCPoint p0, AoCVector d0) {
-        List<SearchState> bestPaths = searchBestPaths(p0, d0);
+    private long countBestTiles(AoCPoint p0, AoCVector d0) {
+        List<SearchState> bestPaths = evalBestPaths(p0, d0);
         Set<AoCPoint> bestTitles = new HashSet<>();
         for (SearchState s : bestPaths) {
             while (s != null) {
-                bestTitles.add(s.p);
+                bestTitles.add(s.dp.p);
                 s = s.prevState;
             }
         }
