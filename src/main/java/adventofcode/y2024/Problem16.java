@@ -36,13 +36,15 @@ public class Problem16 extends AoCProblem<Long> {
 
     private List<SearchState> searchBestPaths(AoCPoint p0, AoCVector d0) {
         Map<String, Long> visitsWithScore = new HashMap<>();
-        Deque<SearchState> stack = new LinkedList<>();
-        stack.push(new SearchState(p0, d0, 0, null));
+        // if we use a priority queue based on position to be visited sorted by score
+        // is more probable to visits a cell the first time at the lowest score possible
+        PriorityQueue<SearchState> pqueue = new PriorityQueue<>(Comparator.comparingLong(a -> a.score));
+        pqueue.add(new SearchState(p0, d0, 0, null));
         long bestScore = Integer.MAX_VALUE;
         List<SearchState> bestPaths = new ArrayList<>();
 
-        while (!stack.isEmpty()) {
-            SearchState state = stack.pop();
+        while (!pqueue.isEmpty()) {
+            SearchState state = pqueue.poll();
 
             if (state.score > bestScore) continue; // discard this option
             char c = board.get(state.p);
@@ -61,9 +63,9 @@ public class Problem16 extends AoCProblem<Long> {
             if (state.score > lastScore) continue; // cell already visited with a best score
             visitsWithScore.put(visitedKey, state.score);
 
-            stack.push(new SearchState(state.p.translate(state.d.rotate90R()), state.d.rotate90R(), state.score + 1001, state));
-            stack.push(new SearchState(state.p.translate(state.d.rotate90L()), state.d.rotate90L(), state.score + 1001, state));
-            stack.push(new SearchState(state.p.translate(state.d), state.d, state.score + 1, state));
+            pqueue.add(new SearchState(state.p.translate(state.d.rotate90R()), state.d.rotate90R(), state.score + 1001, state));
+            pqueue.add(new SearchState(state.p.translate(state.d.rotate90L()), state.d.rotate90L(), state.score + 1001, state));
+            pqueue.add(new SearchState(state.p.translate(state.d), state.d, state.score + 1, state));
         }
 
         return bestPaths;
