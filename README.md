@@ -19,7 +19,7 @@ https://adventofcode.com/2024
 - [x] Day 13: Claw Contraption
 - [x] Day 14: Restroom Redoubt
 - [x] Day 15: Warehouse Woes
-- [ ] Day 16
+- [x] Day 16: Reindeer Maze
 - [ ] Day 17
 - [ ] Day 18
 - [ ] Day 19
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/16/input" \
+curl -s "https://adventofcode.com/2024/day/17/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem16.txt
+  > src/main/resources/adventofcode/y2024/Problem17.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`

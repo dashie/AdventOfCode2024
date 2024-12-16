@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.Character.getNumericValue;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -21,6 +20,15 @@ public class AoCInput {
 
     private AoCInput(String inputText) {
         this.inputText = inputText;
+    }
+
+    @Override
+    public String toString() {
+        return inputText;
+    }
+
+    public List<String> split(String splitRule) {
+        return Arrays.asList(inputText.split(splitRule));
     }
 
     public static AoCInput fromReader(Reader reader) throws IOException {
@@ -44,12 +52,6 @@ public class AoCInput {
     public String[] toArray() {
         return lines()
             .toArray(String[]::new);
-    }
-
-    // I cannot use toString or when I am in debug and the IDE try call toString then I consume all the reader
-    public String toSingleString() {
-        return lines()
-            .collect(joining("\n"));
     }
 
     public int[][] toIntMatrix() {

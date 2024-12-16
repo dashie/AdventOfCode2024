@@ -3,6 +3,7 @@ package adventofcode.commons;
 import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -215,6 +216,28 @@ public class AoCBoard<T> {
             for (int n = 0; n < N; ++n) {
                 AoCPoint p = new AoCPoint(n, m);
                 T v = points.get(p);
+                String vs;
+                if (transformer != null) {
+                    vs = transformer.apply(p, v);
+                } else if (v != null) {
+                    vs = v.toString();
+                } else {
+                    vs = " ";
+                }
+                System.out.print(vs);
+            }
+            System.out.println();
+        }
+        System.out.println("---");
+    }
+
+    public static void dumpBoard(String title, int N, int M, Set<AoCPoint> points, BiFunction<AoCPoint, Character, String> transformer) {
+        System.out.println();
+        System.out.println("--- %s".formatted(title));
+        for (int m = 0; m < M; ++m) {
+            for (int n = 0; n < N; ++n) {
+                AoCPoint p = new AoCPoint(n, m);
+                Character v = points.contains(p) ? 'X' : null;
                 String vs;
                 if (transformer != null) {
                     vs = transformer.apply(p, v);
