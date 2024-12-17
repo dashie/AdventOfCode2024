@@ -4,10 +4,7 @@ import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 import adventofcode.commons.LineEx;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -97,21 +94,27 @@ public class Problem17 extends AoCProblem<String> {
         // the resulting pattern changes following the power of 8, so I try to guess the result
         // by approaching it using powers of 8.
         List<Integer> program = machine.program;
-        long regA = 0;
+
+        List<Long> matches = Arrays.asList(0L);
         for (int i = program.size() - 1; i >= 0; --i) {
             long p8 = (long) Math.pow(8, i);
-            for (int n = 0; ; ++n) {
-                long v = regA + p8 * n;
-                List<Integer> result = runNewMachine(v);
-                if (matchListFromIndex(result, program, i)) {
-//                    System.out.println(programToString(result) + " <<< " + v + " (" + n + ")");
-//                    System.out.println(programToString(machine.program));
-                    regA = v;
-                    break;
+            List<Long> newMatches = new ArrayList<>();
+            for (Long m : matches) {
+                for (int n = 0; n < 8; ++n) {
+                    long regA = m + p8 * n;
+                    List<Integer> result = runNewMachine(regA);
+                    if (matchListFromIndex(result, program, i)) {
+                        // collect all the options that match partially the output
+                        // we see that the same level value can be the result of different regA values
+                        newMatches.add(regA);
+                    }
                 }
             }
+            matches = newMatches;
         }
-        return Long.toString(regA);
+
+        // get the lowest value
+        return matches.stream().min(Long::compare).get().toString();
     }
 
     private boolean matchListFromIndex(List<Integer> p1, List<Integer> p2, int startFrom) {
