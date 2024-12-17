@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  * Day 17: Chronospatial Computer
  * https://adventofcode.com/2024/day/17
  */
-public class Problem17 extends AoCProblem<String> {
+public class Problem17v2 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem17().solve(false);
+        new Problem17v2().solve(false);
     }
 
     class Machine {
@@ -93,34 +93,50 @@ public class Problem17 extends AoCProblem<String> {
      */
     @Override
     public String partTwo() throws Exception {
-        // Analyzing the sequence manually and based on the machine characteristics (3 bit logic)
-        // the resulting pattern changes following the power of 8, so I try to guess the result
-        // by approaching it using powers of 8.
-        List<Integer> program = machine.program;
-        long regA = 0;
-        for (int i = program.size() - 1; i >= 0; --i) {
-            long p8 = (long) Math.pow(8, i);
-            for (int n = 0; ; ++n) {
-                long v = regA + p8 * n;
-                List<Integer> result = runNewMachine(v);
-                if (matchListFromIndex(result, program, i)) {
-//                    System.out.println(programToString(result) + " <<< " + v + " (" + n + ")");
-//                    System.out.println(programToString(machine.program));
-                    regA = v;
-                    break;
-                }
-            }
-        }
+        // Analyzing the program code
+        //
+        // 2,4    b = a % 8                    take last 3 bit of A
+        // 1,3    b = b ^ 3                    play with these 3 digits using b and c
+        // 7,5    c = a / (1L << b)
+        // 4,0    b = b ^ c
+        // 1,3    b = b ^ 3
+        // 0,3    a = a / (1L << 3) = a / 8    divide a/8, that is shift 3 digit right
+        // 5,5    out b % 8                    out b
+        // 3,0    a != 0 goto 0                repeat
+        //
+        // we see that the output number depends every time by the first 3 bits of a,
+        // and then a is shifted.
+        // So trying to guess the result, once we find the solution for the first 3
+        // digits we try to guess the next 3 digits without to change the first ones
+        // anymore.
+        // Total attempts 8 + 8 + 8 + 8 + ... ≈ 8 * 16 (length of the program) = 128
+        //       plus some combinations if at the same level with have more matches
+
+        Long regA = guessRegA(0, 0);
+        if (regA == null) return "?";
         return Long.toString(regA);
     }
 
-    private boolean matchListFromIndex(List<Integer> p1, List<Integer> p2, int startFrom) {
-        if (p1.size() != p2.size()) return false;
-        for (int j = startFrom; j < p1.size(); ++j) {
-            if (!p1.get(j).equals(p2.get(j)))
-                return false;
+    private Long guessRegA(long prevRegA, int level) {
+        List<Integer> program = machine.program;
+        int pindex = program.size() - 1 - level;
+        if (pindex == -1) return prevRegA;
+
+        Long minorRegA = null;
+        prevRegA = prevRegA << 3;
+
+        for (long j = 0; j < 8; ++j) {
+            long v = prevRegA + j;
+            List<Integer> result = runNewMachine(v);
+            if (v != 0 && result.equals(program.subList(pindex, program.size()))) {
+                Long regA = guessRegA(v, level + 1);
+                if (minorRegA == null || (regA != null && minorRegA > regA)) {
+                    minorRegA = regA;
+                }
+            }
         }
-        return true;
+
+        return minorRegA;
     }
 
     private List<Integer> runNewMachine(long regA) {
