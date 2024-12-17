@@ -1,8 +1,9 @@
 package adventofcode.y2024;
 
+import adventofcode.commons.AbstractProblemTest;
 import org.junit.jupiter.api.Test;
 
-public class Problem16Test extends AbstractProblemTest {
+public class Problem16Test extends AbstractProblemTest<Long> {
 
     public Problem16Test() {
         super(Problem16.class);
@@ -10,6 +11,6 @@ public class Problem16Test extends AbstractProblemTest {
 
     @Test
     public void testProblem() throws Exception {
-        _testProblem(134588, 631);
+        _testProblem(134588L, 631L);
     }
 }

@@ -1,14 +1,9 @@
 package adventofcode.y2023;
 
-import adventofcode.y2024.AbstractProblemTest;
-import org.junit.jupiter.api.Assertions;
+import adventofcode.commons.AbstractProblemTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-public class Problem12Test extends AbstractProblemTest<Problem12> {
+public class Problem12Test extends AbstractProblemTest<Long> {
 
     public Problem12Test() {
         super(Problem12.class);
@@ -16,12 +11,12 @@ public class Problem12Test extends AbstractProblemTest<Problem12> {
 
     @Test
     public void testSample() throws Exception {
-        _testSample(21, 525152);
+        _testSample(21L, 525152L);
     }
 
     @Test
     public void testProblem() throws Exception {
-        _testProblem(8075, 4232520187524L);
+        _testProblem(8075L, 4232520187524L);
     }
 
 }

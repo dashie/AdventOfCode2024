@@ -1,8 +1,9 @@
 package adventofcode.y2024;
 
+import adventofcode.commons.AbstractProblemTest;
 import org.junit.jupiter.api.Test;
 
-public class Problem01Test extends AbstractProblemTest {
+public class Problem01Test extends AbstractProblemTest<Long> {
 
     public Problem01Test() {
         super(Problem01.class);

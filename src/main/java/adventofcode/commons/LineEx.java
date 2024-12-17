@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 
 public class LineEx {
 
@@ -15,11 +16,23 @@ public class LineEx {
         this.line = line;
     }
 
+    @Override
+    public String toString() {
+        return line;
+    }
+
     public int getInt(String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
         return parseInt(m.group(0));
+    }
+
+    public long getLong(String regex) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(line);
+        if (!m.find()) throw new IllegalArgumentException();
+        return parseLong(m.group(0));
     }
 
     public String getString(String regex) {
