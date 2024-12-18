@@ -4,8 +4,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AoCPoint {
+
+    private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)");
+
+    public static AoCPoint parsePoint(String str) {
+        Matcher m = POINT_PATTERN.matcher(str);
+        if (!m.find()) throw new IllegalArgumentException(str);
+        return of(m.group(1), m.group(2), null);
+    }
+
+    public static AoCPoint of(int x, int y) {
+        return new AoCPoint(x, y);
+    }
+
+    public static AoCPoint of(String x, String y) {
+        return of(x, y, null);
+    }
+
+    public static AoCPoint of(String x, String y, String z) {
+        return new AoCPoint(
+            parseInt(x),
+            parseInt(y),
+            parseInt(z));
+    }
 
     public final int x;
     public final int y;
@@ -47,17 +72,6 @@ public class AoCPoint {
         return "P{" + x + "," + y + "," + z + "}";
     }
 
-    public static AoCPoint valueOf(String x, String y) {
-        return valueOf(x, y, null);
-    }
-
-    public static AoCPoint valueOf(String x, String y, String z) {
-        return new AoCPoint(
-            parseInt(x),
-            parseInt(y),
-            parseInt(z));
-    }
-
     /**
      * Relative distance from p
      */
@@ -78,6 +92,14 @@ public class AoCPoint {
 
     public AoCPoint translate(int dx, int dy) {
         return new AoCPoint(x + dx, y + dy);
+    }
+
+    public boolean isIn(AoCRect r) {
+        return r.contains(this);
+    }
+
+    public boolean isOut(AoCRect r) {
+        return !r.contains(this);
     }
 
     public AoCPoint north() {

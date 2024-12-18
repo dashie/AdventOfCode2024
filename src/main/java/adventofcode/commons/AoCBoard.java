@@ -239,57 +239,32 @@ public class AoCBoard<T> {
             if (p.x < N0) N0 = p.x;
             if (p.x > N1) N1 = p.x;
         }
+        dumpBoard(title, N0, M0, N1 + 1, M1 + 1, points::get, transformer);
+    }
 
-        System.out.println();
-        System.out.println("--- %s".formatted(title));
-        for (int m = M0; m <= M1; ++m) {
-            for (int n = N0; n <= N1; ++n) {
-                AoCPoint p = new AoCPoint(n, m);
-                T v = points.get(p);
-                String vs;
-                if (transformer != null) {
-                    vs = transformer.apply(p, v);
-                } else if (v != null) {
-                    vs = v.toString();
-                } else {
-                    vs = " ";
-                }
-                System.out.print(vs);
-            }
-            System.out.println();
-        }
-        System.out.println("---");
+    public static <T> void dumpBoard(String title, AoCRect rect, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+        dumpBoard(title, rect.p1.x, rect.p1.y, rect.p2.x + 1, rect.p2.y + 1, points::get, transformer);
     }
 
     public static <T> void dumpBoard(String title, int N, int M, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
-        System.out.println();
-        System.out.println("--- %s".formatted(title));
-        for (int m = 0; m < M; ++m) {
-            for (int n = 0; n < N; ++n) {
-                AoCPoint p = new AoCPoint(n, m);
-                T v = points.get(p);
-                String vs;
-                if (transformer != null) {
-                    vs = transformer.apply(p, v);
-                } else if (v != null) {
-                    vs = v.toString();
-                } else {
-                    vs = " ";
-                }
-                System.out.print(vs);
-            }
-            System.out.println();
-        }
-        System.out.println("---");
+        dumpBoard(title, 0, 0, N, M, points::get, transformer);
+    }
+
+    public static void dumpBoard(String title, int N, int M, Set<AoCPoint> points) {
+        dumpBoard(title, N, M, points, null);
     }
 
     public static void dumpBoard(String title, int N, int M, Set<AoCPoint> points, BiFunction<AoCPoint, Character, String> transformer) {
+        dumpBoard(title, 0, 0, N, M, p -> points.contains(p) ? 'X' : null, transformer);
+    }
+
+    private static <T> void dumpBoard(String title, int N0, int M0, int N1, int M1, Function<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
         System.out.println();
         System.out.println("--- %s".formatted(title));
-        for (int m = 0; m < M; ++m) {
-            for (int n = 0; n < N; ++n) {
+        for (int m = M0; m < M1; ++m) {
+            for (int n = N0; n < N1; ++n) {
                 AoCPoint p = new AoCPoint(n, m);
-                Character v = points.contains(p) ? 'X' : null;
+                T v = points.apply(p);
                 String vs;
                 if (transformer != null) {
                     vs = transformer.apply(p, v);

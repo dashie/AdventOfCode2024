@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Day 12: Hot Springs
- * https://adventofcode.com/2015/day/12
+ * https://adventofcode.com/2023/day/12
  */
 public class Problem12 extends AoCProblem<Long> {
 
@@ -33,7 +33,9 @@ public class Problem12 extends AoCProblem<Long> {
     }
 
     /**
-     *
+     * ...For each row, count all of the different arrangements of
+     * operational and broken springs that meet the given criteria.
+     * What is the sum of those counts?
      */
     @Override
     public Long partOne() throws Exception {
@@ -82,6 +84,10 @@ public class Problem12 extends AoCProblem<Long> {
         return count;
     }
 
+    /**
+     * ...Unfold your condition records; what is the new sum
+     * of possible arrangement counts?
+     */
     @Override
     public Long partTwo() throws Exception {
         long result = 0;

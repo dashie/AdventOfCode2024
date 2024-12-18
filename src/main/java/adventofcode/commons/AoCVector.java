@@ -5,6 +5,18 @@ import java.util.Objects;
 
 public class AoCVector {
 
+    public static AoCVector of(int x, int y) {
+        return new AoCVector(x, y);
+    }
+
+    public static AoCVector of(String x, String y) {
+        return of(x, y, null);
+    }
+
+    public static AoCVector of(String x, String y, String z) {
+        return new AoCVector(parseInt(x), parseInt(y), parseInt(z));
+    }
+
     public static final AoCVector NORTH = new AoCVector(0, 1);
     public static final AoCVector EAST = new AoCVector(1, 0);
     public static final AoCVector SOUTH = new AoCVector(0, -1);
@@ -54,14 +66,6 @@ public class AoCVector {
         return "V{" + x + "," + y + "," + z + "}";
     }
 
-    public static AoCVector valueOf(String x, String y) {
-        return valueOf(x, y, null);
-    }
-
-    public static AoCVector valueOf(String x, String y, String z) {
-        return new AoCVector(parseInt(x), parseInt(y), parseInt(z));
-    }
-
     public int manhattam() {
         return Math.abs(x) + Math.abs(y);
     }
@@ -84,6 +88,13 @@ public class AoCVector {
 
     public AoCVector mul(int n) {
         return new AoCVector(x * n, y * n, z * n);
+    }
+
+    public AoCVector extend(int n) {
+        return new AoCVector(
+            x > 0 ? x + n : x < 0 ? x - n : 0,
+            y > 0 ? y + n : y < 0 ? y - n : 0,
+            z > 0 ? z + n : z < 0 ? z - n : 0);
     }
 
     public AoCVector signs() {
