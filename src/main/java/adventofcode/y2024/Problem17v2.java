@@ -104,13 +104,14 @@ public class Problem17v2 extends AoCProblem<String> {
         // 5,5    out b % 8                    out b
         // 3,0    a != 0 goto 0                repeat
         //
-        // we see that the output number depends every time by the first 3 bits of a,
+        // We see that the output number depends every time by the first 3 bits of a,
         // and then a is shifted.
-        // So trying to guess the result, once we find the solution for the first 3
-        // digits we try to guess the next 3 digits without to change the first ones
-        // anymore.
-        // Total attempts 8 + 8 + 8 + 8 + ... ≈ 8 * 16 (length of the program) = 128
-        //       plus some combinations if at the same level with have more matches
+        // So trying to guess the result starting from the end, and once we find
+        // the solutions for the most right 3 digits we shift left the result and
+        // try to guess the next 3 digits.
+        // Total attempts:
+        //       8 + 8 + 8 + 8 + ... ≈ 8 * 16 (len of the program) ≈ 128
+        // plus some combinations if at the same level with have more matches.
 
         Long regA = guessRegA(0, 0);
         if (regA == null) return "?";

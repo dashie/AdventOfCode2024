@@ -4,7 +4,7 @@ import adventofcode.commons.*;
 
 import java.util.Arrays;
 
-import static adventofcode.commons.AoCVector.charToMatrixDirection;
+import static adventofcode.commons.AoCVector.charArrowToMatrixDirection;
 
 /**
  * Day 15: Warehouse Woes
@@ -37,7 +37,7 @@ public class Problem15 extends AoCProblem<Long> {
         AoCBoard<Character> board = new AoCBoard<>(boardData);
         AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charToMatrixDirection(movement);
+            AoCVector d = charArrowToMatrixDirection(movement);
             if (pushSimple(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, 'O');
@@ -69,7 +69,7 @@ public class Problem15 extends AoCProblem<Long> {
         AoCBoard<Character> board = new AoCBoard<>(boardDataExpanded);
         AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charToMatrixDirection(movement);
+            AoCVector d = charArrowToMatrixDirection(movement);
             if (checkAndPushComplex(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, '[');

@@ -24,7 +24,7 @@ public class Problem23 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        code = input.patter(pattern)
+        code = input.pattern(pattern)
                     .map(m -> {
                         return new Instruction(
                             m.get(1),

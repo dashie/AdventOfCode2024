@@ -178,7 +178,13 @@ public class AoCInput {
                 .iterator();
     }
 
-    public Stream<MatcherEx> patter(PatternEx pattern) {
+    public Stream<MatcherEx> pattern(PatternEx pattern) {
+        return lines()
+            .map(pattern::matches);
+    }
+
+    public Stream<MatcherEx> pattern(String regex) {
+        PatternEx pattern = PatternEx.compile(regex);
         return lines()
             .map(pattern::matches);
     }

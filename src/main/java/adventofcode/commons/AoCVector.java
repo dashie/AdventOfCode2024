@@ -118,16 +118,37 @@ public class AoCVector {
     }
 
     /**
-     * North and South are inverted in a matrix
+     * ^, v, >, < to direction
+     * North and South are inverted in a matrix.
      */
-    public static AoCVector charToMatrixDirection(int c) {
+    public static AoCVector charArrowToMatrixDirection(int c) {
         return switch (c) {
+            case 'v' -> AoCVector.NORTH;
             case '^' -> AoCVector.SOUTH;
             case '>' -> AoCVector.EAST;
-            case 'v' -> AoCVector.NORTH;
             case '<' -> AoCVector.WEST;
             default -> throw new IllegalStateException();
         };
+    }
+
+    /**
+     * U, D, R, L to direction
+     */
+    public static AoCVector charUDRLToDirection(int c) {
+        return switch (Character.toUpperCase(c)) {
+            case 'U' -> AoCVector.NORTH;
+            case 'D' -> AoCVector.SOUTH;
+            case 'R' -> AoCVector.EAST;
+            case 'L' -> AoCVector.WEST;
+            default -> throw new IllegalStateException();
+        };
+    }
+
+    /**
+     * U, D, R, L to direction
+     */
+    public static AoCVector charUDRLToDirection(String c) {
+        return charUDRLToDirection(c.charAt(0));
     }
 
     private static int parseInt(String s) {

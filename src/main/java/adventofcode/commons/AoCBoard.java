@@ -25,6 +25,27 @@ public class AoCBoard<T> {
         buffer = cloneBuffer(data); // create a clone to not to alter original data
     }
 
+    public static <T> AoCBoard from(Map<AoCPoint, T> points, Class<T> type) {
+        int M0 = Integer.MAX_VALUE, M1 = Integer.MIN_VALUE;
+        int N0 = Integer.MAX_VALUE, N1 = Integer.MIN_VALUE;
+        for (AoCPoint p : points.keySet()) {
+            if (p.y < M0) M0 = p.y;
+            if (p.y > M1) M1 = p.y;
+            if (p.x < N0) N0 = p.x;
+            if (p.x > N1) N1 = p.x;
+        }
+        int M = M1 - M0 + 1;
+        int N = N1 - N0 + 1;
+
+        T[][] data = (T[][]) Array.newInstance(type, M, N);
+        for (int m = 0; m < M; ++m) {
+            for (int n = 0; n < N; ++n) {
+                data[m][n] = points.get(new AoCPoint(N0 + n, M0 + m));
+            }
+        }
+        return new AoCBoard(data);
+    }
+
     @Override
     public AoCBoard<T> clone() throws CloneNotSupportedException {
         return new AoCBoard<>(cloneBuffer(buffer));
@@ -203,6 +224,37 @@ public class AoCBoard<T> {
                     v = transformer.apply(new Cell(n, m, v));
                 }
                 System.out.printf(cellFormat, v);
+            }
+            System.out.println();
+        }
+        System.out.println("---");
+    }
+
+    public static <T> void dumpBoard(String title, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+        int M0 = Integer.MAX_VALUE, M1 = Integer.MIN_VALUE;
+        int N0 = Integer.MAX_VALUE, N1 = Integer.MIN_VALUE;
+        for (AoCPoint p : points.keySet()) {
+            if (p.y < M0) M0 = p.y;
+            if (p.y > M1) M1 = p.y;
+            if (p.x < N0) N0 = p.x;
+            if (p.x > N1) N1 = p.x;
+        }
+
+        System.out.println();
+        System.out.println("--- %s".formatted(title));
+        for (int m = M0; m <= M1; ++m) {
+            for (int n = N0; n <= N1; ++n) {
+                AoCPoint p = new AoCPoint(n, m);
+                T v = points.get(p);
+                String vs;
+                if (transformer != null) {
+                    vs = transformer.apply(p, v);
+                } else if (v != null) {
+                    vs = v.toString();
+                } else {
+                    vs = " ";
+                }
+                System.out.print(vs);
             }
             System.out.println();
         }

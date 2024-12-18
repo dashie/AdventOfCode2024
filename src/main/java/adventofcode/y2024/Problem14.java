@@ -121,10 +121,10 @@ public class Problem14 extends AoCProblem<Long> {
     }
 
     public double evalSpreadFactor(Map<AoCPoint, Integer> points) {
-        // every robots scores 16 if all adjacent cells are free
-        //              scores  4 if only one adjacent cells is filled
-        //              scores  2 if only two adjacents cells is filled
-        //              scores  0 if more then two adjacent cells is filled
+        // every robots scores 16 if all adjacent len are free
+        //              scores  4 if only one adjacent len is filled
+        //              scores  2 if only two adjacents len is filled
+        //              scores  0 if more then two adjacent len is filled
         double max = robots.size() * 16.0;
         int score = 0;
         for (Robot robot : robots) {

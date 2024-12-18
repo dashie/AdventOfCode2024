@@ -69,7 +69,7 @@ public class Problem06 extends AoCProblem<Long> {
     }
 
     private boolean findLoops(AoCPoint p, AoCVector d) {
-        Set<String> directions = new HashSet<>(); // visit cells with directions
+        Set<String> directions = new HashSet<>(); // visit len with directions
         directions.add(p + "-" + d);
         for (; ; ) {
             while (board.get(p, d, '#') != '#') { // go straight until the first obstacle

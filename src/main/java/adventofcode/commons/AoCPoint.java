@@ -1,5 +1,8 @@
 package adventofcode.commons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AoCPoint {
@@ -55,10 +58,16 @@ public class AoCPoint {
             parseInt(z));
     }
 
+    /**
+     * Relative distance from p
+     */
     public AoCVector distance(AoCPoint p) {
         return new AoCVector(x - p.x, y - p.y, z - p.z);
     }
 
+    /**
+     * Relative distance from x1, y1
+     */
     public AoCVector distance(int x1, int y1) {
         return new AoCVector(x - x1, y - y1, z - 0);
     }
@@ -87,6 +96,10 @@ public class AoCPoint {
         return this.translate(AoCVector.WEST);
     }
 
+    public List<AoCPoint> neighbors() {
+        return Arrays.asList(north(), east(), south(), west());
+    }
+
     public AoCPoint module(int modX, int modY) {
         int x1 = x % modX;
         if (x1 < 0)
@@ -95,6 +108,42 @@ public class AoCPoint {
         if (y1 < 0)
             y1 += modY;
         return new AoCPoint(x1, y1);
+    }
+
+    /**
+     * Follow all points from p0 to pEnd (p0 + direction)
+     * using the Bresenham algorithm.
+     */
+    public List<AoCPoint> follow(AoCVector d) {
+        List<AoCPoint> points = new ArrayList<>();
+        AoCPoint end = this.translate(d);
+        AoCVector distance = end.distance(this).absolute();
+
+        int dx = distance.x;
+        int dy = distance.y;
+        int sx = x < end.x ? 1 : -1; // x direction
+        int sy = y < end.y ? 1 : -1; // y direction
+        int err = dx - dy; // initial error
+
+        AoCPoint p = this;
+        while (true) {
+            int x1 = p.x;
+            int y1 = p.y;
+            if (x1 == end.x && y1 == end.y) break; // end point
+
+            int e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x1 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y1 += sy;
+            }
+            p = new AoCPoint(x1, y1);
+            points.add(p); // add current point
+        }
+        return points;
     }
 
     public static AoCPoint[] newArray(int size, int x, int y, int z) {
