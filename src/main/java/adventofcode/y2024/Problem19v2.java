@@ -45,17 +45,15 @@ public class Problem19v2 extends AoCProblem<Long> {
     private MemoizationCache<Long> countCombinationsCache = MemoizationCache.build();
 
     private Long countCombinations(String p) {
-        return countCombinationsCache
-            .key(p)
-            .andCompute(() -> {
-                if (p.length() == 0) return 1L;
-                List<Integer> lengths = getBestMatches(p);
-                long n = 0;
-                for (int len : lengths) {
-                    n += countCombinations(p.substring(len));
-                }
-                return n;
-            });
+        return countCombinationsCache.key(p).andCompute(() -> {
+            if (p.length() == 0) return 1L;
+            List<Integer> lengths = getBestMatches(p);
+            long n = 0;
+            for (int len : lengths) {
+                n += countCombinations(p.substring(len));
+            }
+            return n;
+        });
     }
 
     private List<Integer> getBestMatches(String p) {
