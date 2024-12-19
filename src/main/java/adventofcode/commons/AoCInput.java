@@ -6,10 +6,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Character.getNumericValue;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -52,6 +52,11 @@ public class AoCInput {
     public String[] toArray() {
         return lines()
             .toArray(String[]::new);
+    }
+
+    public List<String> toList() {
+        return lines()
+            .toList();
     }
 
     public int[][] toIntMatrix() {
@@ -100,7 +105,7 @@ public class AoCInput {
             .map(line -> Arrays.stream(line.split(splitRule))
                                .map(String::trim)
                                .toArray(String[]::new))
-            .collect(toList());
+            .collect(Collectors.toList());
     }
 
     public List<List<String>> toListOfStringList(String splitRule) {
@@ -108,7 +113,7 @@ public class AoCInput {
             .map(line -> Arrays.stream(line.split(splitRule))
                                .map(String::trim)
                                .toList())
-            .collect(toList());
+            .collect(Collectors.toList());
     }
 
     public List<long[]> toListOfLongArray(String splitRule) {
@@ -118,7 +123,7 @@ public class AoCInput {
                                .map(Long::parseLong)
                                .mapToLong(n -> n)
                                .toArray())
-            .collect(toList());
+            .collect(Collectors.toList());
     }
 
     public List<List<Long>> toListOfLongList(String splitRule) {
@@ -127,7 +132,7 @@ public class AoCInput {
                                .map(String::trim)
                                .map(Long::parseLong)
                                .toList())
-            .collect(toList());
+            .collect(Collectors.toList());
     }
 
     public Iterable<String> iterateLines() {
@@ -156,7 +161,7 @@ public class AoCInput {
         return () ->
             lines()
                 .map(str -> Arrays.stream(str.split(splitRule))
-                                  .collect(toList()))
+                                  .collect(Collectors.toList()))
                 .iterator();
     }
 
@@ -165,7 +170,7 @@ public class AoCInput {
             lines()
                 .map(str -> Arrays.stream(str.split(splitRule))
                                   .map(Integer::parseInt)
-                                  .collect(toList()))
+                                  .collect(Collectors.toList()))
                 .iterator();
     }
 
@@ -174,7 +179,7 @@ public class AoCInput {
             lines()
                 .map(str -> Arrays.stream(str.split(splitRule))
                                   .map(Long::parseLong)
-                                  .collect(toList()))
+                                  .collect(Collectors.toList()))
                 .iterator();
     }
 

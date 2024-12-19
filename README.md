@@ -22,7 +22,7 @@ https://adventofcode.com/2024
 - [x] Day 16: Reindeer Maze
 - [x] Day 17: Chronospatial Computer
 - [x] Day 18: RAM Run
-- [ ] Day 19
+- [x] Day 19: Linen Layout
 - [ ] Day 20
 - [ ] Day 21
 - [ ] Day 22
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/19/input" \
+curl -s "https://adventofcode.com/2024/day/20/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem19.txt
+  > src/main/resources/adventofcode/y2024/Problem20.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
