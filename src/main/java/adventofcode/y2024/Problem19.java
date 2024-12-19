@@ -36,60 +36,7 @@ public class Problem19 extends AoCProblem<Long> {
     public Long partOne() throws Exception {
         long result = 0;
         for (String p : patterns) {
-            if (isDesignPossible(p)) result++;
-        }
-        return result;
-    }
-
-    private HashMap<String, Boolean> isDesignPossibleCache = new HashMap<>();
-
-    private boolean isDesignPossible(String p) {
-        Boolean v = isDesignPossibleCache.get(p);
-        if (v == null) {
-            v = _isDesignPossible(p);
-            isDesignPossibleCache.put(p, v);
-        }
-        return v;
-    }
-
-    private boolean _isDesignPossible(String p) {
-        if (p.length() == 0) return true;
-        List<Integer> lengths = getBestMatches(p);
-        for (int len : lengths) {
-            if (isDesignPossible(p.substring(len)))
-                return true;
-        }
-        return false;
-    }
-
-    private HashMap<String, List<Integer>> getBestMatchesCache = new HashMap<>();
-
-    private List<Integer> getBestMatches(String p) {
-        List<Integer> lengths = getBestMatchesCache.get(p);
-        if (lengths == null) {
-            lengths = new LinkedList<>();
-            SortedSet<String> possibleTowels = towels;
-            for (int len = 1; len <= p.length(); len++) {
-                String sub = p.substring(0, len);
-                possibleTowels = possibleTowels.subSet(sub, sub + AFTER_Z);
-                if (possibleTowels.isEmpty()) break;
-                if (possibleTowels.contains(sub)) lengths.addFirst(len);
-            }
-            getBestMatchesCache.put(p, lengths);
-        }
-        return lengths;
-    }
-
-    /**
-     * ...They'll let you into the onsen as soon as you have the list.
-     * What do you get if you add up the number of different ways
-     * you could make each design?
-     */
-    @Override
-    public Long partTwo() throws Exception {
-        long result = 0;
-        for (String p : patterns) {
-            result += countCombinations(p);
+            if (countCombinations(p) > 0) result++;
         }
         return result;
     }
@@ -113,5 +60,31 @@ public class Problem19 extends AoCProblem<Long> {
             n += countCombinations(p.substring(len));
         }
         return n;
+    }
+
+    private List<Integer> getBestMatches(String p) {
+        List<Integer> lengths = new LinkedList<>();
+        SortedSet<String> possibleTowels = towels;
+        for (int len = 1; len <= p.length(); len++) {
+            String sub = p.substring(0, len);
+            possibleTowels = possibleTowels.subSet(sub, sub + AFTER_Z);
+            if (possibleTowels.isEmpty()) break;
+            if (possibleTowels.contains(sub)) lengths.addFirst(len);
+        }
+        return lengths;
+    }
+
+    /**
+     * ...They'll let you into the onsen as soon as you have the list.
+     * What do you get if you add up the number of different ways
+     * you could make each design?
+     */
+    @Override
+    public Long partTwo() throws Exception {
+        long result = 0;
+        for (String p : patterns) {
+            result += countCombinations(p);
+        }
+        return result;
     }
 }
