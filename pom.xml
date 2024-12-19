@@ -15,30 +15,30 @@
     </properties>
 
     <build>
-        <plugins>
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>aspectj-maven-plugin</artifactId>-->
-            <!--                <version>1.15.0</version>-->
-            <!--                <configuration>-->
-            <!--                    <complianceLevel>16</complianceLevel>-->
-            <!--                    <source>16</source>-->
-            <!--                    <target>16</target>-->
-            <!--                    <showWeaveInfo>true</showWeaveInfo>-->
-            <!--                    <verbose>true</verbose>-->
-            <!--                    <Xlint>ignore</Xlint>-->
-            <!--                    <encoding>UTF-8</encoding>-->
-            <!--                </configuration>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>compile</goal>-->
-            <!--                            <goal>test-compile</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-        </plugins>
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>aspectj-maven-plugin</artifactId>-->
+<!--                <version>1.15.0</version>-->
+<!--                <configuration>-->
+<!--                    <complianceLevel>23</complianceLevel>-->
+<!--                    <source>23</source>-->
+<!--                    <target>23</target>-->
+<!--                    <showWeaveInfo>true</showWeaveInfo>-->
+<!--                    <verbose>true</verbose>-->
+<!--                    <Xlint>ignore</Xlint>-->
+<!--                    <encoding>UTF-8</encoding>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                            <goal>test-compile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
     </build>
 
     <dependencies>
