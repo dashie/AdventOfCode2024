@@ -14,7 +14,7 @@ public class MemoizationCache<V> {
 
     private final Map<MemoizationKey, MemoizationValue> cache = new HashMap<>();
 
-    public MemoizationValue get(Object... keys) {
+    public MemoizationValue key(Object... keys) {
         return cache.computeIfAbsent(MemoizationKey.toKey(keys), k -> new MemoizationValue());
     }
 
@@ -47,7 +47,7 @@ public class MemoizationCache<V> {
 
         private V value;
 
-        public V orCompute(Supplier<V> mappingFunction) {
+        public V andCompute(Supplier<V> mappingFunction) {
             if (value == null)
                 value = mappingFunction.get();
             return value;

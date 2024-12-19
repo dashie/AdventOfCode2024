@@ -46,8 +46,8 @@ public class Problem19v2 extends AoCProblem<Long> {
 
     private Long countCombinations(String p) {
         return countCombinationsCache
-            .get(p)
-            .orCompute(() -> {
+            .key(p)
+            .andCompute(() -> {
                 if (p.length() == 0) return 1L;
                 List<Integer> lengths = getBestMatches(p);
                 long n = 0;
