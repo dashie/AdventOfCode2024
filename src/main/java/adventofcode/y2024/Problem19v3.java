@@ -4,27 +4,36 @@ import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 import adventofcode.commons.MemoizationCache;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Day 19: Linen Layout
  * https://adventofcode.com/2024/day/19
  */
-public class Problem19v2 extends AoCProblem<Long> {
+public class Problem19v3 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19v2().solve(false);
+        new Problem19v3().solve(false);
     }
 
-    public static final char AFTER_Z = (char) ('z' + 1);
-
-    TreeSet<String> towels = new TreeSet<>();
+    Pattern towelsPattern;
     List<String> patterns = new ArrayList<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
         List<String> lines = input.toList();
-        Arrays.stream(lines.get(0).split(", ")).forEach(towels::add);
+
+        // sequences are sorted by length so that larger sequences match before the smaller ones
+        String towelsPatternRegex = Arrays.stream(lines.get(0).split(", "))
+                                          .sorted((a, b) -> Integer.compare(b.length(), a.length()))
+                                          .collect(Collectors.joining("|"));
+        towelsPattern = Pattern.compile("^(?:%s)".formatted(towelsPatternRegex));
+
         lines.subList(2, lines.size()).forEach(patterns::add);
     }
 
@@ -47,26 +56,17 @@ public class Problem19v2 extends AoCProblem<Long> {
     private Long countCombinations(String p, boolean onlyFirst) {
         return countCombinationsCache.key(p, onlyFirst).andCompute(() -> {
             if (p.length() == 0) return 1L;
-            List<Integer> lengths = getBestMatches(p);
             long n = 0;
-            for (int len : lengths) {
+            // find all matches from the largest to the smallest
+            Matcher m = towelsPattern.matcher(p);
+            while (m.find()) {
+                int len = m.group().length();
                 n += countCombinations(p.substring(len), onlyFirst);
-                if (onlyFirst && n > 0) break;
+                if (len < 2 || (onlyFirst && n > 0)) break;
+                m = towelsPattern.matcher(p.substring(0, len - 1));
             }
             return n;
         });
-    }
-
-    private List<Integer> getBestMatches(String p) {
-        List<Integer> lengths = new LinkedList<>();
-        SortedSet<String> possibleTowels = towels;
-        for (int len = 1; len <= p.length(); len++) {
-            String sub = p.substring(0, len);
-            possibleTowels = possibleTowels.subSet(sub, sub + AFTER_Z);
-            if (possibleTowels.isEmpty()) break;
-            if (possibleTowels.contains(sub)) lengths.addFirst(len);
-        }
-        return lengths;
     }
 
     /**
