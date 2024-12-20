@@ -53,9 +53,9 @@ public class Problem20 extends AoCProblem<Long> {
         stack.add(new Visit(p0, 0));
         while (!stack.isEmpty()) {
             Visit v = stack.pollFirst();
+            if (!board.isValidCell(v.p)) continue;
             char c = board.get(v.p, '#');
             if (c == '#') continue;
-            if (!board.isValidCell(v.p)) continue;
             if (distMap.containsKey(v.p)) continue;
             distMap.put(v.p, v.distance);
             if (v.p.equals(pEnd)) continue; // end
@@ -93,7 +93,7 @@ public class Problem20 extends AoCProblem<Long> {
     }
 
     /**
-     * Find the best cheats using the updated cheating rules.
+     * ...Find the best cheats using the updated cheating rules.
      * How many cheats would save you at least 100 picoseconds?
      */
     @Override
