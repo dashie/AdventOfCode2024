@@ -3,7 +3,10 @@ package adventofcode.commons;
 import java.util.List;
 import java.util.Objects;
 
-public class AoCVector {
+/**
+ *
+ */
+public final class AoCVector {
 
     public static AoCVector of(int x, int y) {
         return new AoCVector(x, y);

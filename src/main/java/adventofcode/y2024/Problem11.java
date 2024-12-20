@@ -91,7 +91,7 @@ public class Problem11 extends AoCProblem<Long> {
     private long count(long n, int round) {
         if (round <= 0) return 1; // end of rounds
 
-        // looking at the output I can see repeted numbers, so I try to cache the results
+        // looking at the output I can see repeated numbers, so I try to cache the results
         long cachedCount = countCache.getOrDefault(n + "-" + round, 0L);
         if (cachedCount > 0) {
             return cachedCount;

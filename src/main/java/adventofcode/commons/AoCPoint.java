@@ -7,7 +7,10 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AoCPoint {
+/**
+ *
+ */
+public final class AoCPoint {
 
     private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)");
 
@@ -120,6 +123,17 @@ public class AoCPoint {
 
     public List<AoCPoint> neighbors() {
         return Arrays.asList(north(), east(), south(), west());
+    }
+
+    public List<AoCPoint> neighbors(int distance) {
+        List<AoCPoint> points = new ArrayList<>(distance * distance);
+        for (int dy = -distance; dy <= distance; ++dy) {
+            int dx0 = distance - Math.abs(dy);
+            for (int dx = -dx0; dx <= dx0; ++dx) {
+                if (dy != 0 || dx != 0) points.add(AoCPoint.of(x + dx, y + dy));
+            }
+        }
+        return points;
     }
 
     public AoCPoint module(int modX, int modY) {

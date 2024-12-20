@@ -21,6 +21,20 @@ public class LineEx {
         return line;
     }
 
+    public LineEx before(String regex) {
+        return new LineEx(line.split(regex)[0]);
+    }
+
+    public LineEx after(String regex) {
+        return new LineEx(line.split(regex)[1]);
+    }
+
+    public List<LineEx> split(String regex) {
+        return Arrays.stream(line.split(regex))
+                     .map(LineEx::new)
+                     .toList();
+    }
+
     public int getInt(String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
@@ -43,9 +57,13 @@ public class LineEx {
     }
 
     public MatcherEx match(String regex) {
-        Pattern p = Pattern.compile(regex);
+        return match(regex, 0);
+    }
+
+    public MatcherEx match(String regex, int flags) {
+        Pattern p = Pattern.compile(regex, flags);
         Matcher m = p.matcher(line);
-        if (!m.find()) throw new IllegalArgumentException();
+        if (!m.find()) throw new IllegalArgumentException("Invalid pattern \"%s\" on \"%s\"".formatted(regex, line));
         String[] groups = new String[m.groupCount() + 1];
         for (int i = 0; i < groups.length; ++i) {
             groups[i] = m.group(i);

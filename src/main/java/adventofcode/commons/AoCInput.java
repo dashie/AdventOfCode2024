@@ -27,6 +27,14 @@ public class AoCInput {
         return inputText;
     }
 
+    public AoCInput before(String regex) {
+        return new AoCInput(inputText.split(regex)[0]);
+    }
+
+    public AoCInput after(String regex) {
+        return new AoCInput(inputText.split(regex)[1]);
+    }
+
     public List<String> split(String splitRule) {
         return Arrays.asList(inputText.split(splitRule));
     }

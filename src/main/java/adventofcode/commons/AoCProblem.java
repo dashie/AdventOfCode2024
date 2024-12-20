@@ -21,6 +21,22 @@ public class AoCProblem<T> {
     /**
      *
      */
+    public final void loadSampleData() throws Exception {
+        isUsingSample = true;
+        loadInputData("-sample");
+    }
+
+    /**
+     *
+     */
+    public final void loadInputData() throws Exception {
+        isUsingSample = false;
+        loadInputData("");
+    }
+
+    /**
+     *
+     */
     public final void loadInputData(String fileSuffix) throws Exception {
         if (fileSuffix == null) {
             fileSuffix = "";

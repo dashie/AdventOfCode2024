@@ -16,7 +16,7 @@ public abstract class AbstractProblemTest<T> {
 
     protected void _testSample(T expectedResult1, T expectedResult2) throws Exception {
         AoCProblem<T> problem = _newProblemInstance();
-        problem.loadInputData("-sample");
+        problem.loadSampleData();
         Object result1 = problem.partOne();
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
         Object result2 = problem.partTwo();
@@ -25,7 +25,7 @@ public abstract class AbstractProblemTest<T> {
 
     protected void _testProblem(T expectedResult1, T expectedResult2) throws Exception {
         AoCProblem<T> problem = _newProblemInstance();
-        problem.loadInputData(null);
+        problem.loadInputData();
         Object result1 = problem.partOne();
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
         Object result2 = problem.partTwo();

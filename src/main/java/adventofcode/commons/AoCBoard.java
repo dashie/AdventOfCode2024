@@ -1,13 +1,15 @@
 package adventofcode.commons;
 
 import java.lang.reflect.Array;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class AoCBoard<T> {
+/**
+ *
+ */
+public final class AoCBoard<T> {
 
     public T[][] buffer; // create a safe method to replace
     public final int N; // rows
@@ -49,6 +51,11 @@ public class AoCBoard<T> {
     @Override
     public AoCBoard<T> clone() throws CloneNotSupportedException {
         return new AoCBoard<>(cloneBuffer(buffer));
+    }
+
+    public AoCRect getRect(int offset) {
+        AoCRect rect = AoCRect.of(N - 1, M - 1);
+        return rect.expand(-1);
     }
 
     private T[][] cloneBuffer(T[][] data) {
@@ -168,6 +175,23 @@ public class AoCBoard<T> {
             }
         }
         return null;
+    }
+
+
+    public List<AoCPoint> neighbors(AoCPoint p0, int distance, Predicate<T> filter) {
+        List<AoCPoint> points = new ArrayList<>(distance * distance);
+        for (int dy = -distance; dy <= distance; ++dy) {
+            int dx0 = distance - Math.abs(dy);
+            for (int dx = -dx0; dx <= dx0; ++dx) {
+                if (dy != 0 || dx != 0) {
+                    var p = p0.translate(dx, dy);
+                    if (isValidCell(p) && filter.test(get(p))) {
+                        points.add(p0.translate(dx, dy));
+                    }
+                }
+            }
+        }
+        return points;
     }
 
     public void set(AoCPoint p, T value) {

@@ -1,6 +1,9 @@
 package adventofcode.commons;
 
-public class AoCRect {
+/**
+ *
+ */
+public final class AoCRect {
 
     public static final AoCRect of(int x2, int y2) {
         return of(AoCPoint.of(x2, y2));
@@ -32,6 +35,6 @@ public class AoCRect {
     }
 
     public AoCRect expand(int offset) {
-        return AoCRect.of(p1.x - 1, p1.y - 1, p2.x + 1, p2.y + 1);
+        return AoCRect.of(p1.x - offset, p1.y - offset, p2.x + offset, p2.y + offset);
     }
 }

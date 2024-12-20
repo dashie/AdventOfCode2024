@@ -24,13 +24,34 @@ public class MatcherEx {
         return groups.length;
     }
 
+    public boolean has(int i) {
+        return get(i) != null;
+    }
+
     public String get(int i) {
         return groups[i];
+    }
+
+    public String get(int i, String def) {
+        String group = groups[i];
+        return (group == null) ? def : group;
+    }
+
+    public char getChar(int i, char def) {
+        String group = groups[i];
+        if (group == null) return def;
+        return group.charAt(0);
     }
 
     public Integer getInt(int i) {
         String group = groups[i];
         if (group == null) return null;
+        return parseInt(group);
+    }
+
+    public Integer getInt(int i, int def) {
+        String group = groups[i];
+        if (group == null) return def;
         return parseInt(group);
     }
 
