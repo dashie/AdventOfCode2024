@@ -83,10 +83,10 @@ public class Problem20 extends AoCProblem<Long> {
         long count = 0;
         for (AoCPoint p : distFromSMap.keySet()) {
             for (AoCPoint np : board.neighbors(p, cheatTime, v -> v != '#')) {
-                long dist = np.distance(p).manhattam();
-                long distFromP0 = distFromSMap.get(p);
-                long distFromEnd = distFromEMap.get(np);
-                if (distFromP0 + distFromEnd + dist <= targetTime) count++;
+                long distCheat = np.distance(p).manhattam();
+                long distFromS = distFromSMap.get(p);
+                long distFromE = distFromEMap.get(np);
+                if (distFromS + distFromE + distCheat <= targetTime) count++;
             }
         }
         return count;
