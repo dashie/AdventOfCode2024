@@ -65,9 +65,9 @@ public class Problem21 extends AoCProblem<Long> {
             if (v.cost > lastCost) continue;
             costMap.put(v.p, v.cost);
             if (v.cost < lastCost) {
-                // store all minpath combinations because with nested pattern
-                // when we expand the sequence the same inner sequence can be expanded
-                // in pattern with different length
+                // store all min-path combinations because, with nested patterns,
+                // expanding a sequence can result in the same inner sequence
+                // being expanded into sequences of different lengths.
                 // for example: "^<A" and "<^A'"
                 map.put(code, new ArrayList<>(asList(v.sequence)));
             } else {
@@ -82,8 +82,8 @@ public class Problem21 extends AoCProblem<Long> {
     }
 
     private Visit nextVisit(Visit v, char dirCode) {
-        int cost = (v.sequence.length() > 0
-            && !v.sequence.substring(v.sequence.length() - 1).equals(dirCode)) ? 1000 : 1;
+        int slen = v.sequence.length();
+        int cost = (slen > 0 && v.sequence.charAt(slen - 1) != dirCode) ? 1000 : 1;
         AoCVector d = AoCVector.charArrowToMatrixDirection(dirCode);
         return new Visit(v.p.translate(d), v.sequence + dirCode, v.cost + cost);
     }
