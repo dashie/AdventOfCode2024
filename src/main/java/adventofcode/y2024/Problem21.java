@@ -114,12 +114,9 @@ public class Problem21 extends AoCProblem<Long> {
                     if (wrapper == null) {
                         cost += moves.getFirst().length() + 1; // +1 because we add "A";
                     } else {
-                        long shortest = Long.MAX_VALUE;
-                        for (String move : moves) {
-                            long tmp = wrapper.evalPushSequeceLength(move + "A");
-                            if (tmp < shortest) shortest = tmp;
-                        }
-                        cost += shortest;
+                        cost += moves.stream()
+                                     .mapToLong(m -> wrapper.evalPushSequeceLength(m + "A"))
+                                     .min().getAsLong();
                     }
                 }
                 return cost;
