@@ -59,11 +59,12 @@ public class Problem21 extends AoCProblem<Long> {
             var v = stack.poll();
             char cp = keypad.get(v.p, ' ');
             if (cp == ' ') continue;
-            String code = "%c%c".formatted(c0, cp);
 
             int lastCost = costMap.getOrDefault(v.p, Integer.MAX_VALUE);
             if (v.cost > lastCost) continue;
             costMap.put(v.p, v.cost);
+
+            String code = "%c%c".formatted(c0, cp);
             if (v.cost < lastCost) {
                 // store all min-path combinations because, with nested patterns,
                 // expanding a sequence can result in the same inner sequence
@@ -111,7 +112,7 @@ public class Problem21 extends AoCProblem<Long> {
                     List<String> moves = paths.get(code);
                     if (moves == null) throw new IllegalStateException();
                     if (wrapper == null) {
-                        cost += moves.getFirst().length() + 1; //  +1 because we add "A";
+                        cost += moves.getFirst().length() + 1; // +1 because we add "A";
                     } else {
                         long shortest = Long.MAX_VALUE;
                         for (String move : moves) {
@@ -159,12 +160,12 @@ public class Problem21 extends AoCProblem<Long> {
         return evalComplecityScore(numericKeypad);
     }
 
-    // prepare keypads for N "keypadRobots" + 1 for the numericKeypad
-    private Keypad prepareKeypads(int keypadRobots) {
-        Keypad robotKeypad = null;
-        for (int i = 0; i < keypadRobots; ++i) {
-            robotKeypad = new Keypad("A", directionalPaths, robotKeypad);
+    // prepare keypads for N numericKeypads + 1 for the numericKeypad
+    private Keypad prepareKeypads(int robots) {
+        Keypad keypad = null;
+        for (int i = 0; i < robots; ++i) {
+            keypad = new Keypad("A", directionalPaths, keypad);
         }
-        return new Keypad("A", numericPaths, robotKeypad);
+        return new Keypad("A", numericPaths, keypad);
     }
 }
