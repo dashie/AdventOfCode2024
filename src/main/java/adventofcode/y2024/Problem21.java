@@ -69,7 +69,15 @@ public class Problem21 extends AoCProblem<Long> {
                 // store all min-path combinations because, with nested patterns,
                 // expanding a sequence can result in the same inner sequence
                 // being expanded into sequences of different lengths.
-                // for example: "^<A" and "<^A'"
+                // for example:
+                //    if you want to press "2" you have 2 options: "^<A" and "<^A" (same length)
+                //    with 1 layer you still have 2 sequence of same length
+                //        ^<A : <Av<A>>^A
+                //        <^A : v<<A>^A>A
+                //    but with 2 layers the sequences are:
+                //        ^<A : v<<A>>^A<vA<A>>^AvAA^<A>A
+                //        <^A : <vA<AA>>^AvA^<A>AvA^A
+                //    it's like if with the 2nd option you need less moves to return the robot to "A"
                 map.put(code, new ArrayList<>(asList(v.sequence)));
             } else {
                 map.get(code).add(v.sequence);
@@ -100,6 +108,26 @@ public class Problem21 extends AoCProblem<Long> {
             this.pos = pos;
             this.paths = paths;
             this.wrapper = wrapper;
+        }
+
+        public String evalPushSequece(String digits) {
+            String sequence = "";
+            for (int i = 0; i < digits.length(); ++i) {
+                char digit = digits.charAt(i);
+                String code = pos + digit;
+                pos = Character.toString(digit);
+                List<String> moves = paths.get(code);
+                if (moves == null) throw new IllegalStateException();
+                if (wrapper == null) {
+                    sequence += moves.getFirst() + "A";
+                } else {
+                    sequence += moves.stream()
+                                     .map(m -> wrapper.evalPushSequece(m + "A"))
+                                     .reduce((a, b) -> a.length() > b.length() ? a : b)
+                                     .get();
+                }
+            }
+            return sequence;
         }
 
         public long evalPushSequeceLength(String digits) {
@@ -135,6 +163,15 @@ public class Problem21 extends AoCProblem<Long> {
         return evalComplecityScore(numericKeypad);
     }
 
+    // prepare keypads for N numericKeypads + 1 for the numericKeypad
+    private Keypad prepareKeypads(int robots) {
+        Keypad keypad = null;
+        for (int i = 0; i < robots; ++i) {
+            keypad = new Keypad("A", directionalPaths, keypad);
+        }
+        return new Keypad("A", numericPaths, keypad);
+    }
+
     private long evalComplecityScore(Keypad numericKeypad) {
         long result = 0;
         for (String code : codes) {
@@ -155,14 +192,5 @@ public class Problem21 extends AoCProblem<Long> {
     public Long partTwo() throws Exception {
         Keypad numericKeypad = prepareKeypads(25);
         return evalComplecityScore(numericKeypad);
-    }
-
-    // prepare keypads for N numericKeypads + 1 for the numericKeypad
-    private Keypad prepareKeypads(int robots) {
-        Keypad keypad = null;
-        for (int i = 0; i < robots; ++i) {
-            keypad = new Keypad("A", directionalPaths, keypad);
-        }
-        return new Keypad("A", numericPaths, keypad);
     }
 }
