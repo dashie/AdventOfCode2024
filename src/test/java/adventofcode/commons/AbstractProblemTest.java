@@ -19,8 +19,10 @@ public abstract class AbstractProblemTest<T> {
         problem.loadSampleData();
         Object result1 = problem.partOne();
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
-        Object result2 = problem.partTwo();
-        Assertions.assertEquals(expectedResult2, result2, "Part 2");
+        if (expectedResult2 != null) {
+            Object result2 = problem.partTwo();
+            Assertions.assertEquals(expectedResult2, result2, "Part 2");
+        }
     }
 
     protected void _testProblem(T expectedResult1, T expectedResult2) throws Exception {

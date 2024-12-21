@@ -35,6 +35,11 @@ public class LineEx {
                      .toList();
     }
 
+    public List<String> splitToStrings(String regex) {
+        return Arrays.stream(line.split(regex))
+                     .toList();
+    }
+
     public int getInt(String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);

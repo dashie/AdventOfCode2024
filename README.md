@@ -24,7 +24,7 @@ https://adventofcode.com/2024
 - [x] Day 18: RAM Run
 - [x] Day 19: Linen Layout
 - [x] Day 20: Race Condition
-- [ ] Day 21
+- [x] Day 21: Keypad Conundrum
 - [ ] Day 22
 - [ ] Day 23
 - [ ] Day 24
@@ -37,9 +37,9 @@ Download your puzzle data with `curl "https://adventofcode.com/2024/day/{day}/in
 Example:
 
 ```bash
-curl -s "https://adventofcode.com/2024/day/21/input" \
+curl -s "https://adventofcode.com/2024/day/22/input" \
   --cookie session=$(cat misc/keys/session) \
-  > src/main/resources/adventofcode/y2024/Problem21.txt
+  > src/main/resources/adventofcode/y2024/Problem22.txt
 ```
 
 And get the full puzzle article text with `curl "https://adventofcode.com/2024/day/{day}"`
