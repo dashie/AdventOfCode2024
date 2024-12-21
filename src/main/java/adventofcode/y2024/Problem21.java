@@ -110,6 +110,9 @@ public class Problem21 extends AoCProblem<Long> {
             this.wrapper = wrapper;
         }
 
+        /**
+         * Can be use only with low recursion, or the string concatenation consumes all the memory
+         */
         public String evalPushSequece(String digits) {
             String sequence = "";
             for (int i = 0; i < digits.length(); ++i) {
@@ -123,7 +126,7 @@ public class Problem21 extends AoCProblem<Long> {
                 } else {
                     sequence += moves.stream()
                                      .map(m -> wrapper.evalPushSequece(m + "A"))
-                                     .reduce((a, b) -> a.length() > b.length() ? a : b)
+                                     .reduce((a, b) -> a.length() < b.length() ? a : b)
                                      .get();
                 }
             }
