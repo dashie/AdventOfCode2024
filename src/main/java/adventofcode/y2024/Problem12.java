@@ -17,7 +17,7 @@ import static adventofcode.commons.AoCVector.*;
 public class Problem12 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem12().loadAndSolve(false);
+        new Problem12().loadResourceAndSolve(false);
     }
 
     AoCBoard<Character> board;

@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
 public class Problem08 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem08().loadAndSolve(false);
+        new Problem08().loadResourceAndSolve(false);
     }
 
     AoCBoard<Character> board;

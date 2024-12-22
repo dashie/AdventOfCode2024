@@ -14,7 +14,7 @@ import java.util.Map;
 public class Problem23 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem23().loadAndSolve(false);
+        new Problem23().loadResourceAndSolve(false);
     }
 
     record Instruction(String id, String r, Integer offset) {}

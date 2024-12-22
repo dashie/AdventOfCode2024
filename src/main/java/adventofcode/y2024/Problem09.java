@@ -13,7 +13,7 @@ import java.util.List;
 public class Problem09 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem09().loadAndSolve(false);
+        new Problem09().loadResourceAndSolve(false);
     }
 
     private int[] data;

@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCPoint.parsePoint;
 public class Problem18 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem18().loadAndSolve(true);
+        new Problem18().loadResourceAndSolve(true);
     }
 
     int PART1_TIME;
@@ -23,7 +23,7 @@ public class Problem18 extends AoCProblem<String> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        if (isUsingSampleData()) {
+        if (isUsingSampleResource()) {
             MEMORY_SIZE = AoCRect.of(6, 6);
             PART1_TIME = 12;
         } else {

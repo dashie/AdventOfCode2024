@@ -14,7 +14,7 @@ import java.util.Set;
 public class Problem10 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem10().loadAndSolve(false);
+        new Problem10().loadResourceAndSolve(false);
     }
 
     private AoCBoard<Integer> board;

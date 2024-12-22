@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  */
 public class AoCProblem<T> {
 
-    private boolean isUsingSampleData = false;
+    private boolean isUsingSampleResource = false;
 
     /**
      *
@@ -20,30 +20,30 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public boolean isUsingSampleData() {
-        return isUsingSampleData;
+    public boolean isUsingSampleResource() {
+        return isUsingSampleResource;
     }
 
     /**
      *
      */
-    public final void loadInputData() throws Exception {
-        isUsingSampleData = false;
-        loadInputData("");
+    public final void loadInputResource() throws Exception {
+        isUsingSampleResource = false;
+        loadInputResource("");
     }
 
     /**
      *
      */
-    public final void loadSampleData() throws Exception {
-        isUsingSampleData = true;
-        loadInputData("-sample");
+    public final void loadSampleResource() throws Exception {
+        isUsingSampleResource = true;
+        loadInputResource("-sample");
     }
 
     /**
      *
      */
-    public final void loadInputData(String fileSuffix) throws Exception {
+    public final void loadInputResource(String fileSuffix) throws Exception {
         if (fileSuffix == null) {
             fileSuffix = "";
         } else if (!fileSuffix.isEmpty() && !fileSuffix.startsWith("-")) {
@@ -68,24 +68,24 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final void loadAndSolve() throws Exception {
-        loadAndSolve(false);
+    public final void loadResourceAndSolve() throws Exception {
+        loadResourceAndSolve(false);
     }
 
     /**
      *
      */
-    public void loadAndSolve(boolean useSampleData) throws Exception {
-        isUsingSampleData = useSampleData;
+    public void loadResourceAndSolve(boolean useSampleData) throws Exception {
+        isUsingSampleResource = useSampleData;
         String useSampleSuffix = useSampleData ? "-sample" : "";
-        loadAndSolve(useSampleSuffix);
+        loadResourceAndSolve(useSampleSuffix);
     }
 
     /**
      *
      */
-    private void loadAndSolve(String inputDataSuffix) throws Exception {
-        loadInputData(inputDataSuffix);
+    private void loadResourceAndSolve(String inputDataSuffix) throws Exception {
+        loadInputResource(inputDataSuffix);
 
         System.out.println(getClass().getName());
         T result1 = solvePartOne();

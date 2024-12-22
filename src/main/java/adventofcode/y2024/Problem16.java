@@ -11,7 +11,7 @@ import java.util.*;
 public class Problem16 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem16().loadAndSolve(false);
+        new Problem16().loadResourceAndSolve(false);
     }
 
     AoCBoard<Character> board;

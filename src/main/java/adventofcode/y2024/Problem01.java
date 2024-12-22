@@ -17,7 +17,7 @@ import static java.lang.Math.abs;
 public class Problem01 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem01().loadAndSolve(false);
+        new Problem01().loadResourceAndSolve(false);
     }
 
     private List<Long> list1 = new ArrayList<>();

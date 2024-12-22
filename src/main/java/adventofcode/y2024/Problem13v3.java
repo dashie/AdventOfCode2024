@@ -21,7 +21,7 @@ import static java.lang.Math.*;
 public class Problem13v3 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem13v3().loadAndSolve(false);
+        new Problem13v3().loadResourceAndSolve(false);
     }
 
     record Machine(long prizeX, long prizeY, long[][] buttons) {

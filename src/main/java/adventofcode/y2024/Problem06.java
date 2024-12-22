@@ -12,7 +12,7 @@ import java.util.Set;
 public class Problem06 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem06().loadAndSolve(false);
+        new Problem06().loadResourceAndSolve(false);
     }
 
     private AoCBoard<Character> board;

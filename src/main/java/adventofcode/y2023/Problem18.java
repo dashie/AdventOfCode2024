@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCVector.charUDRLToDirection;
 public class Problem18 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem18().loadAndSolve(false);
+        new Problem18().loadResourceAndSolve(false);
     }
 
     private List<AoCVector> moves = new ArrayList<>();

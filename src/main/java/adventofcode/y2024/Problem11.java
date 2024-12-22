@@ -14,7 +14,7 @@ import static java.lang.Long.parseLong;
 public class Problem11 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem11().loadAndSolve(false);
+        new Problem11().loadResourceAndSolve(false);
     }
 
     private List<Long> data0;

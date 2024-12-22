@@ -19,7 +19,7 @@ import static java.util.function.Predicate.not;
 public class Problem20 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem20().loadAndSolve(false);
+        new Problem20().loadResourceAndSolve(false);
     }
 
     public static final String BROADCASTER = "broadcaster";

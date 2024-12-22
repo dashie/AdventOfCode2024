@@ -22,7 +22,7 @@ import static java.lang.Math.rint;
 public class Problem13v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem13v2().loadAndSolve(false);
+        new Problem13v2().loadResourceAndSolve(false);
     }
 
     record Machine(double prizeX, double prizeY, double[][] buttons) {}

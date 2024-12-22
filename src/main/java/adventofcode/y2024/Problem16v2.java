@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 public class Problem16v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem16v2().loadAndSolve(false);
+        new Problem16v2().loadResourceAndSolve(false);
     }
 
     AoCBoard<Character> board;

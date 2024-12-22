@@ -17,7 +17,7 @@ import static java.lang.Long.parseLong;
 public class Problem05v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem05v2().loadAndSolve(false);
+        new Problem05v2().loadResourceAndSolve(false);
     }
 
     private Set<String> orderSet = new HashSet<>();

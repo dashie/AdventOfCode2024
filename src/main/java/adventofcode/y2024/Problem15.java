@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCVector.charArrowToMatrixDirection;
 public class Problem15 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem15().loadAndSolve(false);
+        new Problem15().loadResourceAndSolve(false);
     }
 
     Character[][] boardData;

@@ -11,7 +11,7 @@ import java.util.*;
 public class Problem14 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem14().loadAndSolve(false);
+        new Problem14().loadResourceAndSolve(false);
     }
 
     class Robot {
@@ -36,7 +36,7 @@ public class Problem14 extends AoCProblem<Long> {
                  robots.add(robot);
              });
 
-        if (isUsingSampleData()) {
+        if (isUsingSampleResource()) {
             areaX = 11;
             areaY = 7;
         } else {

@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 public class Problem21 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem21().loadAndSolve(false);
+        new Problem21().loadResourceAndSolve(false);
     }
 
     AoCBoard<Character> numericKeypad = new AoCBoard<>(new Character[][]{

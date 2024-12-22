@@ -13,7 +13,7 @@ import java.util.*;
 public class Problem19v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19v2().loadAndSolve(false);
+        new Problem19v2().loadResourceAndSolve(false);
     }
 
     public static final char AFTER_Z = (char) ('z' + 1);

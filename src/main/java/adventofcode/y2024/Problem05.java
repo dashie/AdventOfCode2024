@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class Problem05 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem05().loadAndSolve(false);
+        new Problem05().loadResourceAndSolve(false);
     }
 
     private Map<Long, Set<Long>> orderMap = new HashMap<>();

@@ -16,7 +16,7 @@ import java.util.Map;
 public class Problem12 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem12().loadAndSolve(false);
+        new Problem12().loadResourceAndSolve(false);
     }
 
     record Record(String pattern, List<Integer> groups) {}

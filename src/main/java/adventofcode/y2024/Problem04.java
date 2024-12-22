@@ -9,7 +9,7 @@ import adventofcode.commons.*;
 public class Problem04 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem04().loadAndSolve(false);
+        new Problem04().loadResourceAndSolve(false);
     }
 
     private AoCBoard<Character> board;

@@ -21,7 +21,7 @@ import static java.lang.Math.min;
 public class Problem19 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19().loadAndSolve(false);
+        new Problem19().loadResourceAndSolve(false);
     }
 
     record Part(int x, int m, int a, int s) {

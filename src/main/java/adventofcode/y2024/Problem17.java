@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Problem17 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem17().loadAndSolve(false);
+        new Problem17().loadResourceAndSolve(false);
     }
 
     class Machine {

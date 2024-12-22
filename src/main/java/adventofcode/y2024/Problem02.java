@@ -16,7 +16,7 @@ import static java.lang.Math.signum;
 public class Problem02 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem02().loadAndSolve(false);
+        new Problem02().loadResourceAndSolve(false);
     }
 
     private List<List<Long>> reports = new ArrayList<>();

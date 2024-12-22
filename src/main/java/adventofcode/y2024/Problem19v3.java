@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Problem19v3 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19v3().loadAndSolve(false);
+        new Problem19v3().loadResourceAndSolve(false);
     }
 
     Pattern towelsPattern;

@@ -16,7 +16,7 @@ import java.util.List;
 public class Problem13 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem13().loadAndSolve(false);
+        new Problem13().loadResourceAndSolve(false);
     }
 
     record Machine(int prizeX, int prizeY, int[][] buttons) {}

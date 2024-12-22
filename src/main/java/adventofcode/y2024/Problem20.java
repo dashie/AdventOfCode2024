@@ -17,7 +17,7 @@ import java.util.Map;
 public class Problem20 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem20().loadAndSolve(true);
+        new Problem20().loadResourceAndSolve(true);
     }
 
     AoCBoard<Character> board;
@@ -30,7 +30,7 @@ public class Problem20 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        if (isUsingSampleData()) {
+        if (isUsingSampleResource()) {
             savedTimePart1 = 12; // expected 8 paths
             savedTimePart2 = 70; // expected 41 paths
         } else {
