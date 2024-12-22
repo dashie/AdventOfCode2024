@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class Problem22 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem22().loadAndSolve(false);
+        new Problem22().loadResourceAndSolve(false);
     }
 
     private int bossHp0 = 0;

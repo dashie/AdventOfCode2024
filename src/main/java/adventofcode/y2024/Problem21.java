@@ -16,13 +16,13 @@ public class Problem21 extends AoCProblem<Long> {
         new Problem21().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> numericKeypad = new AoCBoard<>(new Character[][]{
+    static AoCBoard<Character> numericKeypad = new AoCBoard<>(new Character[][]{
         {'7', '8', '9'},
         {'4', '5', '6'},
         {'1', '2', '3'},
         {' ', '0', 'A'},
     });
-    AoCBoard<Character> directionalKeypad = new AoCBoard<>(new Character[][]{
+    static AoCBoard<Character> directionalKeypad = new AoCBoard<>(new Character[][]{
         {' ', '^', 'A'},
         {'<', 'v', '>'},
     });
@@ -30,7 +30,6 @@ public class Problem21 extends AoCProblem<Long> {
     Map<String, List<String>> numericPaths = new HashMap<>();
     Map<String, List<String>> directionalPaths = new HashMap<>();
     List<String> codes;
-
 
     @Override
     public void processInput(AoCInput input) throws Exception {

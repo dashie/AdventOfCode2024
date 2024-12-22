@@ -128,6 +128,10 @@ public class Problem18 extends AoCProblem<Long> {
 
         // Using Shoelace formula for the internal area
         // https://en.wikipedia.org/wiki/Shoelace_formula
+        // And specifically the Pick's theorem, because we are in
+        // integer's math and we want the border perimeter too
+        // https://en.wikipedia.org/wiki/Pick%27s_theorem
+        //
         // example:
         // rectangle described by 4 points (0,5),(10, 0),(0, -5),(-10, 0)
         // total pixels = 66

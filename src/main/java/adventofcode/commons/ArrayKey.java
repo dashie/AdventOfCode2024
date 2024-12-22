@@ -13,6 +13,11 @@ public record ArrayKey(Object[] keys) {
     }
 
     @Override
+    public String toString() {
+        return "key:" + Arrays.toString(keys);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ArrayKey that = (ArrayKey) o;
