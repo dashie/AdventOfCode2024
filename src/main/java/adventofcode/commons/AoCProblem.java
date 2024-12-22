@@ -9,29 +9,35 @@ import java.io.InputStreamReader;
  */
 public class AoCProblem<T> {
 
-    private boolean isUsingSample = false;
+    private boolean isUsingSampleData = false;
 
+    /**
+     *
+     */
     public AoCProblem() {
-    }
-
-    public boolean isUsingSample() {
-        return isUsingSample;
     }
 
     /**
      *
      */
-    public final void loadSampleData() throws Exception {
-        isUsingSample = true;
-        loadInputData("-sample");
+    public boolean isUsingSampleData() {
+        return isUsingSampleData;
     }
 
     /**
      *
      */
     public final void loadInputData() throws Exception {
-        isUsingSample = false;
+        isUsingSampleData = false;
         loadInputData("");
+    }
+
+    /**
+     *
+     */
+    public final void loadSampleData() throws Exception {
+        isUsingSampleData = true;
+        loadInputData("-sample");
     }
 
     /**
@@ -62,29 +68,29 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final void solve() throws Exception {
-        solve(false);
+    public final void loadAndSolve() throws Exception {
+        loadAndSolve(false);
     }
 
     /**
      *
      */
-    public void solve(boolean useSample) throws Exception {
-        isUsingSample = useSample;
-        String useSampleSuffix = useSample ? "-sample" : "";
-        solve(useSampleSuffix);
+    public void loadAndSolve(boolean useSampleData) throws Exception {
+        isUsingSampleData = useSampleData;
+        String useSampleSuffix = useSampleData ? "-sample" : "";
+        loadAndSolve(useSampleSuffix);
     }
 
     /**
      *
      */
-    private void solve(String fileSuffix) throws Exception {
-        loadInputData(fileSuffix);
+    private void loadAndSolve(String inputDataSuffix) throws Exception {
+        loadInputData(inputDataSuffix);
 
         System.out.println(getClass().getName());
-        T result1 = partOne();
+        T result1 = solvePartOne();
         System.out.printf("  Part One: %s%n", result1);
-        T result2 = partTwo();
+        T result2 = solvePartTwo();
         if (result2 != null) {
             System.out.printf("  Part Two: %s%n", result2);
         }
@@ -101,14 +107,14 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public T partOne() throws Exception {
+    public T solvePartOne() throws Exception {
         return null;
     }
 
     /**
      *
      */
-    public T partTwo() throws Exception {
+    public T solvePartTwo() throws Exception {
         return null;
     }
 }

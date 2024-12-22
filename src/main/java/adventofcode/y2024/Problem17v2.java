@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class Problem17v2 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem17v2().solve(false);
+        new Problem17v2().loadAndSolve(false);
     }
 
     class Machine {
@@ -57,7 +57,7 @@ public class Problem17v2 extends AoCProblem<String> {
      * the values it output into a single string?
      */
     @Override
-    public String partOne() throws Exception {
+    public String solvePartOne() throws Exception {
         return programToString(run(machine));
     }
 
@@ -92,7 +92,7 @@ public class Problem17v2 extends AoCProblem<String> {
      * that causes the program to output a copy of itself?
      */
     @Override
-    public String partTwo() throws Exception {
+    public String solvePartTwo() throws Exception {
         // Analyzing the program code
         //
         // 2,4    b = a % 8                    take last 3 bit of A

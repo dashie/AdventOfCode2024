@@ -21,7 +21,7 @@ import static java.lang.Math.min;
 public class Problem19 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19().solve(false);
+        new Problem19().loadAndSolve(false);
     }
 
     record Part(int x, int m, int a, int s) {
@@ -86,7 +86,7 @@ public class Problem19 extends AoCProblem<Long> {
      * that ultimately get accepted?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         return parts.stream()
                     .filter(this::isAccepted)
                     .mapToLong(Part::rate)
@@ -118,7 +118,7 @@ public class Problem19 extends AoCProblem<Long> {
      * How many distinct combinations of ratings will be accepted by the Elves' workflows?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         Workflow wf = workflows.get("in");
         return countAcceptedCombinations(wf, new PartCriteria(
             new Range(1, 4000),

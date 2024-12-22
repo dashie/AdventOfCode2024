@@ -16,7 +16,7 @@ import java.util.List;
 public class Problem13 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem13().solve(false);
+        new Problem13().loadAndSolve(false);
     }
 
     record Machine(int prizeX, int prizeY, int[][] buttons) {}
@@ -48,7 +48,7 @@ public class Problem13 extends AoCProblem<Long> {
      * What is the fewest tokens you would have to spend to win all possible prizes?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (Machine m : machines) {
             result += solve(m, 0L);
@@ -82,7 +82,7 @@ public class Problem13 extends AoCProblem<Long> {
      * What is the fewest tokens you would have to spend to win all possible prizes?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0L;
         for (Machine m : machines) {
             result += solve(m, 10000000000000L);

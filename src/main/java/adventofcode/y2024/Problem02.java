@@ -16,7 +16,7 @@ import static java.lang.Math.signum;
 public class Problem02 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem02().solve(false);
+        new Problem02().loadAndSolve(false);
     }
 
     private List<List<Long>> reports = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Problem02 extends AoCProblem<Long> {
      * ...Analyze the unusual data from the engineers. How many reports are safe?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (List<Long> report : reports) {
             if (isSafe(report)) {
@@ -62,7 +62,7 @@ public class Problem02 extends AoCProblem<Long> {
      * can remove a single level from unsafe reports. How many reports are now safe?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         next:
         for (List<Long> report : reports) {

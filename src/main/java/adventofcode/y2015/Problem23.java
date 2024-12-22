@@ -14,7 +14,7 @@ import java.util.Map;
 public class Problem23 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem23().solve(false);
+        new Problem23().loadAndSolve(false);
     }
 
     record Instruction(String id, String r, Integer offset) {}
@@ -40,7 +40,7 @@ public class Problem23 extends AoCProblem<Long> {
      * puzzle input is finished executing?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         Map<String, Integer> regs = new HashMap<>();
         regs.put("a", 0);
         regs.put("b", 0);
@@ -92,7 +92,7 @@ public class Problem23 extends AoCProblem<Long> {
      * if register a starts as 1 instead?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         Map<String, Integer> regs = new HashMap<>();
         regs.put("a", 1);
         regs.put("b", 0);

@@ -11,7 +11,7 @@ import java.util.*;
 public class Problem14 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem14().solve(false);
+        new Problem14().loadAndSolve(false);
     }
 
     class Robot {
@@ -36,7 +36,7 @@ public class Problem14 extends AoCProblem<Long> {
                  robots.add(robot);
              });
 
-        if (isUsingSample()) {
+        if (isUsingSampleData()) {
             areaX = 11;
             areaY = 7;
         } else {
@@ -52,7 +52,7 @@ public class Problem14 extends AoCProblem<Long> {
      * have elapsed?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         moveRobots(100);
         return (long) evalSafetyFactor();
     }
@@ -97,7 +97,7 @@ public class Problem14 extends AoCProblem<Long> {
      * robots to display the Easter egg?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         int cycleLength = areaX * areaY;
         double easterEggSpreadFactor = 1.0;
         double easterEggTime = -1;

@@ -17,7 +17,7 @@ import static java.lang.Long.parseLong;
 public class Problem05v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem05v2().solve(false);
+        new Problem05v2().loadAndSolve(false);
     }
 
     private Set<String> orderSet = new HashSet<>();
@@ -40,7 +40,7 @@ public class Problem05v2 extends AoCProblem<Long> {
      * correctly-ordered updates?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (List<String> update : updates) {
             if (isCorrect(update)) {
@@ -69,7 +69,7 @@ public class Problem05v2 extends AoCProblem<Long> {
      * correctly ordering just those updates?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         for (List<String> update : updates) {
             if (!isCorrect(update)) {

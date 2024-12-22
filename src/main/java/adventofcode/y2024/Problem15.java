@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCVector.charArrowToMatrixDirection;
 public class Problem15 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem15().solve(false);
+        new Problem15().loadAndSolve(false);
     }
 
     Character[][] boardData;
@@ -33,7 +33,7 @@ public class Problem15 extends AoCProblem<Long> {
      * all boxes' GPS coordinates?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         AoCBoard<Character> board = new AoCBoard<>(boardData);
         AoCPoint p = board.searchFor('@');
         for (Integer movement : movements) {
@@ -64,7 +64,7 @@ public class Problem15 extends AoCProblem<Long> {
      * What is the sum of all boxes' final GPS coordinates?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         Character[][] boardDataExpanded = expandBoardData();
         AoCBoard<Character> board = new AoCBoard<>(boardDataExpanded);
         AoCPoint p = board.searchFor('@');

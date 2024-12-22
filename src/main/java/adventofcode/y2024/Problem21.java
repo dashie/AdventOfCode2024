@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 public class Problem21 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem21().solve(false);
+        new Problem21().loadAndSolve(false);
     }
 
     AoCBoard<Character> numericKeypad = new AoCBoard<>(new Character[][]{
@@ -161,7 +161,7 @@ public class Problem21 extends AoCProblem<Long> {
      * What is the sum of the complexities of the five codes on your list?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         Keypad numericKeypad = prepareKeypads(2);
         return evalComplecityScore(numericKeypad);
     }
@@ -192,7 +192,7 @@ public class Problem21 extends AoCProblem<Long> {
      * What is the sum of the complexities of the five codes on your list?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         Keypad numericKeypad = prepareKeypads(25);
         return evalComplecityScore(numericKeypad);
     }

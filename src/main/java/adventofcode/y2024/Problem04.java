@@ -9,7 +9,7 @@ import adventofcode.commons.*;
 public class Problem04 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem04().solve(false);
+        new Problem04().loadAndSolve(false);
     }
 
     private AoCBoard<Character> board;
@@ -23,7 +23,7 @@ public class Problem04 extends AoCProblem<Long> {
      * ...Take a look at the little Elf's word search. How many times does XMAS appear?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = board.forEach((p, c) -> {
             int n = 0;
             if (c == 'X') {
@@ -53,7 +53,7 @@ public class Problem04 extends AoCProblem<Long> {
      * How many times does an X-MAS appear?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = board.forEach((p, c) -> {
             return c == 'A' && checkMaxCross(p) ? 1 : 0;
         });

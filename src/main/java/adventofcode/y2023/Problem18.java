@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCVector.charUDRLToDirection;
 public class Problem18 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem18().solve(false);
+        new Problem18().loadAndSolve(false);
     }
 
     private List<AoCVector> moves = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Problem18 extends AoCProblem<Long> {
      * if they follow their dig plan, how many cubic meters of lava could it hold?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         // First part is solved with fill algorithm.
         return evalShapeSizeWithFillAlgorithm(moves);
     }
@@ -109,7 +109,7 @@ public class Problem18 extends AoCProblem<Long> {
      * could the lagoon hold?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
 
         List<AoCVector> moves = new ArrayList<>();
         colors.forEach(str -> {

@@ -13,7 +13,7 @@ import java.util.List;
 public class Problem09 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem09().solve(false);
+        new Problem09().loadAndSolve(false);
     }
 
     private int[] data;
@@ -29,7 +29,7 @@ public class Problem09 extends AoCProblem<Long> {
      * (Be careful copy/pasting the input for this puzzle; it is a single, very long line.)
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         List<Long> disk = expand();
 
         int fileIndex = disk.size();
@@ -85,7 +85,7 @@ public class Problem09 extends AoCProblem<Long> {
      * new method instead. What is the resulting filesystem checksum?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         List<Long> disk = expand();
 
         int fileIndex = disk.size();

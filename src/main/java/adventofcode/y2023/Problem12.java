@@ -16,7 +16,7 @@ import java.util.Map;
 public class Problem12 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem12().solve(false);
+        new Problem12().loadAndSolve(false);
     }
 
     record Record(String pattern, List<Integer> groups) {}
@@ -38,7 +38,7 @@ public class Problem12 extends AoCProblem<Long> {
      * What is the sum of those counts?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (Record record : records) {
             result += countOptions(record.pattern, record.groups);
@@ -89,7 +89,7 @@ public class Problem12 extends AoCProblem<Long> {
      * of possible arrangement counts?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         for (Record record : records) {
             String pattern5 = record.pattern

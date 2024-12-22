@@ -14,7 +14,7 @@ import java.util.Set;
 public class Problem10 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem10().solve(false);
+        new Problem10().loadAndSolve(false);
     }
 
     private AoCBoard<Integer> board;
@@ -29,7 +29,7 @@ public class Problem10 extends AoCProblem<Long> {
      * What is the sum of the scores of all trailheads on your topographic map?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         return (long) board.forEach((p, v) ->
             (v == 0) ? countTrails(p, false) : 0
         );
@@ -66,7 +66,7 @@ public class Problem10 extends AoCProblem<Long> {
      * What is the sum of the ratings of all trailheads?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         return (long) board.forEach((p, v) ->
             (v == 0) ? countTrails(p, true) : 0
         );

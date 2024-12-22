@@ -12,7 +12,7 @@ import java.util.Set;
 public class Problem06 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem06().solve(false);
+        new Problem06().loadAndSolve(false);
     }
 
     private AoCBoard<Character> board;
@@ -28,7 +28,7 @@ public class Problem06 extends AoCProblem<Long> {
      * visit before leaving the mapped area?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         AoCVector d0 = AoCVector.SOUTH;
         AoCPoint p0 = board.searchFor('^');
         return (long) countCells(p0, d0);
@@ -52,7 +52,7 @@ public class Problem06 extends AoCProblem<Long> {
      * How many different positions could you choose for this obstruction?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         final AoCVector d0 = AoCVector.SOUTH;
         final AoCPoint p0 = board.searchFor('^');
         long loopsCount = board.forEach((p, c) -> {

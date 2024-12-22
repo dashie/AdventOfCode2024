@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
 public class Problem08 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem08().solve(false);
+        new Problem08().loadAndSolve(false);
     }
 
     AoCBoard<Character> board;
@@ -35,7 +35,7 @@ public class Problem08 extends AoCProblem<Long> {
      * How many unique locations within the bounds of the map contain an antinode?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         Set<AoCPoint> antinodes = new HashSet<>();
         searchForAntinodes((p, v) -> {
             AoCPoint antinode = p.translate(v);
@@ -77,7 +77,7 @@ public class Problem08 extends AoCProblem<Long> {
      * How many unique locations within the bounds of the map contain an antinode?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         Set<AoCPoint> antinodes = new HashSet<>();
         searchForAntinodes((p, v) -> {
             antinodes.add(p);

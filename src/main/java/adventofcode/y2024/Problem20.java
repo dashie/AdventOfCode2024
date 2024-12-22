@@ -17,7 +17,7 @@ import java.util.Map;
 public class Problem20 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem20().solve(true);
+        new Problem20().loadAndSolve(true);
     }
 
     AoCBoard<Character> board;
@@ -30,7 +30,7 @@ public class Problem20 extends AoCProblem<Long> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        if (isUsingSample()) {
+        if (isUsingSampleData()) {
             savedTimePart1 = 12; // expected 8 paths
             savedTimePart2 = 70; // expected 41 paths
         } else {
@@ -73,7 +73,7 @@ public class Problem20 extends AoCProblem<Long> {
      * How many cheats would save you at least 100 picoseconds?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long targetTime = distFromEMap.get(p0);
         long n = countPathsWithCheat(2, targetTime - savedTimePart1);
         return n;
@@ -97,7 +97,7 @@ public class Problem20 extends AoCProblem<Long> {
      * How many cheats would save you at least 100 picoseconds?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long targetTime = distFromEMap.get(p0);
         long n = countPathsWithCheat(20, targetTime - savedTimePart2); // 20 = 5
         return n;

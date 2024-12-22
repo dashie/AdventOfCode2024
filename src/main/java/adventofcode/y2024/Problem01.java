@@ -17,7 +17,7 @@ import static java.lang.Math.abs;
 public class Problem01 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem01().solve(false);
+        new Problem01().loadAndSolve(false);
     }
 
     private List<Long> list1 = new ArrayList<>();
@@ -44,7 +44,7 @@ public class Problem01 extends AoCProblem<Long> {
      * What is the total distance between your lists?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (int i = 0; i < list1.size(); i++) {
             result += abs(list1.get(i) - list2.get(i));
@@ -60,7 +60,7 @@ public class Problem01 extends AoCProblem<Long> {
      * What is their similarity score?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         HashMap<Long, Long> map = new HashMap<>();
         for (int i = 0; i < list2.size(); i++) {
             long n = list2.get(i);

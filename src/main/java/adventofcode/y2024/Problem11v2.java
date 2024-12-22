@@ -17,7 +17,7 @@ import static java.lang.Long.parseLong;
 public class Problem11v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem11v2().solve(false);
+        new Problem11v2().loadAndSolve(false);
     }
 
     private List<Long> data0;
@@ -32,7 +32,7 @@ public class Problem11v2 extends AoCProblem<Long> {
      * How many stones will you have after blinking 25 times?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         return count(25);
     }
 
@@ -82,7 +82,7 @@ public class Problem11v2 extends AoCProblem<Long> {
      * ...How many stones would you have after blinking a total of 75 times?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         return count(75);
     }
 }

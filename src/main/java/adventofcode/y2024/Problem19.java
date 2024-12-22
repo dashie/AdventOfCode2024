@@ -12,7 +12,7 @@ import java.util.*;
 public class Problem19 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19().solve(false);
+        new Problem19().loadAndSolve(false);
     }
 
     public static final char AFTER_Z = (char) ('z' + 1);
@@ -33,7 +33,7 @@ public class Problem19 extends AoCProblem<Long> {
      * How many designs are possible?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (String p : patterns) {
             if (countCombinations(p) > 0) result++;
@@ -80,7 +80,7 @@ public class Problem19 extends AoCProblem<Long> {
      * you could make each design?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         for (String p : patterns) {
             result += countCombinations(p);

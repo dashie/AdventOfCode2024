@@ -17,10 +17,10 @@ public abstract class AbstractProblemTest<T> {
     protected void _testSample(T expectedResult1, T expectedResult2) throws Exception {
         AoCProblem<T> problem = _newProblemInstance();
         problem.loadSampleData();
-        Object result1 = problem.partOne();
+        Object result1 = problem.solvePartOne();
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
         if (expectedResult2 != null) {
-            Object result2 = problem.partTwo();
+            Object result2 = problem.solvePartTwo();
             Assertions.assertEquals(expectedResult2, result2, "Part 2");
         }
     }
@@ -28,9 +28,9 @@ public abstract class AbstractProblemTest<T> {
     protected void _testProblem(T expectedResult1, T expectedResult2) throws Exception {
         AoCProblem<T> problem = _newProblemInstance();
         problem.loadInputData();
-        Object result1 = problem.partOne();
+        Object result1 = problem.solvePartOne();
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
-        Object result2 = problem.partTwo();
+        Object result2 = problem.solvePartTwo();
         Assertions.assertEquals(expectedResult2, result2, "Part 2");
     }
 }

@@ -14,7 +14,7 @@ import static java.lang.Long.parseLong;
 public class Problem07 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem07().solve(false);
+        new Problem07().loadAndSolve(false);
     }
 
     private List<long[]> paramsList;
@@ -47,7 +47,7 @@ public class Problem07 extends AoCProblem<Long> {
      * What is their total calibration result?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (long[] params : paramsList) {
             if (isSolvable(params, List.of(ADD, MUL))) {
@@ -86,7 +86,7 @@ public class Problem07 extends AoCProblem<Long> {
      * What is their total calibration result?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         for (long[] params : paramsList) {
             if (isSolvable(params, List.of(ADD, MUL, CAT))) {

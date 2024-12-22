@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 public class Problem16v2 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem16v2().solve(false);
+        new Problem16v2().loadAndSolve(false);
     }
 
     AoCBoard<Character> board;
@@ -33,7 +33,7 @@ public class Problem16v2 extends AoCProblem<Long> {
      * What is the lowest score a Reindeer could possibly get?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         var p = board.searchFor('S');
         return searchBestScore(AoCDirectedPoint.of(p, AoCVector.EAST));
     }
@@ -68,7 +68,7 @@ public class Problem16v2 extends AoCProblem<Long> {
      * How many tiles are part of at least one of the best paths through the maze?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         return 0L;
     }
 

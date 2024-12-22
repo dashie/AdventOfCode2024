@@ -13,7 +13,7 @@ import static adventofcode.commons.AoCPoint.parsePoint;
 public class Problem18 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem18().solve(true);
+        new Problem18().loadAndSolve(true);
     }
 
     int PART1_TIME;
@@ -23,7 +23,7 @@ public class Problem18 extends AoCProblem<String> {
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        if (isUsingSample()) {
+        if (isUsingSampleData()) {
             MEMORY_SIZE = AoCRect.of(6, 6);
             PART1_TIME = 12;
         } else {
@@ -50,7 +50,7 @@ public class Problem18 extends AoCProblem<String> {
      * Afterward, what is the minimum number of steps needed to reach the exit?
      */
     @Override
-    public String partOne() throws Exception {
+    public String solvePartOne() throws Exception {
         Step lastStep = findShortestPath(PART1_TIME);
         return Long.toString(lastStep.len);
     }
@@ -108,7 +108,7 @@ public class Problem18 extends AoCProblem<String> {
      * (Provide the answer as two integers separated by a comma with no other characters.)
      */
     @Override
-    public String partTwo() throws Exception {
+    public String solvePartTwo() throws Exception {
         Set<AoCPoint> pathPoints = null;
         for (int time = PART1_TIME; time < bytes.size(); ++time) {
             if (pathPoints != null) {

@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class Problem22 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem22().solve(false);
+        new Problem22().loadAndSolve(false);
     }
 
     private int bossHp0 = 0;
@@ -43,7 +43,7 @@ public class Problem22 extends AoCProblem<Long> {
      *
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         bestResult = new Game();
         bestResult.spentMana = Integer.MAX_VALUE;
         Game g = new Game();
@@ -211,7 +211,7 @@ public class Problem22 extends AoCProblem<Long> {
     }
 
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         bestResult = new Game();
         bestResult.spentMana = Integer.MAX_VALUE;
         Game g = new Game();

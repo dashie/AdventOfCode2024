@@ -17,7 +17,7 @@ import static adventofcode.commons.AoCVector.*;
 public class Problem12 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem12().solve(false);
+        new Problem12().loadAndSolve(false);
     }
 
     AoCBoard<Character> board;
@@ -42,7 +42,7 @@ public class Problem12 extends AoCProblem<Long> {
      * ...What is the total price of fencing all regions on your map?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         return evalGarden(r -> r.perimeter * r.area);
     }
 
@@ -95,7 +95,7 @@ public class Problem12 extends AoCProblem<Long> {
      * ...What is the new total price of fencing all regions on your map?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         return evalGarden(r -> r.sides * r.area);
     }
 }

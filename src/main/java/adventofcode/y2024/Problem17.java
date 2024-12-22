@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Problem17 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-        new Problem17().solve(false);
+        new Problem17().loadAndSolve(false);
     }
 
     class Machine {
@@ -54,7 +54,7 @@ public class Problem17 extends AoCProblem<String> {
      * the values it output into a single string?
      */
     @Override
-    public String partOne() throws Exception {
+    public String solvePartOne() throws Exception {
         return programToString(run(machine));
     }
 
@@ -89,7 +89,7 @@ public class Problem17 extends AoCProblem<String> {
      * that causes the program to output a copy of itself?
      */
     @Override
-    public String partTwo() throws Exception {
+    public String solvePartTwo() throws Exception {
         // Analyzing the sequence manually and based on the machine characteristics (3 bit logic)
         // the resulting pattern changes following the power of 8, so I try to guess the result
         // by approaching it using powers of 8.

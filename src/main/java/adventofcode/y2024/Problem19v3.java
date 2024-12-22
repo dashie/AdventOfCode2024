@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Problem19v3 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem19v3().solve(false);
+        new Problem19v3().loadAndSolve(false);
     }
 
     Pattern towelsPattern;
@@ -43,7 +43,7 @@ public class Problem19v3 extends AoCProblem<Long> {
      * How many designs are possible?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         for (String p : patterns) {
             if (countCombinations(p, true) > 0) result++;
@@ -75,7 +75,7 @@ public class Problem19v3 extends AoCProblem<Long> {
      * you could make each design?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         for (String p : patterns) {
             result += countCombinations(p, false);

@@ -6,7 +6,7 @@ import adventofcode.commons.AoCProblem;
 public class Problem00 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem00().solve(false);
+        new Problem00().loadAndSolve(false);
     }
 
     @Override
@@ -16,13 +16,13 @@ public class Problem00 extends AoCProblem<Long> {
     }
 
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         long result = 0;
         return result;
     }
 
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         long result = 0;
         return result;
     }

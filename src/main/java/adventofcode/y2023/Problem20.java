@@ -6,6 +6,7 @@ import adventofcode.commons.LineEx;
 
 import java.util.*;
 
+import static adventofcode.commons.AoCMath.lcm;
 import static adventofcode.y2023.Problem20.Pulse.HIGH;
 import static adventofcode.y2023.Problem20.Pulse.LOW;
 import static java.util.Collections.EMPTY_LIST;
@@ -18,7 +19,7 @@ import static java.util.function.Predicate.not;
 public class Problem20 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        new Problem20().solve(false);
+        new Problem20().loadAndSolve(false);
     }
 
     public static final String BROADCASTER = "broadcaster";
@@ -30,6 +31,9 @@ public class Problem20 extends AoCProblem<Long> {
 
     record Message(String from, String to, Pulse pulse) {}
 
+    /**
+     *
+     */
     class MessageBus {
 
         long lowPulses = 0;
@@ -280,7 +284,7 @@ public class Problem20 extends AoCProblem<Long> {
      * total number of high pulses sent?
      */
     @Override
-    public Long partOne() throws Exception {
+    public Long solvePartOne() throws Exception {
         MessageBus bus = new MessageBus();
         reset();
 
@@ -320,7 +324,7 @@ public class Problem20 extends AoCProblem<Long> {
      * required to deliver a single low pulse to the module named rx?
      */
     @Override
-    public Long partTwo() throws Exception {
+    public Long solvePartTwo() throws Exception {
         // After analyzing the module graph using Graphviz/dot (the input structure
         // is quite similar to its language), it is evident that there are groups
         // of FlipFlops (in this case, 4 groups of 12) that influence a small number
@@ -375,26 +379,5 @@ public class Problem20 extends AoCProblem<Long> {
                                   .toArray();
         long result = lcm(values);
         return result;
-    }
-
-    public static long lcm(long[] numbers) {
-        long lcm = numbers[0];
-        for (int i = 1; i < numbers.length; i++) {
-            lcm = lcm(lcm, numbers[i]);
-        }
-        return lcm;
-    }
-
-    public static long lcm(long a, long b) {
-        return Math.abs(a * b) / gcd(a, b);
-    }
-
-    public static long gcd(long a, long b) {
-        while (b != 0) {
-            long t = a;
-            a = b;
-            b = t % b;
-        }
-        return a;
     }
 }
