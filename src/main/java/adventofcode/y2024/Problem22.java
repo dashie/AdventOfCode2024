@@ -17,7 +17,7 @@ public class Problem22 extends AoCProblem<Long> {
         p.loadResourceAndSolve(false);
     }
 
-    public static final int SEQUENCE_LENGTH = 2000;
+    public static final int NUMBERS_TO_GENERATE = 2000;
 
     List<Long> seeds;
 
@@ -36,7 +36,7 @@ public class Problem22 extends AoCProblem<Long> {
     public Long solvePartOne() throws Exception {
         long result = 0;
         for (Long n : seeds) {
-            for (int i = 0; i < SEQUENCE_LENGTH; ++i) n = generateNumber(n);
+            for (int i = 0; i < NUMBERS_TO_GENERATE; ++i) n = generateNumber(n);
             result += n;
         }
         return result;
@@ -106,7 +106,7 @@ public class Problem22 extends AoCProblem<Long> {
         ArrayDeque<Long> sequence = new ArrayDeque<>();
         Sell s = new Sell(n, n % 10L, null);
         sequence.add(0L); // add first null to simplify cut later
-        for (int i = 0; i < SEQUENCE_LENGTH; ++i) {
+        for (int i = 0; i < NUMBERS_TO_GENERATE; ++i) {
             s = generateSell(s);
             sequence.add(s.diff);
             if (sequence.size() > 4) {
