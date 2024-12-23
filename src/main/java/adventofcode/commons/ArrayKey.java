@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public record ArrayKey(Object[] keys) {
 
-    public static final ArrayKey toKey(Object[] keys) {
+    public static final ArrayKey toKey(Object... keys) {
         return new ArrayKey(keys);
     }
 

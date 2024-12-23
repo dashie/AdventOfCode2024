@@ -1,5 +1,7 @@
 package adventofcode.commons;
 
+import java.util.Objects;
+
 /**
  *
  */
@@ -27,6 +29,23 @@ public final class AoCRect {
     public AoCRect(AoCPoint p1, AoCPoint p2) {
         this.p1 = p1;
         this.p2 = p2;
+    }
+
+    @Override
+    public String toString() {
+        return "R{" + p1.x + "," + p1.y + "," + p2.x + "," + p2.y + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        AoCRect rect = (AoCRect) o;
+        return Objects.equals(p1, rect.p1) && Objects.equals(p2, rect.p2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p1, p2);
     }
 
     public boolean contains(AoCPoint p) {
