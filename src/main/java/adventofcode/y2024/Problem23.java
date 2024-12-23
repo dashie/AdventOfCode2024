@@ -84,6 +84,7 @@ public class Problem23 extends AoCProblem<String> {
 
     private Set<String> findBestGroup(Set<String> group, Set<String> candidateSet, Set<String> visitedSet, int bestGroupSize) {
         if (group.size() + candidateSet.size() <= bestGroupSize) return group;
+        if (candidateSet.isEmpty()) return group;
 
         Set<String> bestGroup = group;
         Set<String> newVisitedSet = new HashSet<>(visitedSet);
@@ -102,8 +103,6 @@ public class Problem23 extends AoCProblem<String> {
                 bestGroup = tmpGroup;
             }
         }
-
-        // System.out.println(" >> " + groupToPassword(bestCluster) + " : " + groupToPassword(cluster) + " + " + groupToPassword(candidateSet));
         return bestGroup;
     }
 }
