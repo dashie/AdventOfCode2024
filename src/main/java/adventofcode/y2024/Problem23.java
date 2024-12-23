@@ -2,7 +2,6 @@ package adventofcode.y2024;
 
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
-import adventofcode.commons.MemoizationCache;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -80,33 +79,32 @@ public class Problem23 extends AoCProblem<String> {
      */
     @Override
     public String solvePartTwo() throws Exception {
-        Set<String> bestGroup = findBestGroup(Collections.EMPTY_SET, graph.keySet(), 0);
+        Set<String> bestGroup = findBestGroup(Collections.EMPTY_SET, graph.keySet(), Collections.EMPTY_SET, 0);
         return groupToPassword(bestGroup);
     }
 
-    MemoizationCache<Set<String>> findBestGroupCache = new MemoizationCache<>();
+    private Set<String> findBestGroup(Set<String> group, Set<String> candidateSet, Set<String> visitedSet, int bestGroupSize) {
+        if (group.size() + candidateSet.size() <= bestGroupSize) return group;
 
-    private Set<String> findBestGroup(Set<String> group, Set<String> candidateSet, int bestGroupSize) {
-        return findBestGroupCache.key(group, candidateSet).andCompute(() -> {
-            if (group.size() + candidateSet.size() <= bestGroupSize) return group;
+        Set<String> bestGroup = group;
+        Set<String> newVisitedSet = new HashSet<>(visitedSet);
+        for (var c : candidateSet) {
+            if (!newVisitedSet.add(c)) continue;
 
-            Set<String> bestGroup = group;
-            for (var c : candidateSet) {
-                Set<String> linkSet = graph.get(c);
-                if (linkSet.containsAll(group)) {
-                    Set<String> newGroup = new HashSet<>(group);
-                    newGroup.add(c);
-                    Set<String> newCandidateSet = new HashSet<>(candidateSet);
-                    newCandidateSet.remove(c);
-                    Set<String> tmpGroup = findBestGroup(newGroup, newCandidateSet, max(bestGroup.size(), bestGroupSize));
-                    if (tmpGroup.size() > bestGroup.size()) {
-                        bestGroup = tmpGroup;
-                    }
-                }
+            Set<String> linkSet = graph.get(c);
+            if (!linkSet.containsAll(group)) continue;
+
+            Set<String> newGroup = new HashSet<>(group);
+            newGroup.add(c);
+            Set<String> newCandidateSet = new HashSet<>(candidateSet);
+            newCandidateSet.remove(c);
+            Set<String> tmpGroup = findBestGroup(newGroup, newCandidateSet, newVisitedSet, max(bestGroup.size(), bestGroupSize));
+            if (tmpGroup.size() > bestGroup.size()) {
+                bestGroup = tmpGroup;
             }
+        }
 
-            // System.out.println(" >> " + groupToPassword(bestCluster) + " : " + groupToPassword(cluster) + " + " + groupToPassword(candidateSet));
-            return bestGroup;
-        });
+        // System.out.println(" >> " + groupToPassword(bestCluster) + " : " + groupToPassword(cluster) + " + " + groupToPassword(candidateSet));
+        return bestGroup;
     }
 }
