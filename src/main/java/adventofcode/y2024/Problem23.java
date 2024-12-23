@@ -67,8 +67,7 @@ public class Problem23 extends AoCProblem<String> {
     private static String groupToPassword(Collection<String> computers) {
         List<String> list = new ArrayList<>(computers);
         list.sort(String::compareTo);
-        String group = list.stream().collect(Collectors.joining(","));
-        return group;
+        return list.stream().collect(Collectors.joining(","));
     }
 
     /**
