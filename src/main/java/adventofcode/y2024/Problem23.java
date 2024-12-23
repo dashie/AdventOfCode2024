@@ -83,10 +83,10 @@ public class Problem23 extends AoCProblem<String> {
         return groupToPassword(bestGroup);
     }
 
-    MemoizationCache<Set<String>> findBestGroup = new MemoizationCache<>();
+    MemoizationCache<Set<String>> findBestGroupCache = new MemoizationCache<>();
 
     private Set<String> findBestGroup(Set<String> group, Set<String> candidateSet, int bestGroupSize) {
-        return findBestGroup.key(group, candidateSet).andCompute(() -> {
+        return findBestGroupCache.key(group, candidateSet).andCompute(() -> {
             if (group.size() + candidateSet.size() <= bestGroupSize) return group;
             if (candidateSet.isEmpty()) return group;
 

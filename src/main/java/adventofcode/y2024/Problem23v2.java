@@ -102,7 +102,7 @@ public class Problem23v2 extends AoCProblem<String> {
 
             Set<String> newCandidateSet = new HashSet<>(candidateSet);
             newCandidateSet.remove(c);
-            newCandidateSet.retainAll(linkSet); // candidate ∩ linkSet
+            newCandidateSet.retainAll(linkSet); // candidates ∩ links(c)
 
             Set<String> tmpGroup = findBestGroup(newGroup, newCandidateSet, newVisitedSet, max(bestGroup.size(), bestGroupSize));
             if (tmpGroup.size() > bestGroup.size()) {
