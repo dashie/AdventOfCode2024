@@ -40,13 +40,13 @@ public class Problem23 extends AoCProblem<String> {
     public String solvePartOne() throws Exception {
         Set<String> groups = new HashSet<>();
         for (var c : graph.keySet()) {
-            groups.addAll(findGroupsOf3(c));
+            groups.addAll(findGroupsOf3WithHistorian(c));
         }
         long count = groups.size();
         return Long.toString(count);
     }
 
-    private Set<String> findGroupsOf3(String from) {
+    private Set<String> findGroupsOf3WithHistorian(String from) {
         Set<String> groups = new HashSet<>();
         List<String> tolist = graph.get(from).stream().toList();
         if (tolist.size() > 1) {
