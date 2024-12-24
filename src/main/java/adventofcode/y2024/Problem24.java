@@ -20,27 +20,29 @@ public class Problem24 extends AoCProblem<String> {
         problem.solve();
     }
 
+    public static final int MAX_BITS = 64;
+
     enum Operation {
         AND, OR, XOR
     }
 
     class Node implements Comparable<Node> {
 
-        String id;
+        String output;
         Integer bit = null;
         Operation op = null;
         final String input1;
         final String input2;
 
-        public Node(String id, Integer bit) {
-            this.id = id;
+        public Node(String output, Integer bit) {
+            this.output = output;
             this.bit = bit;
             this.input1 = null;
             this.input2 = null;
         }
 
-        public Node(String id, Operation op, String input1, String input2) {
-            this.id = id;
+        public Node(String output, Operation op, String input1, String input2) {
+            this.output = output;
             this.op = op;
             this.input1 = input1;
             this.input2 = input2;
@@ -48,28 +50,17 @@ public class Problem24 extends AoCProblem<String> {
 
         @Override
         public String toString() {
-            return id;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) return false;
-            Node node = (Node) o;
-            return Objects.equals(id, node.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(id);
+            return output;
         }
 
         @Override
         public int compareTo(Node o) {
-            boolean startsWithXYZ1 = id.startsWith("x") || id.startsWith("y") || id.startsWith("z");
-            boolean startsWithXYZ2 = o.id.startsWith("x") || o.id.startsWith("y") || o.id.startsWith("z");
+            // using this sort criteria to improve serialization to dot language
+            boolean startsWithXYZ1 = output.startsWith("x") || output.startsWith("y") || output.startsWith("z");
+            boolean startsWithXYZ2 = o.output.startsWith("x") || o.output.startsWith("y") || o.output.startsWith("z");
             if (startsWithXYZ1 && !startsWithXYZ2) return -1;
             if (startsWithXYZ2 && !startsWithXYZ1) return 1;
-            return id.compareTo(o.id);
+            return output.compareTo(o.output);
         }
 
         public boolean isGate() {
@@ -97,14 +88,14 @@ public class Problem24 extends AoCProblem<String> {
     @Override
     public void processInput(AoCInput input) throws Exception {
         for (LineEx line : input.before("\n\n").iterateLineExs()) {
-            String id = line.before(":").toString();
+            String output = line.before(":").toString();
             int bit = line.after(": ").getInt();
-            nodes.put(id, new Node(id, bit));
+            nodes.put(output, new Node(output, bit));
         }
         for (LineEx line : input.after("\n\n").iterateLineExs()) {
             MatcherEx m = line.match("([a-z0-9]+) (AND|OR|XOR) ([a-z0-9]+) -> ([a-z0-9]+)");
-            String id = m.get(4);
-            nodes.put(id, new Node(id, Operation.valueOf(m.get(2)), m.get(1), m.get(3)));
+            String output = m.get(4);
+            nodes.put(output, new Node(output, Operation.valueOf(m.get(2)), m.get(1), m.get(3)));
         }
     }
 
@@ -114,15 +105,19 @@ public class Problem24 extends AoCProblem<String> {
      */
     @Override
     public String solvePartOne() throws Exception {
-        long n = readCircuitValue("z");
+        long n = readRegister("z");
         return Long.toString(n);
     }
 
-    private long readCircuitValue(String prefix) {
+    /**
+     * It reads all zX bits and returns the related integer value.
+     * Prefix can be "z", "x" or "y".
+     */
+    private long readRegister(String prefix) {
         long n = 0;
-        for (int i = 0; i < 64; ++i) {
-            String id = intToNodeId(prefix, i);
-            Node node = nodes.get(id);
+        for (int i = 0; i < MAX_BITS; ++i) {
+            String output = intToOutput(prefix, i);
+            Node node = nodes.get(output);
             if (node == null) continue;
             long bit = node.evalBit();
             bit = bit << i;
@@ -131,23 +126,12 @@ public class Problem24 extends AoCProblem<String> {
         return n;
     }
 
-    private long setCircuitValue(String prefix, long value) {
-        long n = 0;
-        for (int i = 0; i < 64; ++i) {
-            String id = intToNodeId(prefix, i);
-            Node node = nodes.get(id);
-            if (node == null) continue;
-            long mask = value & (1L << i);
-            node.bit = mask != 0 ? 1 : 0;
-        }
-        return n;
-    }
-
-    private String intToNodeId(String prefix, int i) {
+    /**
+     * Prefix can be "z", "x" or "y".
+     */
+    private String intToOutput(String prefix, int i) {
         return prefix + (i < 10 ? "0" + i : i);
     }
-
-    record Pair(String a, String b) {}
 
     /**
      * ...Your system of gates and wires has four pairs of gates which need
@@ -160,10 +144,10 @@ public class Problem24 extends AoCProblem<String> {
     @Override
     public String solvePartTwo() throws Exception {
 
-        Set<String> switches = new HashSet<>();
+        Set<String> swaps = new HashSet<>();
         List<Set<String>> solutions = new ArrayList<>();
-        fixCircuit(0, switches, solutions);
-        if (solutions.size() > 1) throw new IllegalStateException();
+        fixCircuit(0, swaps, solutions);
+        if (solutions.size() > 1) throw new IllegalStateException("Too many solutions");
 
         String solution = solutions.stream()
                                    .findFirst().get().stream()
@@ -171,111 +155,129 @@ public class Problem24 extends AoCProblem<String> {
         return solution;
     }
 
-    public boolean fixCircuit(int zi, Set<String> switches, List<Set<String>> solutions) {
-        Set<String> subset = collectNodeSubsetAroundZBit(zi);
-        if (subset.isEmpty()) {
-            // System.out.println("solution: " + switches);
-            checkSumOfFirstNBits(45);
-            solutions.add(new HashSet<>(switches));
+    private void resetAll() {
+        nodes.values().forEach(Node::reset);
+    }
+
+    record Pair(String a, String b) {}
+
+    public boolean fixCircuit(int zth, Set<String> swaps, List<Set<String>> solutions) {
+        Set<String> fullAdderSubset = collectFullAdderNodesSubset(zth);
+        if (fullAdderSubset.isEmpty()) {
+            checkSumOnNBits(MAX_BITS);
+            solutions.add(new HashSet<>(swaps));
             return true;
         }
 
-        if (checkSumOfFirstNBits(zi)) {
-            return fixCircuit(zi + 1, switches, solutions);
+        if (checkSumOnNBits(zth)) {
+            return fixCircuit(zth + 1, swaps, solutions);
         }
 
         boolean fixed = false;
-        // System.out.println("find error at bit: " + zi);
-        List<Pair> pairs = generatePairs(subset);
+        List<Pair> pairs = generateAllPairs(fullAdderSubset);
         for (Pair pair : pairs) {
-            if (switches.contains(pair.a) || switches.contains(pair.b)) continue;
-            if (switchGatesAndCheckForLoops(pair.a, pair.b)) {
-                if (checkSumOfFirstNBits(zi)) {
-                    // System.out.println("bit: " + zi + " match: " + pair + " " + switches);
-                    switches.add(pair.a);
-                    switches.add(pair.b);
-                    if (fixCircuit(zi + 1, switches, solutions)) fixed = true;
-                    switches.remove(pair.a);
-                    switches.remove(pair.b);
+            if (swaps.contains(pair.a) || swaps.contains(pair.b)) continue;
+            if (switchOutputsAndCheckForLoops(pair.a, pair.b)) {
+                if (checkSumOnNBits(zth)) {
+                    swaps.add(pair.a);
+                    swaps.add(pair.b);
+                    if (fixCircuit(zth + 1, swaps, solutions)) fixed = true;
+                    swaps.remove(pair.a);
+                    swaps.remove(pair.b);
                 }
-                switchGatesAndCheckForLoops(pair.b, pair.a);
+                switchOutputsAndCheckForLoops(pair.b, pair.a);
             }
         }
         return fixed;
     }
 
-    public boolean checkSumOfFirstNBits(int zi) {
-        if (!checkSumOfFirstNBitsOnValues(zi, 0L, 0L)) return false;
-        if (!checkSumOfFirstNBitsOnValues(zi, 1L, 1L)) return false;
+    public boolean checkSumOnNBits(int nbits) {
+        if (!checkSumOnNBits(nbits, 0L, 0L)) return false;
+        if (!checkSumOnNBits(nbits, 1L, 1L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b10000000000000000000000000000000000000000000L,
             0b10000000000000000000000000000000000000000000L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b11111111111111111111111111111111111111111111L,
             0b11111111111111111111111111111111111111111111L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b10101010101010101010101010101010101010101010L,
             0b01010101010101010101010101010101010101010101L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b01010101010101010101010101010101010101010101L,
             0b10101010101010101010101010101010101010101010L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b01010101010101010101010101010101010101010101L,
             0b01010101010101010101010101010101010101010101L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b10101010101010101010101010101010101010101010L,
             0b10101010101010101010101010101010101010101010L)) return false;
 
-        if (!checkSumOfFirstNBitsOnValues(zi,
+        if (!checkSumOnNBits(nbits,
             0b11111111111111111111111111111111111111111111L,
             0b1L)) return false;
 
         return true;
     }
 
-    private boolean checkSumOfFirstNBitsOnValues(int zi, long x0, long y0) {
-        setCircuitValue("x", x0);
-        setCircuitValue("y", y0);
-        nodes.values().forEach(Node::reset);
-        long x = readCircuitValue("x");
-        long y = readCircuitValue("y");
+    private boolean checkSumOnNBits(int nbits, long x0, long y0) {
+        writeRegister("x", x0);
+        writeRegister("y", y0);
+        resetAll();
+        long x = readRegister("x");
+        long y = readRegister("y");
+        long z = readRegister("z");
         long sum = x + y;
-        long z = readCircuitValue("z");
         // dumpSumTest();
-        long mask = 0xFFFFFFFFFFFFFFFFL << (zi + 1) ^ 0xFFFFFFFFFFFFFFFFL;
+        long mask = 0xFFFFFFFFFFFFFFFFL << (nbits + 1) ^ 0xFFFFFFFFFFFFFFFFL;
         return (sum & mask) == (z & mask);
     }
 
-    record Visit(String id, int dephth) {}
+    private long writeRegister(String prefix, long value) {
+        long n = 0;
+        for (int i = 0; i < MAX_BITS; ++i) {
+            String id = intToOutput(prefix, i);
+            Node node = nodes.get(id);
+            if (node == null) continue;
+            long mask = value & (1L << i);
+            node.bit = mask != 0 ? 1 : 0;
+        }
+        return n;
+    }
 
-    public Set<String> collectNodeSubsetAroundZBit(int zi) {
-        String id1 = intToNodeId("z", zi);
-        String id2 = intToNodeId("z", zi + 1);
+    record Visit(String output, int dephth) {}
+
+    /**
+     * Collect the subset of nodes that determines the value of the Z-th bit.
+     */
+    public Set<String> collectFullAdderNodesSubset(int zth) {
+        String out1 = intToOutput("z", zth);
+        String out2 = intToOutput("z", zth + 1);
         Set<String> subset = new HashSet<>();
         Deque<Visit> stack = new LinkedList<>();
-        stack.add(new Visit(id1, 0));
-        stack.add(new Visit(id2, 0));
+        stack.add(new Visit(out1, 0));
+        stack.add(new Visit(out2, 0));
         while (!stack.isEmpty()) {
             var v = stack.pop();
             if (v.dephth > 3) continue;
-            Node n = nodes.get(v.id);
+            Node n = nodes.get(v.output);
             if (n == null) continue;
             if (!n.isGate()) continue;
-            if (!subset.add(v.id)) continue;
+            if (!subset.add(v.output)) continue;
             stack.add(new Visit(n.input1, v.dephth + 1));
             stack.add(new Visit(n.input2, v.dephth + 1));
         }
-        subset.remove(id2); // remove the next output from the set
+        subset.remove(out2); // remove the next output from the set
         return subset;
     }
 
-    public List<Pair> generatePairs(Set<String> subset) {
+    public List<Pair> generateAllPairs(Set<String> subset) {
         List<Pair> pairs = new ArrayList<>();
         List<String> ids = subset.stream().toList();
         for (int i = 0; i < ids.size(); ++i) {
@@ -286,31 +288,31 @@ public class Problem24 extends AoCProblem<String> {
         return pairs;
     }
 
-    public boolean switchGatesAndCheckForLoops(String g1, String g2) {
+    public boolean switchOutputsAndCheckForLoops(String g1, String g2) {
         // try the switch
         Node n1 = nodes.remove(g1);
         Node n2 = nodes.remove(g2);
-        n1.id = g2;
-        n2.id = g1;
-        nodes.put(n1.id, n1);
-        nodes.put(n2.id, n2);
+        n1.output = g2;
+        n2.output = g1;
+        nodes.put(n1.output, n1);
+        nodes.put(n2.output, n2);
 
         // check for loops
         if (findLoops(n1) || findLoops(n2)) {
             // restore previous configuration
             n1 = nodes.remove(g1);
             n2 = nodes.remove(g2);
-            n1.id = g2;
-            n2.id = g1;
-            nodes.put(n1.id, n1);
-            nodes.put(n2.id, n2);
+            n1.output = g2;
+            n2.output = g1;
+            nodes.put(n1.output, n1);
+            nodes.put(n2.output, n2);
             return false;
         }
         return true;
     }
 
     public boolean findLoops(Node n0) {
-        String id0 = n0.id;
+        String id0 = n0.output;
         Set<String> visited = new HashSet<>();
         Deque<String> stack = new LinkedList<>();
         stack.add(id0);
@@ -330,9 +332,9 @@ public class Problem24 extends AoCProblem<String> {
     }
 
     private void dumpSumTest() {
-        long x = readCircuitValue("x");
-        long y = readCircuitValue("y");
-        long z = readCircuitValue("z");
+        long x = readRegister("x");
+        long y = readRegister("y");
+        long z = readRegister("z");
 
         System.out.println();
         System.out.println("        4         3         2         1");
@@ -346,23 +348,31 @@ public class Problem24 extends AoCProblem<String> {
     public void dumpDotGraph() {
         var sortedNodes = nodes.values().stream().sorted().toList();
 
+        System.out.println("digraph G {");
+        System.out.println();
+
         for (Node node : sortedNodes) {
             if (node.isGate()) {
-                System.out.println("\"" + node.id + "\"" + " [label=\"" + node.op + "\\n" + node.id + "\"]");
+                System.out.println("\"" + node.output + "\"" + " [label=\"" + node.op + "\\n" + node.output + "\"]");
             } else {
-                System.out.println(node.id + " [label=\"" + node.id + "\\n" + node.bit + "\"]");
+                System.out.println(node.output + " [label=\"" + node.output + "\\n" + node.bit + "\"]");
             }
         }
         System.out.println();
+
         List<String> vertexes = new ArrayList<>();
         for (Node node : sortedNodes) {
             if (node.isGate()) {
-                vertexes.add(node.input1 + " -> " + "\"" + node.id + "\"");
-                vertexes.add(node.input2 + " -> " + "\"" + node.id + "\"");
+                vertexes.add(node.input1 + " -> " + "\"" + node.output + "\"");
+                vertexes.add(node.input2 + " -> " + "\"" + node.output + "\"");
             }
         }
         vertexes.sort(String::compareTo);
         for (var s : vertexes)
             System.out.println(s);
+
+        System.out.println();
+        System.out.println("}");
+        System.out.println();
     }
 }
