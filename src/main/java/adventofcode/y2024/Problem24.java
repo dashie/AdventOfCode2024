@@ -16,8 +16,9 @@ public class Problem24 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
         Problem24 problem = AoCProblem.buildWithInputResource(Problem24.class);
-        // problem.dumpDot();
+        // problem.dumpDotGraph();
         problem.solve();
+        problem.dumpDotGraph();
     }
 
     public static final int MAX_BITS = 64;
@@ -371,7 +372,6 @@ public class Problem24 extends AoCProblem<String> {
         for (var s : vertexes)
             System.out.println(s);
 
-        System.out.println();
         System.out.println("}");
         System.out.println();
     }
