@@ -6,13 +6,14 @@ import adventofcode.commons.LineEx;
 import adventofcode.commons.MatcherEx;
 
 import java.util.*;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 /**
  * Day 24:
  * https://adventofcode.com/2024/day/24
  */
-public class Problem24 extends AoCProblem<Long> {
+public class Problem24 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
 //        Problem24 sample = AoCProblem.buildWithSampleResource(Problem24.class);
@@ -29,14 +30,14 @@ public class Problem24 extends AoCProblem<Long> {
         System.out.println();
         System.out.println();
 
-        long part1 = problem.solvePartOne();
+        String part1 = problem.solvePartOne();
         System.out.println(part1);
-        if (part1 != 65635066541798L) throw new IllegalStateException();
+        if (!part1.equals("65635066541798")) throw new IllegalStateException();
         System.out.println();
 
         // part2 : dgr,dtv,fgc,mtj,vvm,z12,z29,z37
 
-        long part2 = problem.solvePartTwo();
+        String part2 = problem.solvePartTwo();
         System.out.println(part2);
     }
 
@@ -110,6 +111,8 @@ public class Problem24 extends AoCProblem<Long> {
         }
     }
 
+    static RandomGenerator RANDOM = new SplittableRandom();
+    static long MASK44BIT = (1L << 44) - 1;
     Map<String, Node> nodes = new HashMap<>();
 
     @Override
@@ -138,9 +141,9 @@ public class Problem24 extends AoCProblem<Long> {
      *
      */
     @Override
-    public Long solvePartOne() throws Exception {
+    public String solvePartOne() throws Exception {
         long n = evalValue("z");
-        return n;
+        return Long.toString(n);
     }
 
     private long evalValue(String prefix) {
@@ -166,7 +169,7 @@ public class Problem24 extends AoCProblem<Long> {
      *
      */
     @Override
-    public Long solvePartTwo() throws Exception {
+    public String solvePartTwo() throws Exception {
 //        switchGates("z12", "fgc");
 //        switchGates("mtj", "z29");
 //        switchGates("dgr", "vvm");
@@ -186,11 +189,14 @@ public class Problem24 extends AoCProblem<Long> {
         Set<String> switches = new HashSet<>();
         List<Set<String>> solutions = new ArrayList<>();
         fixCircuit(0, switches, solutions);
+        String solution = "?";
         for (var s : solutions) {
-            System.out.println(s.stream().toList().stream().sorted().collect(Collectors.joining(",")));
+            solution = s.stream().toList().stream().sorted().collect(Collectors.joining(","));
+            System.out.println(solution);
         }
+        // FIXME if we have more solution something gone worng
 
-        return 0L;
+        return solution;
     }
 
     public boolean fixCircuit(int zi, Set<String> switches, List<Set<String>> solutions) {
@@ -250,6 +256,13 @@ public class Problem24 extends AoCProblem<Long> {
         if (!checkSumWithValue(zi,
             0b10101010101010101010101010101010101010101010L,
             0b10101010101010101010101010101010101010101010L)) return false;
+
+        // plus 100 random numbers around the bit
+        for (int i = 0; i < 100; ++i) {
+            if (!checkSumWithValue(zi,
+                RANDOM.nextLong() & MASK44BIT,
+                RANDOM.nextLong() & MASK44BIT)) return false;
+        }
 
         return true;
     }
