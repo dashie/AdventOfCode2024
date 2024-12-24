@@ -28,6 +28,11 @@ public class AoCProblem<T> {
         return (P) problem.loadSampleResource();
     }
 
+    public static final <T, P extends AoCProblem<T>> P buildWithSampleResource(Class<P> problemClass, String fileSuffix) throws Exception {
+        P problem = problemClass.getConstructor().newInstance();
+        return (P) problem.loadSampleResource(fileSuffix);
+    }
+
     /**
      *
      */
@@ -56,6 +61,15 @@ public class AoCProblem<T> {
     public final <P extends AoCProblem<T>> P loadSampleResource() throws Exception {
         isUsingSampleResource = true;
         loadInputResource("-sample");
+        return (P) this;
+    }
+
+    /**
+     *
+     */
+    public final <P extends AoCProblem<T>> P loadSampleResource(String fileSuffix) throws Exception {
+        isUsingSampleResource = true;
+        loadInputResource(fileSuffix);
         return (P) this;
     }
 
