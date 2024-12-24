@@ -133,7 +133,13 @@ public class AoCProblem<T> {
      */
     private Solution loadResourceAndSolve(String inputDataSuffix) throws Exception {
         loadInputResource(inputDataSuffix);
+        return solve();
+    }
 
+    /**
+     *
+     */
+    public Solution solve() throws Exception {
         System.out.println(getClass().getName());
         T result1 = solvePartOne();
         System.out.printf("  Part One: %s%n", result1);

@@ -6,39 +6,18 @@ import adventofcode.commons.LineEx;
 import adventofcode.commons.MatcherEx;
 
 import java.util.*;
-import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 /**
- * Day 24:
+ * Day 24: Crossed Wires
  * https://adventofcode.com/2024/day/24
  */
 public class Problem24 extends AoCProblem<String> {
 
     public static void main(String[] args) throws Exception {
-//        Problem24 sample = AoCProblem.buildWithSampleResource(Problem24.class);
-//        System.out.println(sample.solvePartOne());
-//        // sample.dumpDot();
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
-
-
         Problem24 problem = AoCProblem.buildWithInputResource(Problem24.class);
         // problem.dumpDot();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        String part1 = problem.solvePartOne();
-        System.out.println(part1);
-        if (!part1.equals("65635066541798")) throw new IllegalStateException();
-        System.out.println();
-
-        // part2 : dgr,dtv,fgc,mtj,vvm,z12,z29,z37
-
-        String part2 = problem.solvePartTwo();
-        System.out.println(part2);
+        problem.solve();
     }
 
     enum Operation {
@@ -50,12 +29,14 @@ public class Problem24 extends AoCProblem<String> {
         String id;
         Integer bit = null;
         Operation op = null;
-        String input1;
-        String input2;
+        final String input1;
+        final String input2;
 
         public Node(String id, Integer bit) {
             this.id = id;
             this.bit = bit;
+            this.input1 = null;
+            this.input2 = null;
         }
 
         public Node(String id, Operation op, String input1, String input2) {
@@ -111,42 +92,33 @@ public class Problem24 extends AoCProblem<String> {
         }
     }
 
-    static RandomGenerator RANDOM = new SplittableRandom();
-    static long MASK44BIT = (1L << 44) - 1;
     Map<String, Node> nodes = new HashMap<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
-        // x00: 1
         for (LineEx line : input.before("\n\n").iterateLineExs()) {
             String id = line.before(":").toString();
             int bit = line.after(": ").getInt();
             nodes.put(id, new Node(id, bit));
         }
-
-        // fcw AND hrn -> jjw
         for (LineEx line : input.after("\n\n").iterateLineExs()) {
             MatcherEx m = line.match("([a-z0-9]+) (AND|OR|XOR) ([a-z0-9]+) -> ([a-z0-9]+)");
             String id = m.get(4);
-            nodes.put(id, new Node(
-                id,
-                Operation.valueOf(m.get(2)),
-                m.get(1),
-                m.get(3)
-            ));
+            nodes.put(id, new Node(id, Operation.valueOf(m.get(2)), m.get(1), m.get(3)));
         }
     }
 
     /**
-     *
+     * ...Simulate the system of gates and wires.
+     * What decimal number does it output on the wires starting with z?
      */
     @Override
     public String solvePartOne() throws Exception {
-        long n = evalValue("z");
+        long n = readCircuitValue("z");
         return Long.toString(n);
     }
 
-    private long evalValue(String prefix) {
+    private long readCircuitValue(String prefix) {
         long n = 0;
         for (int i = 0; i < 64; ++i) {
             String id = intToNodeId(prefix, i);
@@ -159,6 +131,18 @@ public class Problem24 extends AoCProblem<String> {
         return n;
     }
 
+    private long setCircuitValue(String prefix, long value) {
+        long n = 0;
+        for (int i = 0; i < 64; ++i) {
+            String id = intToNodeId(prefix, i);
+            Node node = nodes.get(id);
+            if (node == null) continue;
+            long mask = value & (1L << i);
+            node.bit = mask != 0 ? 1 : 0;
+        }
+        return n;
+    }
+
     private String intToNodeId(String prefix, int i) {
         return prefix + (i < 10 ? "0" + i : i);
     }
@@ -166,43 +150,31 @@ public class Problem24 extends AoCProblem<String> {
     record Pair(String a, String b) {}
 
     /**
-     *
+     * ...Your system of gates and wires has four pairs of gates which need
+     * their output wires swapped - eight wires in total.
+     * Determine which four pairs of gates need their outputs swapped so that
+     * your system correctly performs addition; what do you get if you sort
+     * the names of the eight wires involved in a swap and then join those
+     * names with commas?
      */
     @Override
     public String solvePartTwo() throws Exception {
-//        switchGates("z12", "fgc");
-//        switchGates("mtj", "z29");
-//        switchGates("dgr", "vvm");
-//        switchGates("z37", "dtv");
-        // dgr,dtv,fgc,mtj,vvm,z12,z29,z37
 
-//        nodes.values().forEach(Node::reset);
-//        dumpSumTest();
-
-        // setValue("x", 0b10101010101010101010101010101010101010101010L);
-        // setValue("y", 0b01010101010101010101010101010101010101010101L);
-//        nodes.values().forEach(Node::reset);
-//        dumpSumTest();
-
-//        setValue("x", 123456789123456789L);
-//        setValue("y", 123456789123456789L);
         Set<String> switches = new HashSet<>();
         List<Set<String>> solutions = new ArrayList<>();
         fixCircuit(0, switches, solutions);
-        String solution = "?";
-        for (var s : solutions) {
-            solution = s.stream().toList().stream().sorted().collect(Collectors.joining(","));
-            System.out.println(solution);
-        }
-        // FIXME if we have more solution something gone worng
+        if (solutions.size() > 1) throw new IllegalStateException();
 
+        String solution = solutions.stream()
+                                   .findFirst().get().stream()
+                                   .toList().stream().sorted().collect(Collectors.joining(","));
         return solution;
     }
 
     public boolean fixCircuit(int zi, Set<String> switches, List<Set<String>> solutions) {
-        Set<String> subset = nodeSubsetAroundZBit(zi);
+        Set<String> subset = collectNodeSubsetAroundZBit(zi);
         if (subset.isEmpty()) {
-            System.out.println("solution: " + switches);
+            // System.out.println("solution: " + switches);
             checkSumOfFirstNBits(45);
             solutions.add(new HashSet<>(switches));
             return true;
@@ -213,76 +185,76 @@ public class Problem24 extends AoCProblem<String> {
         }
 
         boolean fixed = false;
-        System.out.println("find error at bit: " + zi);
+        // System.out.println("find error at bit: " + zi);
         List<Pair> pairs = generatePairs(subset);
         for (Pair pair : pairs) {
             if (switches.contains(pair.a) || switches.contains(pair.b)) continue;
-            if (switchGatesAndCheckLoop(pair.a, pair.b)) {
+            if (switchGatesAndCheckForLoops(pair.a, pair.b)) {
                 if (checkSumOfFirstNBits(zi)) {
-                    System.out.println("bit: " + zi + " match: " + pair + " " + switches);
+                    // System.out.println("bit: " + zi + " match: " + pair + " " + switches);
                     switches.add(pair.a);
                     switches.add(pair.b);
                     if (fixCircuit(zi + 1, switches, solutions)) fixed = true;
                     switches.remove(pair.a);
                     switches.remove(pair.b);
                 }
-                switchGatesAndCheckLoop(pair.b, pair.a);
+                switchGatesAndCheckForLoops(pair.b, pair.a);
             }
         }
         return fixed;
     }
 
-    private boolean checkSumOfFirstNBits(int zi) {
-        if (!checkSumWithValue(zi,
-            0L,
-            0L)) return false;
+    public boolean checkSumOfFirstNBits(int zi) {
+        if (!checkSumOfFirstNBitsOnValues(zi, 0L, 0L)) return false;
+        if (!checkSumOfFirstNBitsOnValues(zi, 1L, 1L)) return false;
 
-        if (!checkSumWithValue(zi,
+        if (!checkSumOfFirstNBitsOnValues(zi,
+            0b10000000000000000000000000000000000000000000L,
+            0b10000000000000000000000000000000000000000000L)) return false;
+
+        if (!checkSumOfFirstNBitsOnValues(zi,
             0b11111111111111111111111111111111111111111111L,
             0b11111111111111111111111111111111111111111111L)) return false;
 
-        if (!checkSumWithValue(zi,
+        if (!checkSumOfFirstNBitsOnValues(zi,
             0b10101010101010101010101010101010101010101010L,
             0b01010101010101010101010101010101010101010101L)) return false;
 
-        if (!checkSumWithValue(zi,
+        if (!checkSumOfFirstNBitsOnValues(zi,
             0b01010101010101010101010101010101010101010101L,
             0b10101010101010101010101010101010101010101010L)) return false;
 
-        if (!checkSumWithValue(zi,
+        if (!checkSumOfFirstNBitsOnValues(zi,
             0b01010101010101010101010101010101010101010101L,
             0b01010101010101010101010101010101010101010101L)) return false;
 
-        if (!checkSumWithValue(zi,
+        if (!checkSumOfFirstNBitsOnValues(zi,
             0b10101010101010101010101010101010101010101010L,
             0b10101010101010101010101010101010101010101010L)) return false;
 
-        // plus 100 random numbers around the bit
-        for (int i = 0; i < 100; ++i) {
-            if (!checkSumWithValue(zi,
-                RANDOM.nextLong() & MASK44BIT,
-                RANDOM.nextLong() & MASK44BIT)) return false;
-        }
+        if (!checkSumOfFirstNBitsOnValues(zi,
+            0b11111111111111111111111111111111111111111111L,
+            0b1L)) return false;
 
         return true;
     }
 
-    private boolean checkSumWithValue(int zi, long x0, long y0) {
-        setValue("x", x0);
-        setValue("y", y0);
+    private boolean checkSumOfFirstNBitsOnValues(int zi, long x0, long y0) {
+        setCircuitValue("x", x0);
+        setCircuitValue("y", y0);
         nodes.values().forEach(Node::reset);
-        long x = evalValue("x");
-        long y = evalValue("y");
+        long x = readCircuitValue("x");
+        long y = readCircuitValue("y");
         long sum = x + y;
-        long z = evalValue("z");
+        long z = readCircuitValue("z");
         // dumpSumTest();
         long mask = 0xFFFFFFFFFFFFFFFFL << (zi + 1) ^ 0xFFFFFFFFFFFFFFFFL;
-        return ((sum & mask) == (z & mask));
+        return (sum & mask) == (z & mask);
     }
 
     record Visit(String id, int dephth) {}
 
-    public Set<String> nodeSubsetAroundZBit(int zi) {
+    public Set<String> collectNodeSubsetAroundZBit(int zi) {
         String id1 = intToNodeId("z", zi);
         String id2 = intToNodeId("z", zi + 1);
         Set<String> subset = new HashSet<>();
@@ -314,33 +286,8 @@ public class Problem24 extends AoCProblem<String> {
         return pairs;
     }
 
-    private void dumpSumTest() {
-        long x = evalValue("x");
-        long y = evalValue("y");
-        long z = evalValue("z");
-
-        System.out.println();
-        System.out.println("        4         3         2         1");
-        System.out.println("   5432109876543210987654321098765432109876543210");
-        System.out.printf("x: %46s %n", Long.toBinaryString(x));
-        System.out.printf("y: %46s %n", Long.toBinaryString(y));
-        System.out.printf("z: %46s %s%n", Long.toBinaryString(z), (z != x + y ? "  !!" : ""));
-        System.out.printf("s: %46s %n", Long.toBinaryString(x + y));
-    }
-
-    private long setValue(String prefix, long value) {
-        long n = 0;
-        for (int i = 0; i < 64; ++i) {
-            String id = intToNodeId(prefix, i);
-            Node node = nodes.get(id);
-            if (node == null) continue;
-            long mask = value & (1L << i);
-            node.bit = mask != 0 ? 1 : 0;
-        }
-        return n;
-    }
-
-    public boolean switchGatesAndCheckLoop(String g1, String g2) {
+    public boolean switchGatesAndCheckForLoops(String g1, String g2) {
+        // try the switch
         Node n1 = nodes.remove(g1);
         Node n2 = nodes.remove(g2);
         n1.id = g2;
@@ -348,7 +295,8 @@ public class Problem24 extends AoCProblem<String> {
         nodes.put(n1.id, n1);
         nodes.put(n2.id, n2);
 
-        if (findLoop(n1) || findLoop(n2)) {
+        // check for loops
+        if (findLoops(n1) || findLoops(n2)) {
             // restore previous configuration
             n1 = nodes.remove(g1);
             n2 = nodes.remove(g2);
@@ -358,11 +306,10 @@ public class Problem24 extends AoCProblem<String> {
             nodes.put(n2.id, n2);
             return false;
         }
-
         return true;
     }
 
-    public boolean findLoop(Node n0) {
+    public boolean findLoops(Node n0) {
         String id0 = n0.id;
         Set<String> visited = new HashSet<>();
         Deque<String> stack = new LinkedList<>();
@@ -382,10 +329,24 @@ public class Problem24 extends AoCProblem<String> {
         return false;
     }
 
-    public void dumpDot() {
-        var snodes = nodes.values().stream().sorted().toList();
+    private void dumpSumTest() {
+        long x = readCircuitValue("x");
+        long y = readCircuitValue("y");
+        long z = readCircuitValue("z");
 
-        for (Node node : snodes) {
+        System.out.println();
+        System.out.println("        4         3         2         1");
+        System.out.println("   5432109876543210987654321098765432109876543210");
+        System.out.printf("x: %46s %n", Long.toBinaryString(x));
+        System.out.printf("y: %46s %n", Long.toBinaryString(y));
+        System.out.printf("z: %46s %s%n", Long.toBinaryString(z), (z != x + y ? "  !!" : ""));
+        System.out.printf("s: %46s %n", Long.toBinaryString(x + y));
+    }
+
+    public void dumpDotGraph() {
+        var sortedNodes = nodes.values().stream().sorted().toList();
+
+        for (Node node : sortedNodes) {
             if (node.isGate()) {
                 System.out.println("\"" + node.id + "\"" + " [label=\"" + node.op + "\\n" + node.id + "\"]");
             } else {
@@ -394,7 +355,7 @@ public class Problem24 extends AoCProblem<String> {
         }
         System.out.println();
         List<String> vertexes = new ArrayList<>();
-        for (Node node : snodes) {
+        for (Node node : sortedNodes) {
             if (node.isGate()) {
                 vertexes.add(node.input1 + " -> " + "\"" + node.id + "\"");
                 vertexes.add(node.input2 + " -> " + "\"" + node.id + "\"");
