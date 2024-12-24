@@ -40,11 +40,19 @@ public class LineEx {
                      .toList();
     }
 
+    public int getInt() {
+        return parseInt(line);
+    }
+
     public int getInt(String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
         return parseInt(m.group(0));
+    }
+
+    public long getLong() {
+        return parseLong(line);
     }
 
     public long getLong(String regex) {

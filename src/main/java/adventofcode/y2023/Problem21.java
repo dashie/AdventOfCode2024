@@ -26,9 +26,9 @@ public class Problem21 extends AoCProblem<Long> {
 
         Problem21 problem = AoCProblem.buildWithInputResource(Problem21.class);
         System.out.println();
-        System.out.println(problem.countPlotsEx(65 + 131 * 20, true));
+        System.out.println(problem.countPlotsEx(65 + 131 * 40, true));
         System.out.println();
-        System.out.println(problem.countPlotsInfinite(65 + 131 * 20, true));
+        System.out.println(problem.countPlotsInfinite(65 + 131 * 40, true));
         System.out.println();
         System.out.println(problem.countPlotsInfinite(26501365, true));
         System.out.println();
@@ -286,7 +286,7 @@ public class Problem21 extends AoCProblem<Long> {
         long ratio1 = ratio - 1;
         long oddPageSteps = ratio % 2 == 0 ? page1.evenSteps : page0.evenSteps;
         long estimatedCellsCount =
-            (page0.evenSteps + page1.evenSteps) * ratio1 * ratio1 + oddPageSteps * (ratio1 * 2L + 1)
+            (page0.evenSteps + page1.evenSteps) * ratio1 * ratio1 + oddPageSteps * (ratio1 * 2L + 1L)
                 + (pageVLh0.evenSteps + pageVLh1.evenSteps) * ratio1 + pageVLh0.evenSteps
                 + (pageVRh0.evenSteps + pageVRh1.evenSteps) * ratio1 + pageVRh0.evenSteps
                 + (pageVLb0.evenSteps + pageVLb1.evenSteps) * ratio1 + pageVLb0.evenSteps
