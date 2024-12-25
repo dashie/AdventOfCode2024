@@ -15,7 +15,7 @@ public class AoCProblem<T> {
 
     public static final <T, P extends AoCProblem<T>> P build(Class<P> problemClass) throws Exception {
         P problem = problemClass.getConstructor().newInstance();
-        return (P) problem.loadInputResource();
+        return (P) problem;
     }
 
     public static final <T, P extends AoCProblem<T>> P buildWithInputResource(Class<P> problemClass) throws Exception {

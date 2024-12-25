@@ -15,23 +15,26 @@ public class Problem21 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
         Problem21 sample = AoCProblem.buildWithSampleResource(Problem21.class);
-        System.out.println(sample.countPlots(6) + " == 16");
-        System.out.println(sample.countPlotsEx(100) + " == 6536");
+//        System.out.println(sample.countPlots(6) + " == 16");
+        System.out.println(sample.countPlotsWithVirtualBoard(100, true) + " == 6536");
+        // System.out.println(sample.countPlotsEx(5000) + " == 16733044");
 
-        System.out.println();
-        System.out.println(sample.countPlotsEx(6 + 11 * 20, true));
-        System.out.println();
-        System.out.println(sample.countPlotsInfinite(6 + 11 * 20, true));
-        System.out.println();
+//        System.out.println();
+//        System.out.println(sample.countPlotsEx(6 + 11 * 20, true));
+//        System.out.println();
+//        System.out.println(sample.countPlotsInfinite(6 + 11 * 20, true));
+//        System.out.println();
 
         Problem21 problem = AoCProblem.buildWithInputResource(Problem21.class);
-        System.out.println();
-        System.out.println(problem.countPlotsEx(65 + 131 * 40, true));
-        System.out.println();
-        System.out.println(problem.countPlotsInfinite(65 + 131 * 40, true));
-        System.out.println();
-        System.out.println(problem.countPlotsInfinite(26501365, true));
-        System.out.println();
+//        System.out.println();
+//        System.out.println(problem.countPlotsEx(65 + 131 * 20, true));
+//        System.out.println();
+//        System.out.println(problem.countPlotsInfinite(65 + 131 * 20, true));
+//        System.out.println();
+//        System.out.println(problem.countPlotsWithProjection(26501365, true));
+//        System.out.println();
+//        System.out.println(problem.countPlotsPolynomial(26501365, true));
+//        System.out.println();
     }
 
     AoCBoard<Character> board;
@@ -44,7 +47,8 @@ public class Problem21 extends AoCProblem<Long> {
     }
 
     /**
-     *
+     * ...Starting from the garden plot marked S on your map,
+     * how many garden plots could the Elf reach in exactly 64 steps?
      */
     @Override
     public Long solvePartOne() throws Exception {
@@ -56,7 +60,6 @@ public class Problem21 extends AoCProblem<Long> {
 
     public long countVisitableCells() {
         AoCPoint p0 = board.searchFor('S');
-
         Set<AoCPoint> visited = new HashSet<>();
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0));
@@ -72,6 +75,7 @@ public class Problem21 extends AoCProblem<Long> {
 
     public long countPlots(int steps) {
         AoCPoint p0 = board.searchFor('S');
+        int plotParity = steps % 2 == 0 ? 0 : 1;
 
         Set<AoCPoint> visited = new HashSet<>();
         Deque<Step> stack = new LinkedList<>();
@@ -83,7 +87,7 @@ public class Problem21 extends AoCProblem<Long> {
             if (c == '#') continue;
             if (!visited.add(s.p)) continue;
             if (s.distance > steps) continue;
-            if (s.distance % 2 == 0) count++;
+            if (s.distance % 2 == plotParity) count++;
             s.p.neighbors().forEach(p -> stack.add(new Step(p, s.distance + 1)));
         }
         return count;
@@ -94,11 +98,11 @@ public class Problem21 extends AoCProblem<Long> {
      */
     @Override
     public Long solvePartTwo() throws Exception {
-        long result = countPlotsEx(50);
+        long result = countPlotsWithProjection(26501365);
         return result;
     }
 
-    class Page implements Comparable<Page> {
+    class BoardPage implements Comparable<BoardPage> {
 
         final AoCPoint origin;
         final AoCPoint p0;
@@ -106,16 +110,16 @@ public class Problem21 extends AoCProblem<Long> {
         Set<AoCPoint> visited = new HashSet<>();
         long destroyAt = -1;
         int size = -1;
-        long evenSteps = 0;
+        long plotsCount = 0;
 
-        Page(AoCPoint origin, AoCPoint p0, long createdAt) {
+        BoardPage(AoCPoint origin, AoCPoint p0, long createdAt) {
             this.origin = origin;
             this.p0 = p0;
             this.createdAt = createdAt;
         }
 
-        long incEvenSteps() {
-            return ++evenSteps;
+        long incPlotsCount() {
+            return ++plotsCount;
         }
 
         void destroy(long time) {
@@ -136,7 +140,7 @@ public class Problem21 extends AoCProblem<Long> {
         }
 
         @Override
-        public int compareTo(Page o) {
+        public int compareTo(BoardPage o) {
             int cmp = Integer.compare(quadrant(), o.quadrant());
             if (cmp == 0) {
                 cmp = switch (quadrant()) {
@@ -157,47 +161,49 @@ public class Problem21 extends AoCProblem<Long> {
         public String toString() {
             long l = destroyAt > 0 ? destroyAt - createdAt : -1;
             long sz = visited != null ? visited.size() : size;
-            return "%-15s p0=%-15s c:%-6d l:%-6d sz:%-5d steps:%d".formatted(origin, p0, createdAt, l, sz, evenSteps);
+            return "%-15s p0=%-15s c:%-6d l:%-6d sz:%-5d plots:%d".formatted(origin, p0, createdAt, l, sz, plotsCount);
         }
     }
 
-    public long countPlotsEx(int steps) {
-        return countPlotsEx(steps, false);
+    public long countPlotsWithVirtualBoard(int steps) {
+        return countPlotsWithVirtualBoard(steps, false);
     }
 
-    public long countPlotsEx(int steps, boolean dumpPages) {
+    public long countPlotsWithVirtualBoard(int steps, boolean dumpPages) {
         AoCPoint p0 = board.searchFor('S');
-        Map<AoCPoint, Page> pageMap = new HashMap<>();
-        long count = countPlotsExTraversal(steps, p0, pageMap);
+        Map<AoCPoint, BoardPage> pageMap = new HashMap<>();
+        long count = countPlotsWithVirtualBoardTraversal(steps, p0, pageMap);
 
         if (dumpPages) {
             dumpPagesPeriod(steps);
             dumpPagesDiamond(pageMap);
             // dumpPagesStats(pageMap);
             System.out.printf("pages count: %d%n", pageMap.size());
-            long cellsCountStats = pageMap.values().stream().mapToLong(p -> p.evenSteps).sum();
+            long cellsCountStats = pageMap.values().stream().mapToLong(p -> p.plotsCount).sum();
             System.out.printf("cells' count (scaled): %d%n", cellsCountStats);
         }
 
         return count;
     }
 
-    private long countPlotsExTraversal(int steps, AoCPoint p0, Map<AoCPoint, Page> pageMap) {
+    private long countPlotsWithVirtualBoardTraversal(int steps, AoCPoint p0, Map<AoCPoint, BoardPage> pageMap) {
+        int plotParity = steps % 2 == 0 ? 0 : 1;
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0));
         long count = 0;
         while (!stack.isEmpty()) {
             Step s = stack.pollFirst();
             if (s.distance > steps) continue;
-            Character c = getVirtualCell(s.p, s.distance, pageMap);
+            Character c = getVirtualCell(s.p, s.distance, plotParity, pageMap);
             if (c == null) continue;
-            if (s.distance % 2 == 0) count++;
+            if (s.distance % 2 == plotParity)
+                count++;
             s.p.neighbors().forEach(p -> stack.add(new Step(p, s.distance + 1)));
         }
         return count;
     }
 
-    public Character getVirtualCell(AoCPoint p, long time, Map<AoCPoint, Page> pageMap) {
+    public Character getVirtualCell(AoCPoint p, long time, int plotParity, Map<AoCPoint, BoardPage> pageMap) {
         int rx = p.x % board.N;
         if (rx < 0) rx += board.N;
         int ry = p.y % board.M;
@@ -205,7 +211,7 @@ public class Problem21 extends AoCProblem<Long> {
         var rp = AoCPoint.of(rx, ry);
 
         AoCPoint origin = AoCPoint.of(p.x - rx, p.y - ry);
-        Page page = pageMap.computeIfAbsent(origin, k -> new Page(k, rp, time));
+        BoardPage page = pageMap.computeIfAbsent(origin, k -> new BoardPage(k, rp, time));
         if (page.visited == null) return null;
 
         char c = board.get(rx, ry, '#');
@@ -216,17 +222,17 @@ public class Problem21 extends AoCProblem<Long> {
             page.destroy(time);
             // System.out.printf("%s%n", page);
         }
-        if (time % 2 == 0) page.incEvenSteps();
+        if (time % 2 == plotParity) page.incPlotsCount();
         return c;
     }
 
-    public long countPlotsInfinite(int steps) {
-        return countPlotsInfinite(steps, false);
+    public long countPlotsWithProjection(int steps) {
+        return countPlotsWithProjection(steps, false);
     }
 
-    // TODO still need to be fixed to cover all possible board shape
-    public long countPlotsInfinite(int steps, boolean dumpPages) {
-        if (steps < board.N * 6) return countPlotsEx(steps, dumpPages);
+    // TODO still need to be fixed to cover all possible board shape (e.g. not square shapes)
+    public long countPlotsWithProjection(int steps, boolean dumpPages) {
+        if (steps < board.N * 6) return countPlotsWithVirtualBoard(steps, dumpPages);
 
         long scaledSteps = steps;
         scaledSteps = scaledSteps - board.N / 2;
@@ -237,16 +243,16 @@ public class Problem21 extends AoCProblem<Long> {
         int simulationSteps = board.N / 2 + board.N * (int) simulationMultiplier + (int) remainder;
 
         AoCPoint p0 = board.searchFor('S');
-        Map<AoCPoint, Page> pageMap = new HashMap<>();
-        long scaledCount = countPlotsExTraversal(simulationSteps, p0, pageMap);
+        Map<AoCPoint, BoardPage> pageMap = new HashMap<>();
+        long scaledCount = countPlotsWithVirtualBoardTraversal(simulationSteps, p0, pageMap);
 
-        // eval shape size
+        // eval visited area size (a diamond if the board is a square)
         int ymin = Integer.MAX_VALUE;
         int xmin = Integer.MAX_VALUE;
         int ymax = Integer.MIN_VALUE;
         int xmax = Integer.MIN_VALUE;
 
-        for (Page p : pageMap.values()) {
+        for (BoardPage p : pageMap.values()) {
             if (p.completed()) continue;
             if (p.origin.y < ymin) ymin = p.origin.y;
             if (p.origin.x < xmin) xmin = p.origin.x;
@@ -262,38 +268,117 @@ public class Problem21 extends AoCProblem<Long> {
             System.out.printf("pages module: %d (%d)%n", ratio, simulationMultiplier);
 
             System.out.printf("pages count: %d%n", pageMap.size());
-            long cellsCountStats = pageMap.values().stream().mapToLong(p -> p.evenSteps).sum();
+            long cellsCountStats = pageMap.values().stream().mapToLong(p -> p.plotsCount).sum();
             System.out.printf("cells' count (scaled): %d%n", cellsCountStats);
         }
 
-        Page page0 = pageMap.get(AoCPoint.of(0, 0));
-        Page page1 = pageMap.get(AoCPoint.of(board.N, 0));
+        BoardPage page0 = pageMap.get(AoCPoint.of(0, 0));
+        BoardPage page1 = pageMap.get(AoCPoint.of(board.N, 0));
 
-        Page pageVLh0 = pageMap.get(AoCPoint.of(xmin, -board.M));
-        Page pageVLh1 = pageMap.get(AoCPoint.of(xmin + board.N, -board.M));
-        Page pageVRh0 = pageMap.get(AoCPoint.of(xmax, -board.M));
-        Page pageVRh1 = pageMap.get(AoCPoint.of(xmax - board.N, -board.M));
-        Page pageVLb0 = pageMap.get(AoCPoint.of(xmin, board.M));
-        Page pageVLb1 = pageMap.get(AoCPoint.of(xmin + board.N, board.M));
-        Page pageVRb0 = pageMap.get(AoCPoint.of(xmax, board.M));
-        Page pageVRb1 = pageMap.get(AoCPoint.of(xmax - board.N, board.M));
+        BoardPage pageVLh0 = pageMap.get(AoCPoint.of(xmin, -board.M));
+        BoardPage pageVLh1 = pageMap.get(AoCPoint.of(xmin + board.N, -board.M));
+        BoardPage pageVRh0 = pageMap.get(AoCPoint.of(xmax, -board.M));
+        BoardPage pageVRh1 = pageMap.get(AoCPoint.of(xmax - board.N, -board.M));
+        BoardPage pageVLb0 = pageMap.get(AoCPoint.of(xmin, board.M));
+        BoardPage pageVLb1 = pageMap.get(AoCPoint.of(xmin + board.N, board.M));
+        BoardPage pageVRb0 = pageMap.get(AoCPoint.of(xmax, board.M));
+        BoardPage pageVRb1 = pageMap.get(AoCPoint.of(xmax - board.N, board.M));
 
-        Page pageVH = pageMap.get(AoCPoint.of(0, ymin));
-        Page pageVB = pageMap.get(AoCPoint.of(0, ymax));
-        Page pageVL = pageMap.get(AoCPoint.of(xmin, 0));
-        Page pageVR = pageMap.get(AoCPoint.of(xmax, 0));
+        BoardPage pageVH = pageMap.get(AoCPoint.of(0, ymin));
+        BoardPage pageVB = pageMap.get(AoCPoint.of(0, ymax));
+        BoardPage pageVL = pageMap.get(AoCPoint.of(xmin, 0));
+        BoardPage pageVR = pageMap.get(AoCPoint.of(xmax, 0));
 
         long ratio1 = ratio - 1;
-        long oddPageSteps = ratio % 2 == 0 ? page1.evenSteps : page0.evenSteps;
-        long estimatedCellsCount =
-            (page0.evenSteps + page1.evenSteps) * ratio1 * ratio1 + oddPageSteps * (ratio1 * 2L + 1L)
-                + (pageVLh0.evenSteps + pageVLh1.evenSteps) * ratio1 + pageVLh0.evenSteps
-                + (pageVRh0.evenSteps + pageVRh1.evenSteps) * ratio1 + pageVRh0.evenSteps
-                + (pageVLb0.evenSteps + pageVLb1.evenSteps) * ratio1 + pageVLb0.evenSteps
-                + (pageVRb0.evenSteps + pageVRb1.evenSteps) * ratio1 + pageVRb0.evenSteps
-                + pageVH.evenSteps + pageVB.evenSteps + pageVL.evenSteps + pageVR.evenSteps;
+        long oddPageSteps = ratio % 2 == 0 ? page1.plotsCount : page0.plotsCount;
+        long projectionCellsCount =
+            (page0.plotsCount + page1.plotsCount) * ratio1 * ratio1 + oddPageSteps * (ratio1 * 2L + 1L)
+                + (pageVLh0.plotsCount + pageVLh1.plotsCount) * ratio1 + pageVLh0.plotsCount
+                + (pageVRh0.plotsCount + pageVRh1.plotsCount) * ratio1 + pageVRh0.plotsCount
+                + (pageVLb0.plotsCount + pageVLb1.plotsCount) * ratio1 + pageVLb0.plotsCount
+                + (pageVRb0.plotsCount + pageVRb1.plotsCount) * ratio1 + pageVRb0.plotsCount
+                + pageVH.plotsCount + pageVB.plotsCount + pageVL.plotsCount + pageVR.plotsCount;
 
-        return estimatedCellsCount;
+        return projectionCellsCount;
+    }
+
+    public long countPlotsWithPolynomial(int steps) {
+        return countPlotsWithPolynomial(steps, false);
+    }
+
+    public long countPlotsWithPolynomial(int steps, boolean dumpStats) {
+        // I try to solve a polynomial system:
+        //
+        // y1 = a•x1² + b•x1 + c
+        // y2 = a•x2² + b•x2 + c
+        // y3 = a•x3² + b•x3 + c
+        //
+        // In the input file the "S" position is central in a square tile large 131 cells.
+        // If x-> is the number o horizontal tiles thet I can reach, and "y" the number of even cells
+        //
+        //     y = a•x² + b•x + c
+        //
+        // "c" is the value with x at the end of the central tile, so, for 131 width tiles, x = 0 -> c = 65.
+        // Then I have to solve the polynomial:
+        //
+        //    x = 0 -> c = y0
+        //
+        // With "c" solved
+        //
+        //    a•x1² + b•x1 = u1 = y1 - c
+        //    a•x2² + b•x2 = u2 = y2 - c
+        //
+        //    b = (u1 - a•x1²) / x1
+        //    b = (u2 - a•x2²) / x2 = u2/x2 - a•x2
+        //
+        //    (u1 - a•x1²) / x1 = (u2 - a•x2²) / x2
+        //    a = (u2/x2 - u1/x1) / (x2 - x1)
+
+        // use always "even" x
+        long x0 = 0;
+        long x0steps = board.N / 2 + board.N * x0; // x = 0 in the equation
+        long x1 = 2;
+        long x1steps = board.N / 2 + board.N * x1; // x = 2 in the equation
+        long x2 = 8;
+        long x2steps = board.N / 2 + board.N * x2; // x = 10 in the equation
+
+        long y0 = countPlotsWithVirtualBoard((int) x0steps);
+        long y1 = countPlotsWithVirtualBoard((int) x1steps);
+        long y2 = countPlotsWithVirtualBoard((int) x2steps);
+
+        long c = y0;
+        double u1 = y1 - c;
+        double u2 = y2 - c;
+        double a = (u2 / x2 - u1 / x1) / (x2 - x1);
+        double b = u2 / x2 - a * x2;
+
+        if (dumpStats) {
+            System.out.printf("f(x) = a•x² + b•x + c%n");
+            System.out.printf("f(%d:%d) = %d%n", x0, x0steps, y0);
+            System.out.printf("f(%d:%d) = %d%n", x1, x1steps, y1);
+            System.out.printf("f(%d:%d) = %d%n", x2, x2steps, y2);
+
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
+
+            System.out.println("check coefficients");
+            System.out.printf("f(%d) ≈ %d (%d)%n", x0, (long) (a * x0 * x0 + b * x0 + c), y0);
+            System.out.printf("f(%d) ≈ %d (%d)%n", x1, (long) (a * x1 * x1 + b * x1 + c), y1);
+            System.out.printf("f(%d) ≈ %d (%d)%n", x2, (long) (a * x2 * x2 + b * x2 + c), y2);
+        }
+
+        long x1c = 4;
+        long y1c = countPlotsWithVirtualBoard(board.N / 2 + board.N * (int) x1c);
+        if (dumpStats) System.out.printf("f(%d) ≈ %d (%d)%n", x1c, (long) (a * x1c * x1c + b * x1c + c), y1c);
+        long x2c = 20;
+        long y2c = countPlotsWithVirtualBoard(board.N / 2 + board.N * (int) x2c);
+        if (dumpStats) System.out.printf("f(%d) ≈ %d (%d)%n", x2c, (long) (a * x2c * x2c + b * x2c + c), y2c);
+
+        long xsteps = (steps - board.N / 2) / board.N;
+        long estimatedCount = (long) (a * xsteps * xsteps + b * xsteps + c);
+        if (dumpStats) System.out.println("projection count = " + estimatedCount);
+        return estimatedCount;
     }
 
     private void dumpPagesPeriod(int steps) {
@@ -304,13 +389,13 @@ public class Problem21 extends AoCProblem<Long> {
         System.out.printf("steps: %-8d %d + %d x %d + %d%n", steps, stepsInto1stPage, board.N, ratio, remainder);
     }
 
-    private void dumpPagesDiamond(Map<AoCPoint, Page> pageMap) {
+    private void dumpPagesDiamond(Map<AoCPoint, BoardPage> pageMap) {
         int ymin = Integer.MAX_VALUE;
         int xmin = Integer.MAX_VALUE;
         int ymax = Integer.MIN_VALUE;
         int xmax = Integer.MIN_VALUE;
 
-        for (Page p : pageMap.values()) {
+        for (BoardPage p : pageMap.values()) {
             if (p.completed()) continue;
             if (p.origin.y < ymin) ymin = p.origin.y;
             if (p.origin.x < xmin) xmin = p.origin.x;
@@ -321,19 +406,19 @@ public class Problem21 extends AoCProblem<Long> {
         System.out.println("diamond data:");
         for (int n = xmin; n <= xmax; n += board.N) {
             for (int m = ymin; m <= ymax; m += board.M) {
-                Page page = pageMap.get(AoCPoint.of(n, m));
-                String cell = page == null ? "      " : "%5d ".formatted(page.evenSteps);
+                BoardPage page = pageMap.get(AoCPoint.of(n, m));
+                String cell = page == null ? "      " : "%5d ".formatted(page.plotsCount);
                 System.out.print(cell);
             }
             System.out.println();
         }
     }
 
-    private void dumpPagesStats(Map<AoCPoint, Page> pageMap) {
+    private void dumpPagesStats(Map<AoCPoint, BoardPage> pageMap) {
         System.out.println("perimeter's pages:");
         pageMap.values().stream()
                .filter(p -> p.destroyAt < 0)
-               .sorted(Page::compareTo)
+               .sorted(BoardPage::compareTo)
                .forEach(System.out::println);
 
         System.out.println("central pages with parity:");
