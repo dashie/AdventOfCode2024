@@ -88,7 +88,8 @@ public class LineEx {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
-        return Arrays.stream(m.group(0).split(splitRegex))
+        String match = m.groupCount() > 0 ? m.group(1) : m.group(0);
+        return Arrays.stream(match.trim().split(splitRegex))
                      .mapToInt(Integer::parseInt)
                      .toArray();
     }
@@ -97,7 +98,8 @@ public class LineEx {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
-        return Arrays.stream(m.group(0).split(splitRegex))
+        String match = m.groupCount() > 0 ? m.group(1) : m.group(0);
+        return Arrays.stream(match.trim().split(splitRegex))
                      .map(Integer::parseInt)
                      .toArray(Integer[]::new);
     }
@@ -106,7 +108,8 @@ public class LineEx {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
-        return Arrays.stream(m.group(0).split(splitRegex))
+        String match = m.groupCount() > 0 ? m.group(1) : m.group(0);
+        return Arrays.stream(match.trim().split(splitRegex))
                      .map(Integer::parseInt)
                      .toList();
     }
