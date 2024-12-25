@@ -28,9 +28,8 @@ public class Problem25 extends AoCProblem<Long> {
             Character[][] schema = si.toCharMatrix();
             if (schema[0][0] == '.') { // is a key
                 keys.add(schemaToString(schema));
-            } else {
-                // create a complement of the key so I can compare strings
-                locks.add(complement(schemaToString(schema)));
+            } else { // is a lock
+                locks.add(schemaToString(schema));
             }
         }
 
@@ -44,22 +43,15 @@ public class Problem25 extends AoCProblem<Long> {
             int n = 0;
             if (schema[0][0] == '#') { // lock
                 while (schema[n][i] == '#') n++;
-                str.append(n - 1);
+                // store the complement, that is the size of free space
+                // to compare easily, based on alphabetical criteria, with keys
+                str.append(6 - n);
             } else {
                 while (schema[n][i] == '.') n++;
                 str.append(6 - n);
             }
         }
         return str.toString();
-    }
-
-    public String complement(String str) {
-        StringBuilder c = new StringBuilder();
-        for (int i = 0; i < str.length(); ++i) {
-            int n = 5 - Character.getNumericValue(str.charAt(i));
-            c.append(n);
-        }
-        return c.toString();
     }
 
     /**
