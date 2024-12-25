@@ -18,7 +18,7 @@ public class Problem24 extends AoCProblem<String> {
         Problem24 problem = AoCProblem.buildWithInputResource(Problem24.class);
         // problem.dumpDotGraph();
         problem.solve();
-        problem.dumpDotGraph();
+        // problem.dumpDotGraph();
     }
 
     public static final int MAX_BITS = 64;

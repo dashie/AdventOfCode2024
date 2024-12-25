@@ -27,6 +27,10 @@ public class AoCInput {
         return inputText;
     }
 
+    public int indexOf(String str) {
+        return inputText.indexOf(str);
+    }
+
     public AoCInput before(String regex) {
         return new AoCInput(inputText.split(regex)[0]);
     }
@@ -37,6 +41,12 @@ public class AoCInput {
 
     public List<String> split(String splitRule) {
         return Arrays.asList(inputText.split(splitRule));
+    }
+
+    public List<AoCInput> splitInput(String splitRule) {
+        return Arrays.asList(inputText.split(splitRule))
+                     .stream().map(AoCInput::new)
+                     .toList();
     }
 
     public static AoCInput fromReader(Reader reader) throws IOException {
