@@ -14,27 +14,11 @@ import java.util.*;
 public class Problem21 extends AoCProblem<Long> {
 
     public static void main(String[] args) throws Exception {
-        Problem21 sample = AoCProblem.buildWithSampleResource(Problem21.class);
-//        System.out.println(sample.countPlots(6) + " == 16");
-        System.out.println(sample.countPlotsWithVirtualBoard(100, true) + " == 6536");
-        // System.out.println(sample.countPlotsEx(5000) + " == 16733044");
-
-//        System.out.println();
-//        System.out.println(sample.countPlotsEx(6 + 11 * 20, true));
-//        System.out.println();
-//        System.out.println(sample.countPlotsInfinite(6 + 11 * 20, true));
-//        System.out.println();
-
         Problem21 problem = AoCProblem.buildWithInputResource(Problem21.class);
-//        System.out.println();
-//        System.out.println(problem.countPlotsEx(65 + 131 * 20, true));
-//        System.out.println();
-//        System.out.println(problem.countPlotsInfinite(65 + 131 * 20, true));
-//        System.out.println();
-//        System.out.println(problem.countPlotsWithProjection(26501365, true));
-//        System.out.println();
-//        System.out.println(problem.countPlotsPolynomial(26501365, true));
-//        System.out.println();
+        System.out.println(problem.countPlotsWithProjection(26501365, false));
+        System.out.println();
+        System.out.println(problem.countPlotsWithPolynomial(26501365, false));
+        System.out.println();
     }
 
     AoCBoard<Character> board;
@@ -94,7 +78,9 @@ public class Problem21 extends AoCProblem<Long> {
     }
 
     /**
-     *
+     * ...However, the step count the Elf needs is much larger! Starting from
+     * the garden plot marked S on your infinite map, how many garden plots
+     * could the Elf reach in exactly 26501365 steps?
      */
     @Override
     public Long solvePartTwo() throws Exception {
