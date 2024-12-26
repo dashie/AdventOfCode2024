@@ -10,7 +10,7 @@ import java.util.List;
  * Day 9: Disk Fragmenter
  * https://adventofcode.com/2024/day/9
  */
-public class Problem09 extends AoCProblem<Long> {
+public class Problem09 extends AoCProblem<Long, Problem09> {
 
     public static void main(String[] args) throws Exception {
         new Problem09().loadResourceAndSolve(false);

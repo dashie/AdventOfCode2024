@@ -10,7 +10,7 @@ import java.util.*;
  * Day 22: Monkey Market
  * https://adventofcode.com/2024/day/22
  */
-public class Problem22v2 extends AoCProblem<Long> {
+public class Problem22v2 extends AoCProblem<Long, Problem22v2> {
 
     public static void main(String[] args) throws Exception {
         Problem22v2 p = new Problem22v2();

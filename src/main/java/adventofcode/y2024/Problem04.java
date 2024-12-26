@@ -6,7 +6,7 @@ import adventofcode.commons.*;
  * Day 4: Ceres Search
  * https://adventofcode.com/2024/day/4
  */
-public class Problem04 extends AoCProblem<Long> {
+public class Problem04 extends AoCProblem<Long, Problem04> {
 
     public static void main(String[] args) throws Exception {
         new Problem04().loadResourceAndSolve(false);

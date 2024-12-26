@@ -6,6 +6,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,11 +34,21 @@ public class AoCInput {
     }
 
     public AoCInput before(String regex) {
-        return new AoCInput(inputText.split(regex)[0]);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(inputText);
+        if (matcher.find()) {
+            return new AoCInput(inputText.substring(0, matcher.start()));
+        }
+        return null;
     }
 
     public AoCInput after(String regex) {
-        return new AoCInput(inputText.split(regex)[1]);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(inputText);
+        if (matcher.find()) {
+            return new AoCInput(inputText.substring(matcher.end()));
+        }
+        return null;
     }
 
     public List<String> split(String splitRule) {
@@ -75,6 +87,14 @@ public class AoCInput {
     public List<String> toList() {
         return lines()
             .toList();
+    }
+
+    public String firstLine() {
+        return lines().findFirst().get();
+    }
+
+    public LineEx firstLineEx() {
+        return new LineEx(firstLine());
     }
 
     public int[][] toIntMatrix() {

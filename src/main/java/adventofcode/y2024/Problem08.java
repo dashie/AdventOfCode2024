@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
  * Day 8: Resonant Collinearity
  * https://adventofcode.com/2024/day/8
  */
-public class Problem08 extends AoCProblem<Long> {
+public class Problem08 extends AoCProblem<Long, Problem08> {
 
     public static void main(String[] args) throws Exception {
         new Problem08().loadResourceAndSolve(false);

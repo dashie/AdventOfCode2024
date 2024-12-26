@@ -14,7 +14,7 @@ import java.util.Map;
  * Day 20: Race Condition
  * https://adventofcode.com/2024/day/20
  */
-public class Problem20 extends AoCProblem<Long> {
+public class Problem20 extends AoCProblem<Long, Problem20> {
 
     public static void main(String[] args) throws Exception {
         new Problem20().loadResourceAndSolve(true);

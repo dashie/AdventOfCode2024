@@ -11,7 +11,7 @@ import java.util.List;
  * Day 25: Code Chronicle
  * https://adventofcode.com/2024/day/25
  */
-public class Problem25 extends AoCProblem<Long> {
+public class Problem25 extends AoCProblem<Long, Problem25> {
 
     public static void main(String[] args) throws Exception {
         Problem25 problem = AoCProblem.buildWithInputResource(Problem25.class);

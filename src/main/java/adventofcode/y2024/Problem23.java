@@ -13,7 +13,7 @@ import static java.lang.Math.max;
  * Day 23: LAN Party
  * https://adventofcode.com/2024/day/23
  */
-public class Problem23 extends AoCProblem<String> {
+public class Problem23 extends AoCProblem<String, Problem23> {
 
     public static void main(String[] args) throws Exception {
         new Problem23().loadResourceAndSolve(false);

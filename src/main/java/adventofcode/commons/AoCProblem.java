@@ -9,26 +9,26 @@ import java.util.Objects;
 /**
  *
  */
-public class AoCProblem<T> {
+public class AoCProblem<T, P extends AoCProblem<T, P>> {
 
     private boolean isUsingSampleResource = false;
 
-    public static final <T, P extends AoCProblem<T>> P build(Class<P> problemClass) throws Exception {
+    public static final <T, P extends AoCProblem<T, P>> P build(Class<P> problemClass) throws Exception {
         P problem = problemClass.getConstructor().newInstance();
         return (P) problem;
     }
 
-    public static final <T, P extends AoCProblem<T>> P buildWithInputResource(Class<P> problemClass) throws Exception {
+    public static final <T, P extends AoCProblem<T, P>> P buildWithInputResource(Class<P> problemClass) throws Exception {
         P problem = problemClass.getConstructor().newInstance();
         return (P) problem.loadInputResource();
     }
 
-    public static final <T, P extends AoCProblem<T>> P buildWithSampleResource(Class<P> problemClass) throws Exception {
+    public static final <T, P extends AoCProblem<T, P>> P buildWithSampleResource(Class<P> problemClass) throws Exception {
         P problem = problemClass.getConstructor().newInstance();
         return (P) problem.loadSampleResource();
     }
 
-    public static final <T, P extends AoCProblem<T>> P buildWithSampleResource(Class<P> problemClass, String fileSuffix) throws Exception {
+    public static final <T, P extends AoCProblem<T, P>> P buildWithSampleResource(Class<P> problemClass, String fileSuffix) throws Exception {
         P problem = problemClass.getConstructor().newInstance();
         return (P) problem.loadSampleResource(fileSuffix);
     }
@@ -49,7 +49,7 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final <P extends AoCProblem<T>> P loadInputResource() throws Exception {
+    public final P loadInputResource() throws Exception {
         isUsingSampleResource = false;
         loadInputResource("");
         return (P) this;
@@ -58,7 +58,7 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final <P extends AoCProblem<T>> P loadSampleResource() throws Exception {
+    public final P loadSampleResource() throws Exception {
         isUsingSampleResource = true;
         loadInputResource("-sample");
         return (P) this;
@@ -67,7 +67,7 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final <P extends AoCProblem<T>> P loadSampleResource(String fileSuffix) throws Exception {
+    public final P loadSampleResource(String fileSuffix) throws Exception {
         isUsingSampleResource = true;
         loadInputResource(fileSuffix);
         return (P) this;
@@ -76,7 +76,7 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final <P extends AoCProblem<T>> P loadInputResource(String fileSuffix) throws Exception {
+    public final P loadInputResource(String fileSuffix) throws Exception {
         if (fileSuffix == null) {
             fileSuffix = "";
         } else if (!fileSuffix.isEmpty() && !fileSuffix.startsWith("-")) {
@@ -102,7 +102,7 @@ public class AoCProblem<T> {
     /**
      *
      */
-    public final <P extends AoCProblem<T>> P loadInputData(String data) throws Exception {
+    public final P loadInputData(String data) throws Exception {
         Objects.requireNonNull(data, "data");
         AoCInput input;
         try (BufferedReader reader = new BufferedReader(new StringReader(data))) {
@@ -170,6 +170,14 @@ public class AoCProblem<T> {
      */
     public T solvePartTwo() throws Exception {
         return null;
+    }
+
+    /**
+     *
+     */
+    public P log(String format, Object... args) {
+        System.out.printf(format, args);
+        return (P) this;
     }
 
     /**

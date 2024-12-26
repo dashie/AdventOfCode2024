@@ -10,7 +10,7 @@ import static adventofcode.commons.AoCVector.charArrowToMatrixDirection;
  * Day 15: Warehouse Woes
  * https://adventofcode.com/2024/day/15
  */
-public class Problem15 extends AoCProblem<Long> {
+public class Problem15 extends AoCProblem<Long, Problem15> {
 
     public static void main(String[] args) throws Exception {
         new Problem15().loadResourceAndSolve(false);

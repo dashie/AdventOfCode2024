@@ -10,7 +10,7 @@ import static adventofcode.commons.AoCVector.charUDRLToDirection;
  * Day 18: Lavaduct Lagoon
  * https://adventofcode.com/2023/day/18
  */
-public class Problem18 extends AoCProblem<Long> {
+public class Problem18 extends AoCProblem<Long, Problem18> {
 
     public static void main(String[] args) throws Exception {
         new Problem18().loadResourceAndSolve(false);

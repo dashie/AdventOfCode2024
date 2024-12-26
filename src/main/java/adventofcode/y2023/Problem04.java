@@ -12,7 +12,7 @@ import static java.util.Comparator.comparing;
  * Day 4: Scratchcards
  * https://adventofcode.com/2023/day/4
  */
-public class Problem04 extends AoCProblem<Long> {
+public class Problem04 extends AoCProblem<Long, Problem04> {
 
     public static void main(String[] args) throws Exception {
         new Problem04().loadResourceAndSolve(false);
@@ -39,8 +39,8 @@ public class Problem04 extends AoCProblem<Long> {
         // Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
         for (LineEx line : input.iterateLineExs()) {
             int id = line.match("Card\\s+([0-9]+):").getInt(1);
-            List<Integer> wins = line.getListOfIntegers(": ([0-9 ]+) \\|", "\\s+");
-            List<Integer> numbers = line.getListOfIntegers(" \\| ([0-9 ]+)$", "\\s+");
+            List<Integer> wins = line.getListOfInteger(": ([0-9 ]+) \\|", "\\s+");
+            List<Integer> numbers = line.getListOfInteger(" \\| ([0-9 ]+)$", "\\s+");
             cards.put(id, new Card(id, wins, numbers));
         }
     }

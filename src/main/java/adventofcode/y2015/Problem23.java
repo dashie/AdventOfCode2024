@@ -11,7 +11,7 @@ import java.util.Map;
  * Day 23: Opening the Turing Lock
  * https://adventofcode.com/2015/day/23
  */
-public class Problem23 extends AoCProblem<Long> {
+public class Problem23 extends AoCProblem<Long, Problem23> {
 
     public static void main(String[] args) throws Exception {
         new Problem23().loadResourceAndSolve(false);

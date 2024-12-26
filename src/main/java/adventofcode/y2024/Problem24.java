@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * Day 24: Crossed Wires
  * https://adventofcode.com/2024/day/24
  */
-public class Problem24 extends AoCProblem<String> {
+public class Problem24 extends AoCProblem<String, Problem24> {
 
     public static void main(String[] args) throws Exception {
         Problem24 problem = AoCProblem.buildWithInputResource(Problem24.class);

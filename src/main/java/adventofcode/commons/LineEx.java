@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
-public class LineEx {
+public class LineEx implements CharSequence {
 
     private final String line;
 
@@ -21,6 +21,21 @@ public class LineEx {
         return line;
     }
 
+    @Override
+    public int length() {
+        return line.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return line.charAt(index);
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return line.subSequence(start, end);
+    }
+
     public LineEx before(String regex) {
         return new LineEx(line.split(regex)[0]);
     }
@@ -29,14 +44,30 @@ public class LineEx {
         return new LineEx(line.split(regex)[1]);
     }
 
+    public boolean isEmpty() {
+        return "".equals(line);
+    }
+
     public List<LineEx> split(String regex) {
         return Arrays.stream(line.split(regex))
                      .map(LineEx::new)
                      .toList();
     }
 
-    public List<String> splitToStrings(String regex) {
+    public List<String> splitToString(String regex) {
         return Arrays.stream(line.split(regex))
+                     .toList();
+    }
+
+    public List<Integer> splitToInteger(String regex) {
+        return Arrays.stream(line.split(regex))
+                     .map(Integer::parseInt)
+                     .toList();
+    }
+
+    public List<Long> splitToLong(String regex) {
+        return Arrays.stream(line.split(regex))
+                     .map(Long::parseLong)
                      .toList();
     }
 
@@ -94,7 +125,7 @@ public class LineEx {
                      .toArray();
     }
 
-    public Integer[] getArrayOfIntegers(String regex, String splitRegex) {
+    public Integer[] getArrayOfInteger(String regex, String splitRegex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
@@ -104,7 +135,7 @@ public class LineEx {
                      .toArray(Integer[]::new);
     }
 
-    public List<Integer> getListOfIntegers(String regex, String splitRegex) {
+    public List<Integer> getListOfInteger(String regex, String splitRegex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(line);
         if (!m.find()) throw new IllegalArgumentException();
@@ -113,4 +144,15 @@ public class LineEx {
                      .map(Integer::parseInt)
                      .toList();
     }
+
+    public List<Long> getListOfLong(String regex, String splitRegex) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(line);
+        if (!m.find()) throw new IllegalArgumentException();
+        String match = m.groupCount() > 0 ? m.group(1) : m.group(0);
+        return Arrays.stream(match.trim().split(splitRegex))
+                     .map(Long::parseLong)
+                     .toList();
+    }
+
 }

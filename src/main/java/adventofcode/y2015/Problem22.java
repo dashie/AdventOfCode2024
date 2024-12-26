@@ -13,7 +13,7 @@ import java.util.function.Function;
  * Day 22: Wizard Simulator 20XX
  * https://adventofcode.com/2015/day/22
  */
-public class Problem22 extends AoCProblem<Long> {
+public class Problem22 extends AoCProblem<Long, Problem22> {
 
     public static void main(String[] args) throws Exception {
         new Problem22().loadResourceAndSolve(false);

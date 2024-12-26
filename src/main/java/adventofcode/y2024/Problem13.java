@@ -13,7 +13,7 @@ import java.util.List;
  * Day 13: Claw Contraption
  * https://adventofcode.com/2024/day/13
  */
-public class Problem13 extends AoCProblem<Long> {
+public class Problem13 extends AoCProblem<Long, Problem13> {
 
     public static void main(String[] args) throws Exception {
         new Problem13().loadResourceAndSolve(false);

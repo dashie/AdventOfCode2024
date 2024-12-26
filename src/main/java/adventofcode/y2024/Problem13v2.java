@@ -19,7 +19,7 @@ import static java.lang.Math.rint;
  *
  * Solve using Apache Commons Math
  */
-public class Problem13v2 extends AoCProblem<Long> {
+public class Problem13v2 extends AoCProblem<Long, Problem13v2> {
 
     public static void main(String[] args) throws Exception {
         new Problem13v2().loadResourceAndSolve(false);

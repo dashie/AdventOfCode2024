@@ -3,7 +3,7 @@ package adventofcode.templates.y0000;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
-public class Problem00 extends AoCProblem<Long> {
+public class Problem00 extends AoCProblem<Long, Problem00> {
 
     public static void main(String[] args) throws Exception {
         new Problem00().loadResourceAndSolve(false);

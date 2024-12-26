@@ -11,7 +11,7 @@ import static java.lang.Long.parseLong;
  * Day 11: Plutonian Pebbles
  * https://adventofcode.com/2024/day/11
  */
-public class Problem11 extends AoCProblem<Long> {
+public class Problem11 extends AoCProblem<Long, Problem11> {
 
     public static void main(String[] args) throws Exception {
         new Problem11().loadResourceAndSolve(false);

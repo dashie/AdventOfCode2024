@@ -8,7 +8,7 @@ import java.util.*;
  * Day 14: Restroom Redoubt
  * https://adventofcode.com/2024/day/14
  */
-public class Problem14 extends AoCProblem<Long> {
+public class Problem14 extends AoCProblem<Long, Problem14> {
 
     public static void main(String[] args) throws Exception {
         new Problem14().loadResourceAndSolve(false);

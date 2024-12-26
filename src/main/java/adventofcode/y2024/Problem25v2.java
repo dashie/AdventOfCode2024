@@ -12,7 +12,7 @@ import static java.util.Comparator.reverseOrder;
  * Day 25: Code Chronicle
  * https://adventofcode.com/2024/day/25
  */
-public class Problem25v2 extends AoCProblem<Long> {
+public class Problem25v2 extends AoCProblem<Long, Problem25v2> {
 
     public static void main(String[] args) throws Exception {
         Problem25v2 problem = AoCProblem.buildWithInputResource(Problem25v2.class);

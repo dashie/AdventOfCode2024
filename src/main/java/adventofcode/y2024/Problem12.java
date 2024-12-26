@@ -14,7 +14,7 @@ import static adventofcode.commons.AoCVector.*;
  * Day 12: Garden Groups
  * https://adventofcode.com/2024/day/12
  */
-public class Problem12 extends AoCProblem<Long> {
+public class Problem12 extends AoCProblem<Long, Problem12> {
 
     public static void main(String[] args) throws Exception {
         new Problem12().loadResourceAndSolve(false);

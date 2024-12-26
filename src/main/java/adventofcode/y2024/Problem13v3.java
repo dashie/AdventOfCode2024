@@ -18,7 +18,7 @@ import static java.lang.Math.*;
  *
  * Solve using linear search.
  */
-public class Problem13v3 extends AoCProblem<Long> {
+public class Problem13v3 extends AoCProblem<Long, Problem13v3> {
 
     public static void main(String[] args) throws Exception {
         new Problem13v3().loadResourceAndSolve(false);

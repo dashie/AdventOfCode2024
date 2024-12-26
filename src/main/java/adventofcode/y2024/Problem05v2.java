@@ -14,7 +14,7 @@ import static java.lang.Long.parseLong;
  * Day 5: Print Queue
  * https://adventofcode.com/2024/day/5
  */
-public class Problem05v2 extends AoCProblem<Long> {
+public class Problem05v2 extends AoCProblem<Long, Problem05v2> {
 
     public static void main(String[] args) throws Exception {
         new Problem05v2().loadResourceAndSolve(false);

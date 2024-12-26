@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Day 19: Linen Layout
  * https://adventofcode.com/2024/day/19
  */
-public class Problem19v3 extends AoCProblem<Long> {
+public class Problem19v3 extends AoCProblem<Long, Problem19v3> {
 
     public static void main(String[] args) throws Exception {
         new Problem19v3().loadResourceAndSolve(false);

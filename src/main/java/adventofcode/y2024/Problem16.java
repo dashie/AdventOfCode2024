@@ -8,7 +8,7 @@ import java.util.*;
  * Day 16: Reindeer Maze
  * https://adventofcode.com/2024/day/16
  */
-public class Problem16 extends AoCProblem<Long> {
+public class Problem16 extends AoCProblem<Long, Problem16> {
 
     public static void main(String[] args) throws Exception {
         new Problem16().loadResourceAndSolve(false);

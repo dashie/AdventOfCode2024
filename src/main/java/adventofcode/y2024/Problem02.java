@@ -13,7 +13,7 @@ import static java.lang.Math.signum;
  * Day 2: Red-Nosed Reports
  * https://adventofcode.com/2024/day/2
  */
-public class Problem02 extends AoCProblem<Long> {
+public class Problem02 extends AoCProblem<Long, Problem02> {
 
     public static void main(String[] args) throws Exception {
         new Problem02().loadResourceAndSolve(false);

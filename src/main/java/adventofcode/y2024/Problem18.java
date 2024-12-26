@@ -10,7 +10,7 @@ import static adventofcode.commons.AoCPoint.parsePoint;
  * Day 18: RAM Run
  * https://adventofcode.com/2024/day/18
  */
-public class Problem18 extends AoCProblem<String> {
+public class Problem18 extends AoCProblem<String, Problem18> {
 
     public static void main(String[] args) throws Exception {
         new Problem18().loadResourceAndSolve(true);

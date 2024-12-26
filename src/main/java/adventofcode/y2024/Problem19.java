@@ -9,7 +9,7 @@ import java.util.*;
  * Day 19: Linen Layout
  * https://adventofcode.com/2024/day/19
  */
-public class Problem19 extends AoCProblem<Long> {
+public class Problem19 extends AoCProblem<Long, Problem19> {
 
     public static void main(String[] args) throws Exception {
         new Problem19().loadResourceAndSolve(false);

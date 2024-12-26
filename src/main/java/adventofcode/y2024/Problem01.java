@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
  * Day 1: Historian Hysteria
  * https://adventofcode.com/2024/day/1
  */
-public class Problem01 extends AoCProblem<Long> {
+public class Problem01 extends AoCProblem<Long, Problem01> {
 
     public static void main(String[] args) throws Exception {
         new Problem01().loadResourceAndSolve(false);

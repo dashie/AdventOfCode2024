@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Day 17: Chronospatial Computer
  * https://adventofcode.com/2024/day/17
  */
-public class Problem17v2 extends AoCProblem<String> {
+public class Problem17v2 extends AoCProblem<String, Problem17v2> {
 
     public static void main(String[] args) throws Exception {
         new Problem17v2().loadResourceAndSolve(false);
@@ -47,7 +47,7 @@ public class Problem17v2 extends AoCProblem<String> {
         machine.regs[1] = it.next().getLong("[0-9]+");
         machine.regs[2] = it.next().getLong("[0-9]+");
         it.next(); // skip blank line
-        machine.program = it.next().getListOfIntegers("[0-9,]+", ",");
+        machine.program = it.next().getListOfInteger("[0-9,]+", ",");
     }
 
     /**

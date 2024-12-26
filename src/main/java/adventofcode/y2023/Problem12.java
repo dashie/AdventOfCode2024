@@ -13,7 +13,7 @@ import java.util.Map;
  * Day 12: Hot Springs
  * https://adventofcode.com/2023/day/12
  */
-public class Problem12 extends AoCProblem<Long> {
+public class Problem12 extends AoCProblem<Long, Problem12> {
 
     public static void main(String[] args) throws Exception {
         new Problem12().loadResourceAndSolve(false);
@@ -27,7 +27,7 @@ public class Problem12 extends AoCProblem<Long> {
     public void processInput(AoCInput input) throws Exception {
         for (LineEx line : input.iterateLineExs()) {
             String pattern = line.getString("^[^ ]+");
-            List<Integer> groups = line.getListOfIntegers("[0-9,]+$", ",");
+            List<Integer> groups = line.getListOfInteger("[0-9,]+$", ",");
             records.add(new Record(pattern, groups));
         }
     }

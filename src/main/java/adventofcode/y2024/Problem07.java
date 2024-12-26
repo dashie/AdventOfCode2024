@@ -11,7 +11,7 @@ import static java.lang.Long.parseLong;
  * Day 7: Bridge Repair
  * https://adventofcode.com/2024/day/7
  */
-public class Problem07 extends AoCProblem<Long> {
+public class Problem07 extends AoCProblem<Long, Problem07> {
 
     public static void main(String[] args) throws Exception {
         new Problem07().loadResourceAndSolve(false);

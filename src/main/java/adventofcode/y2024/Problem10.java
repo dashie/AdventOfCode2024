@@ -11,7 +11,7 @@ import java.util.Set;
  * Day 10: Hoof It
  * https://adventofcode.com/2024/day/10
  */
-public class Problem10 extends AoCProblem<Long> {
+public class Problem10 extends AoCProblem<Long, Problem10> {
 
     public static void main(String[] args) throws Exception {
         new Problem10().loadResourceAndSolve(false);

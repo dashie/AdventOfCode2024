@@ -9,7 +9,7 @@ import java.util.Set;
  * Day 6: Guard Gallivant
  * https://adventofcode.com/2024/day/6
  */
-public class Problem06 extends AoCProblem<Long> {
+public class Problem06 extends AoCProblem<Long, Problem06> {
 
     public static void main(String[] args) throws Exception {
         new Problem06().loadResourceAndSolve(false);

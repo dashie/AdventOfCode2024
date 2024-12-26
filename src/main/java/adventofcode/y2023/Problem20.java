@@ -16,7 +16,7 @@ import static java.util.function.Predicate.not;
  * Day 20: Pulse Propagation
  * https://adventofcode.com/2023/day/20
  */
-public class Problem20 extends AoCProblem<Long> {
+public class Problem20 extends AoCProblem<Long, Problem20> {
 
     public static void main(String[] args) throws Exception {
         new Problem20().loadResourceAndSolve(false);
@@ -228,7 +228,7 @@ public class Problem20 extends AoCProblem<Long> {
             Module m;
             // %a -> inv, con
             String id = line.before(" -> ").toString();
-            List<String> outputs = line.after(" -> ").splitToStrings(", ");
+            List<String> outputs = line.after(" -> ").splitToString(", ");
             if (id.startsWith("%")) {
                 m = new FlipFlop(id.substring(1), outputs);
             } else if (id.startsWith("&")) {

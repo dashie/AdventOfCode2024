@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
  * Slow solution, not optimized and based on recursion.
  * Set VM option -Xss to -Xss32m to avoid a Stack Overflow error.
  */
-public class Problem16v2 extends AoCProblem<Long> {
+public class Problem16v2 extends AoCProblem<Long, Problem16v2> {
 
     public static void main(String[] args) throws Exception {
         new Problem16v2().loadResourceAndSolve(false);

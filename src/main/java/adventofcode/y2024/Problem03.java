@@ -12,7 +12,7 @@ import static java.lang.Long.parseLong;
  * Day 3: Mull It Over
  * https://adventofcode.com/2024/day/3
  */
-public class Problem03 extends AoCProblem<Long> {
+public class Problem03 extends AoCProblem<Long, Problem03> {
 
     public static void main(String[] args) throws Exception {
         new Problem03().loadResourceAndSolve(false);

@@ -11,7 +11,7 @@ import java.util.*;
  * Day 21: Step Counter
  * https://adventofcode.com/2023/day/21
  */
-public class Problem21 extends AoCProblem<Long> {
+public class Problem21 extends AoCProblem<Long, Problem21> {
 
     public static void main(String[] args) throws Exception {
         Problem21 problem = AoCProblem.buildWithInputResource(Problem21.class);

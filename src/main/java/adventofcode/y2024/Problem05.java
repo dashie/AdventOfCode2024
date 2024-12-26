@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
  * Day 5: Print Queue
  * https://adventofcode.com/2024/day/5
  */
-public class Problem05 extends AoCProblem<Long> {
+public class Problem05 extends AoCProblem<Long, Problem05> {
 
     public static void main(String[] args) throws Exception {
         new Problem05().loadResourceAndSolve(false);

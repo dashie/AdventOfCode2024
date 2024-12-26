@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
  * Day 21: Keypad Conundrum
  * https://adventofcode.com/2024/day/21
  */
-public class Problem21 extends AoCProblem<Long> {
+public class Problem21 extends AoCProblem<Long, Problem21> {
 
     public static void main(String[] args) throws Exception {
         new Problem21().loadResourceAndSolve(false);
