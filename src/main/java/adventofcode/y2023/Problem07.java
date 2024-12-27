@@ -20,16 +20,6 @@ public class Problem07 extends AoCProblem<Long, Problem07> {
         new Problem07().loadResourceAndSolve(false);
     }
 
-    enum HandType {
-        HIGH_CARD,     // -    A23A4
-        ONE_PAIR,      // 2    A23A4
-        TWO_PAIR,      // 2+2  23432
-        THREE_OF_KIND, // 3    23332
-        FULL_HOUSE,    // 3+2  23332
-        FOUR_OF_KIND,  // 4    AA8AA
-        FIVE_OF_KIND;  // 5    AAAAA
-    }
-
     record Hand(String cards, long bid) {}
 
     List<Hand> hands;
@@ -96,6 +86,16 @@ public class Problem07 extends AoCProblem<Long, Problem07> {
             result += th.hand.bid * (i + 1);
         }
         return result;
+    }
+
+    enum HandType {
+        HIGH_CARD,     // -    A23A4
+        ONE_PAIR,      // 2    A23A4
+        TWO_PAIR,      // 2+2  23432
+        THREE_OF_KIND, // 3    23332
+        FULL_HOUSE,    // 3+2  23332
+        FOUR_OF_KIND,  // 4    AA8AA
+        FIVE_OF_KIND;  // 5    AAAAA
     }
 
     record TypedHand(Hand hand, HandType type) {}
@@ -185,11 +185,5 @@ public class Problem07 extends AoCProblem<Long, Problem07> {
             }
         }
         return type;
-    }
-
-    static Map<Character, Integer> CARD_VALUES_2NDTPART = new HashMap<>();
-
-    static {
-
     }
 }

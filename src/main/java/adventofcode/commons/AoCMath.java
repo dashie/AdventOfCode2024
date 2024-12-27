@@ -1,9 +1,18 @@
 package adventofcode.commons;
 
+import java.util.Collection;
+
 /**
  *
  */
 public final class AoCMath {
+
+    /**
+     *
+     */
+    public static long lcm(Collection<Long> numbers) {
+        return lcm(numbers.stream().mapToLong(Long::longValue).toArray());
+    }
 
     /**
      *
