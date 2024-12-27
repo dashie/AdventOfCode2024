@@ -24,13 +24,10 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
     @Override
     public void processInput(AoCInput input) throws Exception {
         instructions = input.before("\n\n").toCharList();
-
         // FCG = (PLG, GXC)
-        input
-            .after("\n\n")
+        input.after("\n\n")
             .pattern("([A-Z]+) = \\(([A-Z]+), ([A-Z]+)\\)")
             .forEach(m -> graph.put(m.get(1), new String[]{m.get(2), m.get(3)}));
-
     }
 
     /**
@@ -49,7 +46,6 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
             };
         }
     }
-
 
     /**
      * ...Simultaneously start on every node that ends with A.
@@ -73,12 +69,9 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
         long period = -1;
         for (int i = 0; ; ++i) {
             if (node.endsWith("Z")) {
-                if (period == -1) {
-                    period = i;
-                } else if (i - period == period) {
-                    log("%s %d%n", node, i);
-                    return period;
-                } else throw new IllegalStateException();
+                if (period == -1) period = i;
+                else if (i - period == period) return period;
+                else throw new IllegalStateException();
             }
             String[] choice = graph.get(node);
             node = switch (instructions.get(i % instructions.size())) {

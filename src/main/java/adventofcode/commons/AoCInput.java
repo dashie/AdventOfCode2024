@@ -75,6 +75,10 @@ public class AoCInput {
         return inputText.lines();
     }
 
+    public Stream<LineEx> lineExs() {
+        return lines().map(LineEx::new);
+    }
+
     public BufferedReader newReader() {
         return new BufferedReader(new StringReader(inputText));
     }
