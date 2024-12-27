@@ -325,7 +325,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         long x0steps = board.N / 2 + board.N * x0; // x = 0 in the equation
         long x1 = 2;
         long x1steps = board.N / 2 + board.N * x1; // x = 2 in the equation
-        long x2 = 8;
+        long x2 = 4;
         long x2steps = board.N / 2 + board.N * x2; // x = 10 in the equation
 
         long y0 = countPlotsWithVirtualBoard((int) x0steps);
@@ -353,13 +353,6 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
             System.out.printf("f(%d) ≈ %d (%d)%n", x1, (long) (a * x1 * x1 + b * x1 + c), y1);
             System.out.printf("f(%d) ≈ %d (%d)%n", x2, (long) (a * x2 * x2 + b * x2 + c), y2);
         }
-
-        long x1c = 4;
-        long y1c = countPlotsWithVirtualBoard(board.N / 2 + board.N * (int) x1c);
-        if (dumpStats) System.out.printf("f(%d) ≈ %d (%d)%n", x1c, (long) (a * x1c * x1c + b * x1c + c), y1c);
-        long x2c = 20;
-        long y2c = countPlotsWithVirtualBoard(board.N / 2 + board.N * (int) x2c);
-        if (dumpStats) System.out.printf("f(%d) ≈ %d (%d)%n", x2c, (long) (a * x2c * x2c + b * x2c + c), y2c);
 
         long xsteps = (steps - board.N / 2) / board.N;
         long estimatedCount = (long) (a * xsteps * xsteps + b * xsteps + c);
@@ -403,9 +396,9 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
     private void dumpPagesStats(Map<AoCPoint, BoardPage> pageMap) {
         System.out.println("perimeter's pages:");
         pageMap.values().stream()
-               .filter(p -> p.destroyAt < 0)
-               .sorted(BoardPage::compareTo)
-               .forEach(System.out::println);
+            .filter(p -> p.destroyAt < 0)
+            .sorted(BoardPage::compareTo)
+            .forEach(System.out::println);
 
         System.out.println("central pages with parity:");
         System.out.println(pageMap.get(AoCPoint.of(0, 0)));

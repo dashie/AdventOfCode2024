@@ -25,6 +25,20 @@ public abstract class AbstractProblemTest<T> {
         }
     }
 
+    protected void _testPart1OnSample(T expectedResult) throws Exception {
+        AoCProblem<T, ?> problem = _newProblemInstance();
+        problem.loadSampleResource();
+        Object result = problem.solvePartOne();
+        Assertions.assertEquals(expectedResult, result, "Part 1");
+    }
+
+    protected void _testPart2OnSample(T expectedResult) throws Exception {
+        AoCProblem<T, ?> problem = _newProblemInstance();
+        problem.loadSampleResource();
+        Object result = problem.solvePartTwo();
+        Assertions.assertEquals(expectedResult, result, "Part 2");
+    }
+
     protected void _testProblem(T expectedResult1, T expectedResult2) throws Exception {
         AoCProblem<T, ?> problem = _newProblemInstance();
         problem.loadInputResource();
@@ -32,5 +46,19 @@ public abstract class AbstractProblemTest<T> {
         Assertions.assertEquals(expectedResult1, result1, "Part 1");
         Object result2 = problem.solvePartTwo();
         Assertions.assertEquals(expectedResult2, result2, "Part 2");
+    }
+
+    protected void _testPart1(T expectedResult) throws Exception {
+        AoCProblem<T, ?> problem = _newProblemInstance();
+        problem.loadInputResource();
+        Object result = problem.solvePartOne();
+        Assertions.assertEquals(expectedResult, result, "Part 1");
+    }
+
+    protected void _testPart2(T expectedResult) throws Exception {
+        AoCProblem<T, ?> problem = _newProblemInstance();
+        problem.loadInputResource();
+        Object result = problem.solvePartTwo();
+        Assertions.assertEquals(expectedResult, result, "Part 2");
     }
 }
