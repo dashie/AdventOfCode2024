@@ -33,7 +33,7 @@ public final class AoCRect {
 
     @Override
     public String toString() {
-        return "R{" + p1.x + "," + p1.y + "," + p2.x + "," + p2.y + "}";
+        return "R{" + p1.x + "," + p1.y + ":" + p2.x + "," + p2.y + "}";
     }
 
     @Override
@@ -55,5 +55,11 @@ public final class AoCRect {
 
     public AoCRect expand(int offset) {
         return AoCRect.of(p1.x - offset, p1.y - offset, p2.x + offset, p2.y + offset);
+    }
+
+    public AoCRect sortVertices() {
+        if (p1.compareTo(p2) > 0)
+            return new AoCRect(p2, p1);
+        return this;
     }
 }

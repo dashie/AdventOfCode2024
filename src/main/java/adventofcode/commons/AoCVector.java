@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  *
  */
-public final class AoCVector {
+public final class AoCVector implements Comparable<AoCVector> {
 
     public static AoCVector of(int x, int y) {
         return new AoCVector(x, y);
@@ -62,6 +62,13 @@ public final class AoCVector {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    @Override
+    public int compareTo(AoCVector o) {
+        var md1 = manhattam();
+        var md2 = o.manhattam();
+        return Integer.compare(md1, md2);
     }
 
     @Override

@@ -222,6 +222,12 @@ public final class AoCBoard<T> {
         };
     }
 
+    public List<Cell> listAll(T value) {
+        List<Cell> list = new ArrayList<>();
+        searchAll(value).forEach(c -> list.add(c));
+        return list;
+    }
+
     public Iterable<Cell> searchAll(T value) {
         return () -> new Iterator<>() {
             int m = 0;
@@ -428,6 +434,26 @@ public final class AoCBoard<T> {
 
         public int getInt(AoCVector dir) {
             return (int) AoCBoard.this.get(p, dir, defaultValue);
+        }
+
+        public AoCPoint p() {
+            return p;
+        }
+
+        public int n() {
+            return n;
+        }
+
+        public int m() {
+            return m;
+        }
+
+        public T v() {
+            return v;
+        }
+
+        public T defaultValue() {
+            return defaultValue;
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public final class AoCPoint {
+public final class AoCPoint implements Comparable<AoCPoint> {
 
     private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)");
 
@@ -64,6 +64,21 @@ public final class AoCPoint {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    @Override
+    public int compareTo(AoCPoint o) {
+        // distance from O
+        var d1 = distance(0, 0);
+        var d2 = o.distance(0, 0);
+        var cmp = d1.compareTo(d2);
+        if (cmp == 0) {
+            cmp = Integer.compare(y, o.y);
+            if (cmp == 0) {
+                cmp = Integer.compare(x, o.x);
+            }
+        }
+        return cmp;
     }
 
     public int[] toArray() {
