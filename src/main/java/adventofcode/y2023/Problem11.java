@@ -2,7 +2,9 @@ package adventofcode.y2023;
 
 import adventofcode.commons.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Day 11: Cosmic Expansion
@@ -52,81 +54,34 @@ public class Problem11 extends AoCProblem<Long, Problem11> {
     public long evalDistancesSum(int expansionFactor) {
         List<AoCPoint> galaxies = board.listAll('#').stream()
             .map(AoCBoard.Cell::p)
-            .sorted((a, b) -> {
-                // sort galaxies by distance from origin,
-                // to reduce deep traversal after the first traversals
-                int d1 = a.distance(0, 0).manhattam();
-                int d2 = b.distance(0, 0).manhattam();
-                int cmp = Integer.compare(d1, d2);
-                if (cmp == 0) {
-                    cmp = Integer.compare(a.y, b.y);
-                    if (cmp == 0) {
-                        cmp = Integer.compare(a.x, b.x);
-                    }
-                }
-                return cmp;
-            })
             .toList();
 
-        Map<AoCRect, Integer> distances = new HashMap<>();
-        for (AoCPoint galaxy : galaxies) {
-            Set<AoCPoint> missingTos = new HashSet<>();
-            for (AoCPoint to : galaxies) {
-                if (to.equals(galaxy)) continue;
-                AoCRect rect = AoCRect.of(galaxy, to).sortVertices();
-                if (distances.containsKey(rect)) continue;
-                missingTos.add(to);
-            }
-            Map<AoCPoint, Integer> map = buildDistanceMap(galaxy, missingTos, expansionFactor);
-            for (var e : map.entrySet()) {
-                AoCRect r = AoCRect.of(galaxy, e.getKey()).sortVertices();
-                distances.put(r, e.getValue());
+        long result = 0;
+        for (int i = 0; i < galaxies.size(); ++i) {
+            for (int j = i; j < galaxies.size(); ++j) {
+                result += evalDistance(galaxies.get(i), galaxies.get(j), expansionFactor);
             }
         }
-        return distances.values().stream()
-            .mapToLong(Integer::intValue)
-            .sum();
+        return result;
     }
 
-    record Step(AoCPoint p, int d) implements Comparable<Step> {
+    public long evalDistance(AoCPoint p1, AoCPoint p2, int expansionFactor) {
+        long distance = 0;
+        AoCVector dir = p2.distance(p1).signs();
 
-        @Override
-        public int compareTo(Step o) {
-            return Integer.compare(d, o.d);
-        }
-    }
-
-    public Map<AoCPoint, Integer> buildDistanceMap(AoCPoint p0, int expansionFactor) {
-        return buildDistanceMap(p0, null, expansionFactor);
-    }
-
-    public Map<AoCPoint, Integer> buildDistanceMap(AoCPoint p0, Set<AoCPoint> missingTos, int expansionFactor) {
-        Map<AoCPoint, Integer> map = new HashMap<>();
-
-        Set<AoCPoint> visited = new HashSet<>();
-        PriorityQueue<Step> stack = new PriorityQueue<>();
-        stack.add(new Step(p0, 0));
-        while (!stack.isEmpty()) {
-            if (missingTos != null && missingTos.isEmpty()) break;
-            Step s = stack.poll();
-            char c = board.get(s.p, ' ');
-            if (c == ' ') continue;
-            if (!visited.add(s.p)) continue;
-            if (c == '#') {
-                map.put(s.p, s.d);
-                if (missingTos != null) missingTos.remove(s.p);
-            }
-            s.p.neighbors().forEach(
-                np -> stack.add(new Step(np, s.d + expandDistance(s.p, np, expansionFactor))));
+        var x = p1.x;
+        while (x != p2.x) {
+            x += dir.x;
+            distance += freeCols.contains(x) ? expansionFactor : 1;
         }
 
-        return map;
-    }
+        var y = p1.y;
+        while (y != p2.y) {
+            y += dir.y;
+            distance += freeRows.contains(y) ? expansionFactor : 1;
+        }
 
-    private int expandDistance(AoCPoint from, AoCPoint to, int factor) {
-        if (freeRows.contains(to.y) && from.y != to.y) return factor;
-        if (freeCols.contains(to.x) && from.x != to.x) return factor;
-        return 1;
+        return distance;
     }
 
     /**
