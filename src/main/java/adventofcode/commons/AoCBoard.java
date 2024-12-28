@@ -63,6 +63,14 @@ public final class AoCBoard<T> {
         buffer = cloneBuffer(data); // create a clone to not to alter original data
     }
 
+    public int N() {
+        return N;
+    }
+
+    public int M() {
+        return M;
+    }
+
     @Override
     public AoCBoard<T> clone() throws CloneNotSupportedException {
         return new AoCBoard<>(cloneBuffer(buffer));
@@ -192,7 +200,7 @@ public final class AoCBoard<T> {
         return null;
     }
 
-    public Iterable<Cell> iterateAll() {
+    public Iterable<Cell> iterateCells() {
         return () -> new Iterator<>() {
             int m = 0;
             int n = 0;
@@ -277,6 +285,54 @@ public final class AoCBoard<T> {
             }
         }
         return set;
+    }
+
+    public Iterable<Dimension<T>> rows() {
+        return () -> new Iterator<>() {
+            int m = 0;
+            Row next;
+
+            @Override
+            public boolean hasNext() {
+                if (next == null && m < M) {
+                    next = new Row(m++);
+                }
+                return next != null;
+            }
+
+            @Override
+            public Row next() {
+                if (next == null) hasNext();
+                if (next == null) throw new NoSuchElementException();
+                Row row = next;
+                next = null;
+                return row;
+            }
+        };
+    }
+
+    public Iterable<Dimension<T>> cols() {
+        return () -> new Iterator<>() {
+            int n = 0;
+            Col next;
+
+            @Override
+            public boolean hasNext() {
+                if (next == null && n < N) {
+                    next = new Col(n++);
+                }
+                return next != null;
+            }
+
+            @Override
+            public Col next() {
+                if (next == null) hasNext();
+                if (next == null) throw new NoSuchElementException();
+                Col col = next;
+                next = null;
+                return col;
+            }
+        };
     }
 
     public List<AoCPoint> neighbors(AoCPoint p0, int distance, Predicate<T> filter) {
@@ -428,6 +484,12 @@ public final class AoCBoard<T> {
             this.defaultValue = defaultValue;
         }
 
+        @Override
+        public String toString() {
+            return "B[" + n + "," + m + "]:" + v;
+        }
+
+
         public char getChar(AoCVector dir) {
             return (char) AoCBoard.this.get(p, dir, defaultValue);
         }
@@ -454,6 +516,138 @@ public final class AoCBoard<T> {
 
         public T defaultValue() {
             return defaultValue;
+        }
+    }
+
+    /**
+     *
+     */
+    public interface Dimension<T> extends Iterable<AoCBoard<T>.Cell> {
+
+        int forEach(BiFunction<AoCPoint, T, Integer> fn);
+    }
+
+    /**
+     *
+     */
+    public class Row implements Dimension<T> {
+
+        public final int m;
+
+        private Row(int m) {
+            this.m = m;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(N * 2);
+            for (int n = 0; n < N; ++n) {
+                if (n > 0) sb.append(",");
+                sb.append(buffer[m][n]);
+            }
+            return sb.toString();
+        }
+
+        public int m() {
+            return m;
+        }
+
+        public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
+            int result = 0;
+            for (int n = 0; n < N; ++n) {
+                AoCPoint p = new AoCPoint(n, m);
+                T value = buffer[m][n];
+                result += fn.apply(p, value);
+            }
+            return result;
+        }
+
+        @Override
+        public Iterator<Cell> iterator() {
+            return new Iterator<>() {
+                int n = 0;
+                Cell next;
+
+                @Override
+                public boolean hasNext() {
+                    if (next == null && n < N) {
+                        next = new Cell(n, m, buffer[m][n]);
+                        n++;
+                    }
+                    return next != null;
+                }
+
+                @Override
+                public Cell next() {
+                    if (next == null) hasNext();
+                    if (next == null) throw new NoSuchElementException();
+                    Cell cell = next;
+                    next = null;
+                    return cell;
+                }
+            };
+        }
+    }
+
+    /**
+     *
+     */
+    public class Col implements Dimension<T> {
+
+        public final int n;
+
+        private Col(int n) {
+            this.n = n;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(N * 2);
+            for (int m = 0; m < M; ++m) {
+                if (m > 0) sb.append(",");
+                sb.append(buffer[m][n]);
+            }
+            return sb.toString();
+        }
+
+        public int n() {
+            return n;
+        }
+
+        public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
+            int result = 0;
+            for (int m = 0; m < M; ++m) {
+                AoCPoint p = new AoCPoint(n, m);
+                T value = buffer[m][n];
+                result += fn.apply(p, value);
+            }
+            return result;
+        }
+
+        @Override
+        public Iterator<Cell> iterator() {
+            return new Iterator<>() {
+                int m = 0;
+                Cell next;
+
+                @Override
+                public boolean hasNext() {
+                    if (next == null && m < M) {
+                        next = new Cell(n, m, buffer[m][n]);
+                        m++;
+                    }
+                    return next != null;
+                }
+
+                @Override
+                public Cell next() {
+                    if (next == null) hasNext();
+                    if (next == null) throw new NoSuchElementException();
+                    Cell cell = next;
+                    next = null;
+                    return cell;
+                }
+            };
         }
     }
 }

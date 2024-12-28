@@ -12,7 +12,7 @@ import java.util.Set;
 public class AoCBoardTest {
 
     @Test
-    public void iterateAllTest() {
+    public void iterateCellsTest() {
         AoCBoard<Character> board = AoCBoard.from("""
             ....
             .##.
@@ -22,7 +22,7 @@ public class AoCBoardTest {
         int totalCount = 0;
         int dotCount = 0;
         int hashCount = 0;
-        for (var cell : board.iterateAll()) {
+        for (var cell : board.iterateCells()) {
             totalCount++;
             if (cell.v == '#') hashCount++;
             if (cell.v == '.') dotCount++;
