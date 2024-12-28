@@ -11,22 +11,21 @@ import java.util.function.Predicate;
  */
 public final class AoCBoard<T> {
 
-    public T[][] buffer; // create a safe method to replace
-    public final int N; // rows
-    public final int M; // cols
-
-    public AoCBoard(Class<T> clazz, int n, int m) {
-        N = n; // rows
-        M = m; // cols
-        buffer = (T[][]) Array.newInstance(clazz, M, N);
+    /**
+     *
+     */
+    public static <T> AoCBoard from(String data) {
+        Character[][] charMatrix = data.lines()
+            .map(str -> str.chars()
+                .mapToObj(c -> (char) c)
+                .toArray(Character[]::new))
+            .toArray(Character[][]::new);
+        return new AoCBoard(charMatrix);
     }
 
-    public AoCBoard(T[][] data) {
-        N = data[0].length;
-        M = data.length;
-        buffer = cloneBuffer(data); // create a clone to not to alter original data
-    }
-
+    /**
+     *
+     */
     public static <T> AoCBoard from(Map<AoCPoint, T> points, Class<T> type) {
         int M0 = Integer.MAX_VALUE, M1 = Integer.MIN_VALUE;
         int N0 = Integer.MAX_VALUE, N1 = Integer.MIN_VALUE;
@@ -46,6 +45,22 @@ public final class AoCBoard<T> {
             }
         }
         return new AoCBoard(data);
+    }
+
+    public T[][] buffer; // create a safe method to replace
+    public final int N; // rows
+    public final int M; // cols
+
+    public AoCBoard(Class<T> clazz, int n, int m) {
+        N = n; // rows
+        M = m; // cols
+        buffer = (T[][]) Array.newInstance(clazz, M, N);
+    }
+
+    public AoCBoard(T[][] data) {
+        N = data[0].length;
+        M = data.length;
+        buffer = cloneBuffer(data); // create a clone to not to alter original data
     }
 
     @Override
@@ -168,7 +183,7 @@ public final class AoCBoard<T> {
     public AoCPoint searchFor(T value) {
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                if (buffer[m][n] == value) {
+                if (value.equals(buffer[m][n])) {
                     AoCPoint p = new AoCPoint(n, m);
                     return p;
                 }
@@ -177,6 +192,86 @@ public final class AoCBoard<T> {
         return null;
     }
 
+    public Iterable<Cell> iterateAll() {
+        return () -> new Iterator<>() {
+            int m = 0;
+            int n = 0;
+            Cell nextCell;
+
+            @Override
+            public boolean hasNext() {
+                if (nextCell == null && m < M) {
+                    nextCell = new Cell(n, m, buffer[m][n]);
+                    n++;
+                    if (n >= N) {
+                        m++;
+                        n = 0;
+                    }
+                }
+                return nextCell != null;
+            }
+
+            @Override
+            public Cell next() {
+                if (nextCell == null) hasNext();
+                if (nextCell == null) throw new NoSuchElementException();
+                Cell cell = nextCell;
+                nextCell = null;
+                return cell;
+            }
+        };
+    }
+
+    public Iterable<Cell> searchAll(T value) {
+        return () -> new Iterator<>() {
+            int m = 0;
+            int n = 0;
+            Cell nextCell;
+
+            @Override
+            public boolean hasNext() {
+                while (nextCell == null && m < M) {
+                    Cell cell = new Cell(n, m, buffer[m][n]);
+                    T c = buffer[m][n++];
+                    if (n >= N) {
+                        m++;
+                        n = 0;
+                    }
+                    if (value.equals(c)) nextCell = cell;
+                }
+                return nextCell != null;
+            }
+
+            @Override
+            public Cell next() {
+                if (nextCell == null) hasNext();
+                if (nextCell == null) throw new NoSuchElementException();
+                Cell cell = nextCell;
+                nextCell = null;
+                return cell;
+            }
+        };
+    }
+
+    public Set<AoCPoint> pointSet() {
+        Set<AoCPoint> set = new HashSet<>(N * M);
+        for (int m = 0; m < M; ++m) {
+            for (int n = 0; n < N; ++n) {
+                set.add(AoCPoint.of(n, m));
+            }
+        }
+        return set;
+    }
+
+    public Set<Cell> cellSet() {
+        Set<Cell> set = new HashSet<>(N * M);
+        for (int m = 0; m < M; ++m) {
+            for (int n = 0; n < N; ++n) {
+                set.add(new Cell(n, m, buffer[m][n]));
+            }
+        }
+        return set;
+    }
 
     public List<AoCPoint> neighbors(AoCPoint p0, int distance, Predicate<T> filter) {
         List<AoCPoint> points = new ArrayList<>(distance * distance);
@@ -320,7 +415,7 @@ public final class AoCBoard<T> {
         }
 
         public Cell(int n, int m, T v, T defaultValue) {
-            this.p = new AoCPoint(n, m);
+            this.p = AoCPoint.of(n, m);
             this.n = n;
             this.m = m;
             this.v = v;

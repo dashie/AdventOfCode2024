@@ -10,8 +10,8 @@ public abstract class AbstractProblemTest<T> {
         this.problemClass = (Class<AoCProblem<T, ?>>) problemClass;
     }
 
-    protected AoCProblem<T, ?> _newProblemInstance() throws Exception {
-        return problemClass.getConstructor().newInstance();
+    protected <P extends AoCProblem<T, P>> P _newProblemInstance() throws Exception {
+        return (P) problemClass.getConstructor().newInstance();
     }
 
     protected void _testSample(T expectedResult1, T expectedResult2) throws Exception {
