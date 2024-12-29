@@ -22,7 +22,7 @@ public class AoCBoardTest {
         int totalCount = 0;
         int dotCount = 0;
         int hashCount = 0;
-        for (var cell : board.iterateCells()) {
+        for (var cell : board.cells()) {
             totalCount++;
             if (cell.v == '#') hashCount++;
             if (cell.v == '.') dotCount++;

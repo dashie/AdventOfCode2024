@@ -6,6 +6,10 @@ import java.util.Objects;
 
 public class DirectedPoint {
 
+    public static DirectedPoint of(int x, int y, Vector d) {
+        return new DirectedPoint(Point.of(x, y), d);
+    }
+
     public static DirectedPoint of(Point p, Vector d) {
         return new DirectedPoint(p, d);
     }
@@ -70,7 +74,7 @@ public class DirectedPoint {
 
     public Collection<DirectedPoint> move(Direction... directions) {
         return Arrays.stream(directions)
-                     .map(this::move)
-                     .toList();
+            .map(this::move)
+            .toList();
     }
 }

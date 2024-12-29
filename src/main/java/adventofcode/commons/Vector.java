@@ -130,6 +130,13 @@ public final class Vector implements Comparable<Vector> {
         return this.equals(WEST);
     }
 
+    public boolean is(Vector... dirs) {
+        for (var d : dirs) {
+            if (d.equals(this)) return true;
+        }
+        return false;
+    }
+
     public static Vector[] newArray(int size, int x, int y, int z) {
         Vector[] a = new Vector[size];
         for (int i = 0; i < a.length; ++i) {

@@ -260,7 +260,7 @@ public final class Board<T> {
         return null;
     }
 
-    public Iterable<Cell> iterateCells() {
+    public Iterable<Cell> cells() {
         return () -> new Iterator<>() {
             int m = 0;
             int n = 0;
