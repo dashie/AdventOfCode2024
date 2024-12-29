@@ -1,6 +1,7 @@
 package adventofcode.y2024;
 
 import adventofcode.commons.*;
+import adventofcode.commons.Vector;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -15,8 +16,8 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
         new Problem08().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
-    Map<Character, List<AoCPoint>> antennas = new HashMap<>();
+    Board<Character> board;
+    Map<Character, List<Point>> antennas = new HashMap<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -36,9 +37,9 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
      */
     @Override
     public Long solvePartOne() throws Exception {
-        Set<AoCPoint> antinodes = new HashSet<>();
+        Set<Point> antinodes = new HashSet<>();
         searchForAntinodes((p, v) -> {
-            AoCPoint antinode = p.translate(v);
+            Point antinode = p.translate(v);
             if (board.getOrBlank(p, v) != ' ') {
                 antinodes.add(antinode);
             }
@@ -47,20 +48,20 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
         return (long) antinodes.size();
     }
 
-    private void searchForAntinodes(BiConsumer<AoCPoint, AoCVector> fn) {
-        for (List<AoCPoint> group : antennas.values()) {
+    private void searchForAntinodes(BiConsumer<Point, Vector> fn) {
+        for (List<Point> group : antennas.values()) {
             if (group.size() < 2) continue;
-            for (AoCPoint p0 : group) {
-                for (AoCPoint p1 : group) {
+            for (Point p0 : group) {
+                for (Point p1 : group) {
                     if (p0.equals(p1)) continue;
-                    AoCVector v = p0.distance(p1);
+                    Vector v = p0.distance(p1);
                     fn.accept(p0, v);
                 }
             }
         }
     }
 
-    private void dumpBoard(Set<AoCPoint> antinodes) {
+    private void dumpBoard(Set<Point> antinodes) {
         board.dumpBoard("%s", (c) -> {
             if (antinodes.contains(c.p))
                 return '#';
@@ -78,7 +79,7 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
      */
     @Override
     public Long solvePartTwo() throws Exception {
-        Set<AoCPoint> antinodes = new HashSet<>();
+        Set<Point> antinodes = new HashSet<>();
         searchForAntinodes((p, v) -> {
             antinodes.add(p);
             while (board.getOrBlank(p, v) != ' ') {

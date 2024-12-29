@@ -1,6 +1,7 @@
 package adventofcode.y2024;
 
 import adventofcode.commons.*;
+import adventofcode.commons.Vector;
 
 import java.util.*;
 
@@ -16,13 +17,13 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         new Problem21().loadResourceAndSolve(false);
     }
 
-    static AoCBoard<Character> numericKeypad = new AoCBoard<>(new Character[][]{
+    static Board<Character> numericKeypad = new Board<>(new Character[][]{
         {'7', '8', '9'},
         {'4', '5', '6'},
         {'1', '2', '3'},
         {' ', '0', 'A'},
     });
-    static AoCBoard<Character> directionalKeypad = new AoCBoard<>(new Character[][]{
+    static Board<Character> directionalKeypad = new Board<>(new Character[][]{
         {' ', '^', 'A'},
         {'<', 'v', '>'},
     });
@@ -38,7 +39,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         evalShortestPaths(directionalKeypad, directionalPaths);
     }
 
-    private void evalShortestPaths(AoCBoard<Character> keypad, Map<String, List<String>> map) {
+    private void evalShortestPaths(Board<Character> keypad, Map<String, List<String>> map) {
         keypad.forEach((p, v) -> {
             if (v == ' ') return 0;
             evalShortestPath(p, keypad, map);
@@ -46,11 +47,11 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         });
     }
 
-    record Visit(AoCPoint p, String sequence, int cost) {}
+    record Visit(Point p, String sequence, int cost) {}
 
-    private void evalShortestPath(AoCPoint p0, AoCBoard<Character> keypad, Map<String, List<String>> map) {
+    private void evalShortestPath(Point p0, Board<Character> keypad, Map<String, List<String>> map) {
         char c0 = keypad.get(p0);
-        Map<AoCPoint, Integer> costMap = new HashMap<>();
+        Map<Point, Integer> costMap = new HashMap<>();
         PriorityQueue<Visit> stack = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
         stack.add(new Visit(p0, "", 0));
 
@@ -92,7 +93,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
     private Visit nextVisit(Visit v, char dirCode) {
         int slen = v.sequence.length();
         int cost = (slen > 0 && v.sequence.charAt(slen - 1) != dirCode) ? 1000 : 1;
-        AoCVector d = AoCVector.charArrowToMatrixDirection(dirCode);
+        Vector d = Vector.charArrowToMatrixDirection(dirCode);
         return new Visit(v.p.translate(d), v.sequence + dirCode, v.cost + cost);
     }
 

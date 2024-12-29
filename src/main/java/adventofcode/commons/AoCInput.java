@@ -140,12 +140,12 @@ public class AoCInput {
             .toArray(Integer[][]::new);
     }
 
-    public AoCBoard<Character> toCharBoard() {
-        return new AoCBoard<>(toCharMatrix());
+    public Board<Character> toCharBoard() {
+        return new Board<>(toCharMatrix());
     }
 
-    public AoCBoard<Integer> toIntBoard() {
-        return new AoCBoard<>(toIntegerMatrix());
+    public Board<Integer> toIntBoard() {
+        return new Board<>(toIntegerMatrix());
     }
 
     public List<String[]> toListOfStringArray(String splitRule) {

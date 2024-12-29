@@ -1,7 +1,7 @@
 package adventofcode.y2023;
 
 import adventofcode.commons.AbstractProblemTest;
-import adventofcode.commons.AoCBoard;
+import adventofcode.commons.Board;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class Problem13Test extends AbstractProblemTest<Long> {
     @Test
     public void testHorizontalSymmetry() throws Exception {
         Problem13 problem = _newProblemInstance();
-        AoCBoard<Character> board = AoCBoard.from("""
+        Board<Character> board = Board.from("""
             #...##..#
             #....#..#
             ..##..###
@@ -32,7 +32,7 @@ public class Problem13Test extends AbstractProblemTest<Long> {
     @Test
     public void testVerticalSymmetry() throws Exception {
         Problem13 problem = _newProblemInstance();
-        AoCBoard<Character> board = AoCBoard.from("""
+        Board<Character> board = Board.from("""
             #.##..##.
             ..#.##.#.
             ##......#

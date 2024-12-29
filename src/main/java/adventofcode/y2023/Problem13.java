@@ -1,6 +1,6 @@
 package adventofcode.y2023;
 
-import adventofcode.commons.AoCBoard;
+import adventofcode.commons.Board;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 
@@ -17,7 +17,7 @@ public class Problem13 extends AoCProblem<Long, Problem13> {
         new Problem13().loadResourceAndSolve(false);
     }
 
-    record Pattern(AoCBoard<Character> schema, List<Long> rowsbits, List<Long> colsbits) {}
+    record Pattern(Board<Character> schema, List<Long> rowsbits, List<Long> colsbits) {}
 
     // List[2] = { rowBitset, colBitset }
     List<Pattern> patterns = new ArrayList<>();
@@ -31,13 +31,13 @@ public class Problem13 extends AoCProblem<Long, Problem13> {
         });
     }
 
-    public List<Long> patternToBitset(Iterable<AoCBoard.Dimension<Character>> dimensions) {
+    public List<Long> patternToBitset(Iterable<Board.Dimension<Character>> dimensions) {
         List<Long> bitset = new ArrayList<>();
         for (var d : dimensions) bitset.add(dimensionToBitset(d));
         return bitset;
     }
 
-    public long dimensionToBitset(AoCBoard.Dimension<Character> dimension) {
+    public long dimensionToBitset(Board.Dimension<Character> dimension) {
         long mask = 0;
         int i = 0;
         for (var cell : dimension) {

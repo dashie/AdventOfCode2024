@@ -14,7 +14,7 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
         new Problem11v2().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
     Set<Integer> freeRows = new HashSet<>();
     Set<Integer> freeCols = new HashSet<>();
 
@@ -50,8 +50,8 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
     }
 
     public long evalDistancesSum(int expansionFactor) {
-        List<AoCPoint> galaxies = board.listAll('#').stream()
-            .map(AoCBoard.Cell::p)
+        List<Point> galaxies = board.listAll('#').stream()
+            .map(Board.Cell::p)
             .sorted((a, b) -> {
                 // sort galaxies by distance from origin,
                 // to reduce deep traversal after the first traversals
@@ -68,18 +68,18 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
             })
             .toList();
 
-        Map<AoCRect, Integer> distances = new HashMap<>();
-        for (AoCPoint galaxy : galaxies) {
-            Set<AoCPoint> missingTos = new HashSet<>();
-            for (AoCPoint to : galaxies) {
+        Map<Rect, Integer> distances = new HashMap<>();
+        for (Point galaxy : galaxies) {
+            Set<Point> missingTos = new HashSet<>();
+            for (Point to : galaxies) {
                 if (to.equals(galaxy)) continue;
-                AoCRect rect = AoCRect.of(galaxy, to).sortVertices();
+                Rect rect = Rect.of(galaxy, to).sortVertices();
                 if (distances.containsKey(rect)) continue;
                 missingTos.add(to);
             }
-            Map<AoCPoint, Integer> map = buildDistanceMap(galaxy, missingTos, expansionFactor);
+            Map<Point, Integer> map = buildDistanceMap(galaxy, missingTos, expansionFactor);
             for (var e : map.entrySet()) {
-                AoCRect r = AoCRect.of(galaxy, e.getKey()).sortVertices();
+                Rect r = Rect.of(galaxy, e.getKey()).sortVertices();
                 distances.put(r, e.getValue());
             }
         }
@@ -88,7 +88,7 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
             .sum();
     }
 
-    record Step(AoCPoint p, int d) implements Comparable<Step> {
+    record Step(Point p, int d) implements Comparable<Step> {
 
         @Override
         public int compareTo(Step o) {
@@ -96,14 +96,14 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
         }
     }
 
-    public Map<AoCPoint, Integer> buildDistanceMap(AoCPoint p0, int expansionFactor) {
+    public Map<Point, Integer> buildDistanceMap(Point p0, int expansionFactor) {
         return buildDistanceMap(p0, null, expansionFactor);
     }
 
-    public Map<AoCPoint, Integer> buildDistanceMap(AoCPoint p0, Set<AoCPoint> missingTos, int expansionFactor) {
-        Map<AoCPoint, Integer> map = new HashMap<>();
+    public Map<Point, Integer> buildDistanceMap(Point p0, Set<Point> missingTos, int expansionFactor) {
+        Map<Point, Integer> map = new HashMap<>();
 
-        Set<AoCPoint> visited = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         PriorityQueue<Step> stack = new PriorityQueue<>();
         stack.add(new Step(p0, 0));
         while (!stack.isEmpty()) {
@@ -123,7 +123,7 @@ public class Problem11v2 extends AoCProblem<Long, Problem11v2> {
         return map;
     }
 
-    private int expandDistance(AoCPoint from, AoCPoint to, int factor) {
+    private int expandDistance(Point from, Point to, int factor) {
         if (freeRows.contains(to.y) && from.y != to.y) return factor;
         if (freeCols.contains(to.x) && from.x != to.x) return factor;
         return 1;

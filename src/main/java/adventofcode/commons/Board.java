@@ -9,27 +9,27 @@ import java.util.function.Predicate;
 /**
  *
  */
-public final class AoCBoard<T> {
+public final class Board<T> {
 
     /**
      *
      */
-    public static <T> AoCBoard from(String data) {
+    public static <T> Board from(String data) {
         Character[][] charMatrix = data.lines()
             .map(str -> str.chars()
                 .mapToObj(c -> (char) c)
                 .toArray(Character[]::new))
             .toArray(Character[][]::new);
-        return new AoCBoard(charMatrix);
+        return new Board(charMatrix);
     }
 
     /**
      *
      */
-    public static <T> AoCBoard from(Map<AoCPoint, T> points, Class<T> type) {
+    public static <T> Board from(Map<Point, T> points, Class<T> type) {
         int M0 = Integer.MAX_VALUE, M1 = Integer.MIN_VALUE;
         int N0 = Integer.MAX_VALUE, N1 = Integer.MIN_VALUE;
-        for (AoCPoint p : points.keySet()) {
+        for (Point p : points.keySet()) {
             if (p.y < M0) M0 = p.y;
             if (p.y > M1) M1 = p.y;
             if (p.x < N0) N0 = p.x;
@@ -41,23 +41,23 @@ public final class AoCBoard<T> {
         T[][] data = (T[][]) Array.newInstance(type, M, N);
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                data[m][n] = points.get(new AoCPoint(N0 + n, M0 + m));
+                data[m][n] = points.get(new Point(N0 + n, M0 + m));
             }
         }
-        return new AoCBoard(data);
+        return new Board(data);
     }
 
     public T[][] buffer; // create a safe method to replace
     public final int N; // rows
     public final int M; // cols
 
-    public AoCBoard(Class<T> clazz, int n, int m) {
+    public Board(Class<T> clazz, int n, int m) {
         N = n; // rows
         M = m; // cols
         buffer = (T[][]) Array.newInstance(clazz, M, N);
     }
 
-    public AoCBoard(T[][] data) {
+    public Board(T[][] data) {
         N = data[0].length;
         M = data.length;
         buffer = cloneBuffer(data); // create a clone to not to alter original data
@@ -66,8 +66,8 @@ public final class AoCBoard<T> {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        AoCBoard<?> aoCBoard = (AoCBoard<?>) o;
-        return Objects.deepEquals(buffer, aoCBoard.buffer);
+        Board<?> board = (Board<?>) o;
+        return Objects.deepEquals(buffer, board.buffer);
     }
 
     @Override
@@ -84,12 +84,12 @@ public final class AoCBoard<T> {
     }
 
     @Override
-    public AoCBoard<T> clone() {
-        return new AoCBoard<>(cloneBuffer(buffer));
+    public Board<T> clone() {
+        return new Board<>(cloneBuffer(buffer));
     }
 
-    public AoCRect getRect(int offset) {
-        AoCRect rect = AoCRect.of(N - 1, M - 1);
+    public Rect getRect(int offset) {
+        Rect rect = Rect.of(N - 1, M - 1);
         return rect.expand(-1);
     }
 
@@ -123,11 +123,11 @@ public final class AoCBoard<T> {
         }
     }
 
-    public boolean isValidCell(AoCPoint p) {
+    public boolean isValidCell(Point p) {
         return p.x >= 0 && p.x < N && p.y >= 0 && p.y < M;
     }
 
-    public Cell cell(AoCPoint p) {
+    public Cell cell(Point p) {
         if (isValidCell(p)) {
             return new Cell(p.x, p.y, buffer[p.y][p.x]);
         } else {
@@ -135,7 +135,7 @@ public final class AoCBoard<T> {
         }
     }
 
-    public Cell cell(AoCPoint p, T defaultValue) {
+    public Cell cell(Point p, T defaultValue) {
         if (isValidCell(p)) {
             return new Cell(p.x, p.y, buffer[p.y][p.x], defaultValue);
         } else {
@@ -151,48 +151,48 @@ public final class AoCBoard<T> {
         }
     }
 
-    public T get(AoCPoint p, T defaultValue) {
+    public T get(Point p, T defaultValue) {
         return get(p.x, p.y, defaultValue);
     }
 
-    public T get(AoCPoint p) {
+    public T get(Point p) {
         return get(p.x, p.y, null);
     }
 
-    public T get(AoCPoint p, int xOffset, int yOffset, T defaultValue) {
+    public T get(Point p, int xOffset, int yOffset, T defaultValue) {
         return get(p.x + xOffset, p.y + yOffset, defaultValue);
     }
 
-    public T get(AoCPoint p, int xOffset, int yOffset) {
+    public T get(Point p, int xOffset, int yOffset) {
         return get(p, xOffset, yOffset, null);
     }
 
-    public T get(AoCPoint p, AoCVector v, T defaultValue) {
+    public T get(Point p, Vector v, T defaultValue) {
         return get(p, v.x, v.y, defaultValue);
     }
 
-    public T getOrBlank(AoCPoint p) {
+    public T getOrBlank(Point p) {
         return get(p, (T) (Character) ' ');
     }
 
-    public T getOrBlank(AoCPoint p, int xOffset, int yOffset) {
+    public T getOrBlank(Point p, int xOffset, int yOffset) {
         return get(p, xOffset, yOffset, (T) (Character) ' ');
     }
 
-    public T getOrBlank(AoCPoint p, AoCVector v) {
+    public T getOrBlank(Point p, Vector v) {
         return get(p, v.x, v.y, (T) (Character) ' ');
     }
 
-    public boolean check(AoCPoint p, T value) {
+    public boolean check(Point p, T value) {
         T v = get(p, null);
         return v != null && v.equals(value);
     }
 
-    public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
+    public int forEach(BiFunction<Point, T, Integer> fn) {
         int result = 0;
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                AoCPoint p = new AoCPoint(n, m);
+                Point p = new Point(n, m);
                 T value = buffer[m][n];
                 result += fn.apply(p, value);
             }
@@ -200,9 +200,9 @@ public final class AoCBoard<T> {
         return result;
     }
 
-    public int forEach(AoCVector direction, BiFunction<AoCPoint, T, Integer> fn) {
+    public int forEach(Vector direction, BiFunction<Point, T, Integer> fn) {
         int m0, m1, dm, n0, n1, dn;
-        if (direction == AoCVector.SOUTH) {
+        if (direction == Vector.SOUTH) {
             // start from up to bottom (remember matrix coords are upside-down)
             dm = 1;
             m0 = 0;
@@ -210,7 +210,7 @@ public final class AoCBoard<T> {
             dn = 1;
             n0 = 0;
             n1 = N;
-        } else if (direction == AoCVector.EAST) {
+        } else if (direction == Vector.EAST) {
             // start right to left
             dm = 1;
             m0 = 0;
@@ -218,7 +218,7 @@ public final class AoCBoard<T> {
             dn = -1;
             n0 = N - 1;
             n1 = -1;
-        } else if (direction == AoCVector.NORTH) {
+        } else if (direction == Vector.NORTH) {
             // start from bottom to up (remember matrix coords are upside-down)
             dm = -1;
             m0 = M - 1;
@@ -226,7 +226,7 @@ public final class AoCBoard<T> {
             dn = 1;
             n0 = 0;
             n1 = N;
-        } else if (direction == AoCVector.WEST) {
+        } else if (direction == Vector.WEST) {
             // start from left to right
             dm = 1;
             m0 = 0;
@@ -240,7 +240,7 @@ public final class AoCBoard<T> {
         int result = 0;
         for (int m = m0; m != m1; m += dm) {
             for (int n = n0; n != n1; n += dn) {
-                AoCPoint p = new AoCPoint(n, m);
+                Point p = new Point(n, m);
                 T value = buffer[m][n];
                 result += fn.apply(p, value);
             }
@@ -248,11 +248,11 @@ public final class AoCBoard<T> {
         return result;
     }
 
-    public AoCPoint searchFor(T value) {
+    public Point searchFor(T value) {
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
                 if (value.equals(buffer[m][n])) {
-                    AoCPoint p = new AoCPoint(n, m);
+                    Point p = new Point(n, m);
                     return p;
                 }
             }
@@ -327,11 +327,11 @@ public final class AoCBoard<T> {
         };
     }
 
-    public Set<AoCPoint> pointSet() {
-        Set<AoCPoint> set = new HashSet<>(N * M);
+    public Set<Point> pointSet() {
+        Set<Point> set = new HashSet<>(N * M);
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                set.add(AoCPoint.of(n, m));
+                set.add(Point.of(n, m));
             }
         }
         return set;
@@ -395,8 +395,8 @@ public final class AoCBoard<T> {
         };
     }
 
-    public List<AoCPoint> neighbors(AoCPoint p0, int distance, Predicate<T> filter) {
-        List<AoCPoint> points = new ArrayList<>(distance * distance);
+    public List<Point> neighbors(Point p0, int distance, Predicate<T> filter) {
+        List<Point> points = new ArrayList<>(distance * distance);
         for (int dy = -distance; dy <= distance; ++dy) {
             int dx0 = distance - Math.abs(dy);
             for (int dx = -dx0; dx <= dx0; ++dx) {
@@ -411,11 +411,11 @@ public final class AoCBoard<T> {
         return points;
     }
 
-    public void set(AoCPoint p, T value) {
+    public void set(Point p, T value) {
         set(p.x, p.y, value);
     }
 
-    public void swap(AoCPoint from, AoCPoint to) {
+    public void swap(Point from, Point to) {
         T tmp = get(to);
         set(to, get(from));
         set(from, tmp);
@@ -477,10 +477,10 @@ public final class AoCBoard<T> {
         System.out.println("---");
     }
 
-    public static <T> void dumpBoard(String title, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+    public static <T> void dumpBoard(String title, Map<Point, T> points, BiFunction<Point, T, String> transformer) {
         int M0 = Integer.MAX_VALUE, M1 = Integer.MIN_VALUE;
         int N0 = Integer.MAX_VALUE, N1 = Integer.MIN_VALUE;
-        for (AoCPoint p : points.keySet()) {
+        for (Point p : points.keySet()) {
             if (p.y < M0) M0 = p.y;
             if (p.y > M1) M1 = p.y;
             if (p.x < N0) N0 = p.x;
@@ -489,28 +489,28 @@ public final class AoCBoard<T> {
         dumpBoard(title, N0, M0, N1 + 1, M1 + 1, points::get, transformer);
     }
 
-    public static <T> void dumpBoard(String title, AoCRect rect, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+    public static <T> void dumpBoard(String title, Rect rect, Map<Point, T> points, BiFunction<Point, T, String> transformer) {
         dumpBoard(title, rect.p1.x, rect.p1.y, rect.p2.x + 1, rect.p2.y + 1, points::get, transformer);
     }
 
-    public static <T> void dumpBoard(String title, int N, int M, Map<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+    public static <T> void dumpBoard(String title, int N, int M, Map<Point, T> points, BiFunction<Point, T, String> transformer) {
         dumpBoard(title, 0, 0, N, M, points::get, transformer);
     }
 
-    public static void dumpBoard(String title, int N, int M, Set<AoCPoint> points) {
+    public static void dumpBoard(String title, int N, int M, Set<Point> points) {
         dumpBoard(title, N, M, points, null);
     }
 
-    public static void dumpBoard(String title, int N, int M, Set<AoCPoint> points, BiFunction<AoCPoint, Character, String> transformer) {
+    public static void dumpBoard(String title, int N, int M, Set<Point> points, BiFunction<Point, Character, String> transformer) {
         dumpBoard(title, 0, 0, N, M, p -> points.contains(p) ? 'X' : null, transformer);
     }
 
-    private static <T> void dumpBoard(String title, int N0, int M0, int N1, int M1, Function<AoCPoint, T> points, BiFunction<AoCPoint, T, String> transformer) {
+    private static <T> void dumpBoard(String title, int N0, int M0, int N1, int M1, Function<Point, T> points, BiFunction<Point, T, String> transformer) {
         System.out.println();
         System.out.println("--- %s".formatted(title));
         for (int m = M0; m < M1; ++m) {
             for (int n = N0; n < N1; ++n) {
-                AoCPoint p = new AoCPoint(n, m);
+                Point p = new Point(n, m);
                 T v = points.apply(p);
                 String vs;
                 if (transformer != null) {
@@ -532,7 +532,7 @@ public final class AoCBoard<T> {
      */
     public class Cell {
 
-        public final AoCPoint p;
+        public final Point p;
         public final int n;
         public final int m;
         public final T v;
@@ -543,7 +543,7 @@ public final class AoCBoard<T> {
         }
 
         public Cell(int n, int m, T v, T defaultValue) {
-            this.p = AoCPoint.of(n, m);
+            this.p = Point.of(n, m);
             this.n = n;
             this.m = m;
             this.v = v;
@@ -556,15 +556,15 @@ public final class AoCBoard<T> {
         }
 
 
-        public char getChar(AoCVector dir) {
-            return (char) AoCBoard.this.get(p, dir, defaultValue);
+        public char getChar(Vector dir) {
+            return (char) Board.this.get(p, dir, defaultValue);
         }
 
-        public int getInt(AoCVector dir) {
-            return (int) AoCBoard.this.get(p, dir, defaultValue);
+        public int getInt(Vector dir) {
+            return (int) Board.this.get(p, dir, defaultValue);
         }
 
-        public AoCPoint p() {
+        public Point p() {
             return p;
         }
 
@@ -588,9 +588,9 @@ public final class AoCBoard<T> {
     /**
      *
      */
-    public interface Dimension<T> extends Iterable<AoCBoard<T>.Cell> {
+    public interface Dimension<T> extends Iterable<Board<T>.Cell> {
 
-        int forEach(BiFunction<AoCPoint, T, Integer> fn);
+        int forEach(BiFunction<Point, T, Integer> fn);
     }
 
     /**
@@ -618,10 +618,10 @@ public final class AoCBoard<T> {
             return m;
         }
 
-        public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
+        public int forEach(BiFunction<Point, T, Integer> fn) {
             int result = 0;
             for (int n = 0; n < N; ++n) {
-                AoCPoint p = new AoCPoint(n, m);
+                Point p = new Point(n, m);
                 T value = buffer[m][n];
                 result += fn.apply(p, value);
             }
@@ -680,10 +680,10 @@ public final class AoCBoard<T> {
             return n;
         }
 
-        public int forEach(BiFunction<AoCPoint, T, Integer> fn) {
+        public int forEach(BiFunction<Point, T, Integer> fn) {
             int result = 0;
             for (int m = 0; m < M; ++m) {
-                AoCPoint p = new AoCPoint(n, m);
+                Point p = new Point(n, m);
                 T value = buffer[m][n];
                 result += fn.apply(p, value);
             }

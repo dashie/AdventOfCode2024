@@ -1,8 +1,8 @@
 package adventofcode.y2023;
 
-import adventofcode.commons.AoCBoard;
+import adventofcode.commons.Board;
 import adventofcode.commons.AoCInput;
-import adventofcode.commons.AoCPoint;
+import adventofcode.commons.Point;
 import adventofcode.commons.AoCProblem;
 
 import java.util.*;
@@ -17,7 +17,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         new Problem10().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -34,9 +34,9 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         return evalFarthestPointDistance(new HashSet<>());
     }
 
-    record Step(AoCPoint p, long distance) {}
+    record Step(Point p, long distance) {}
 
-    public long evalFarthestPointDistance(Set<AoCPoint> visited) {
+    public long evalFarthestPointDistance(Set<Point> visited) {
         var p0 = board.searchFor('S');
 
         long farthestDistance = 0;
@@ -54,7 +54,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         return farthestDistance;
     }
 
-    public Character resolveCell(AoCPoint p) {
+    public Character resolveCell(Point p) {
         Character c = board.get(p, '.');
         if (c != 'S') return c;
         Character n = board.get(p.north(), '.');
@@ -73,7 +73,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         throw new IllegalStateException();
     }
 
-    public List<AoCPoint> connectedPoints(AoCPoint p, Character c) {
+    public List<Point> connectedPoints(Point p, Character c) {
         return switch (c) {
             case '|' -> List.of(p.north(), p.south());
             case '-' -> List.of(p.east(), p.west());
@@ -92,21 +92,21 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
      */
     @Override
     public Long solvePartTwo() throws Exception {
-        Set<AoCPoint> perimeter = new HashSet<>();
+        Set<Point> perimeter = new HashSet<>();
         evalFarthestPointDistance(perimeter);
 
-        Set<AoCPoint> points = board.pointSet();
+        Set<Point> points = board.pointSet();
         points.removeAll(perimeter);
 
-        Set<AoCPoint> insideArea = new HashSet<>();
-        Set<AoCPoint> outsideArea = new HashSet<>();
+        Set<Point> insideArea = new HashSet<>();
+        Set<Point> outsideArea = new HashSet<>();
         evalAreaInsideOutsideOfPerimeter(points, perimeter, insideArea, outsideArea);
         // dumpSolutionArea(perimeter, insideArea);
 
         return (long) insideArea.size();
     }
 
-    public long evalAreaInsideOutsideOfPerimeter(Set<AoCPoint> points, Set<AoCPoint> perimeter, Set<AoCPoint> insideArea, Set<AoCPoint> outsideArea) {
+    public long evalAreaInsideOutsideOfPerimeter(Set<Point> points, Set<Point> perimeter, Set<Point> insideArea, Set<Point> outsideArea) {
         while (!points.isEmpty()) {
             evalAreaInsideOutsideOfPerimeterFill(
                 points.iterator().next(),
@@ -119,14 +119,14 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         return insideArea.size();
     }
 
-    private void evalAreaInsideOutsideOfPerimeterFill(AoCPoint p0, Set<AoCPoint> perimeter, Set<AoCPoint> insideArea, Set<AoCPoint> outsideArea) {
+    private void evalAreaInsideOutsideOfPerimeterFill(Point p0, Set<Point> perimeter, Set<Point> insideArea, Set<Point> outsideArea) {
         boolean isOutOfPerimeter = isOutOfShape(p0, perimeter);
-        Set<AoCPoint> visited = isOutOfPerimeter ? outsideArea : insideArea;
+        Set<Point> visited = isOutOfPerimeter ? outsideArea : insideArea;
 
-        Deque<AoCPoint> stack = new LinkedList<>();
+        Deque<Point> stack = new LinkedList<>();
         stack.add(p0);
         while (!stack.isEmpty()) {
-            AoCPoint p = stack.pollFirst();
+            Point p = stack.pollFirst();
             char c = board.get(p, ' ');
             if (c == ' ') {
                 // hit board border, we are 100% out of perimeter
@@ -140,7 +140,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         }
     }
 
-    private boolean isOutOfShape(AoCPoint p0, Set<AoCPoint> perimeter) {
+    private boolean isOutOfShape(Point p0, Set<Point> perimeter) {
         // moving the point to right, counts the times it crosses the perimeter
         // if the count is odd the point is inside the shape
         // id the count is even the point is outside the shape
@@ -148,7 +148,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         // like "F-J" or "L-7" (here the cross is counted one)
         long countRightPerimeterCrosses = 0;
         char crossAt = ' ';
-        for (AoCPoint p = p0; p.x < board.N; p = p.east()) {
+        for (Point p = p0; p.x < board.N; p = p.east()) {
             char c = board.get(p);
             if (perimeter.contains(p)) {
                 if ("-".indexOf(c) != -1) {
@@ -170,7 +170,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         return countRightPerimeterCrosses % 2 == 0;
     }
 
-    private void dumpSolutionArea(Set<AoCPoint> perimeter, Set<AoCPoint> insideArea) {
+    private void dumpSolutionArea(Set<Point> perimeter, Set<Point> insideArea) {
         board.dumpBoard("%c", (c -> {
             if (perimeter.contains(c.p)) return c.v;
             if (insideArea.contains(c.p)) return '•';

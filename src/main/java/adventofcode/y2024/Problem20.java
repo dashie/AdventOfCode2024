@@ -1,8 +1,8 @@
 package adventofcode.y2024;
 
-import adventofcode.commons.AoCBoard;
+import adventofcode.commons.Board;
 import adventofcode.commons.AoCInput;
-import adventofcode.commons.AoCPoint;
+import adventofcode.commons.Point;
 import adventofcode.commons.AoCProblem;
 
 import java.util.Deque;
@@ -20,10 +20,10 @@ public class Problem20 extends AoCProblem<Long, Problem20> {
         new Problem20().loadResourceAndSolve(true);
     }
 
-    AoCBoard<Character> board;
-    AoCPoint p0, pEnd;
-    Map<AoCPoint, Long> distFromSMap;
-    Map<AoCPoint, Long> distFromEMap;
+    Board<Character> board;
+    Point p0, pEnd;
+    Map<Point, Long> distFromSMap;
+    Map<Point, Long> distFromEMap;
 
     long savedTimePart1;
     long savedTimePart2;
@@ -45,10 +45,10 @@ public class Problem20 extends AoCProblem<Long, Problem20> {
         distFromEMap = evalDistanceMap(pEnd, p0);
     }
 
-    record Visit(AoCPoint p, long distance) {}
+    record Visit(Point p, long distance) {}
 
-    private Map<AoCPoint, Long> evalDistanceMap(AoCPoint p0, AoCPoint pEnd) {
-        Map<AoCPoint, Long> distMap = new HashMap<>();
+    private Map<Point, Long> evalDistanceMap(Point p0, Point pEnd) {
+        Map<Point, Long> distMap = new HashMap<>();
         Deque<Visit> stack = new LinkedList<>();
         stack.add(new Visit(p0, 0));
         while (!stack.isEmpty()) {
@@ -59,7 +59,7 @@ public class Problem20 extends AoCProblem<Long, Problem20> {
             if (distMap.containsKey(v.p)) continue;
             distMap.put(v.p, v.distance);
             if (v.p.equals(pEnd)) continue; // end
-            for (AoCPoint np : v.p.neighbors()) {
+            for (Point np : v.p.neighbors()) {
                 stack.add(new Visit(np, v.distance + 1));
             }
         }
@@ -81,8 +81,8 @@ public class Problem20 extends AoCProblem<Long, Problem20> {
 
     private long countPathsWithCheat(int cheatTime, long targetTime) {
         long count = 0;
-        for (AoCPoint p : distFromSMap.keySet()) {
-            for (AoCPoint np : board.neighbors(p, cheatTime, v -> v != '#')) {
+        for (Point p : distFromSMap.keySet()) {
+            for (Point np : board.neighbors(p, cheatTime, v -> v != '#')) {
                 long distCheat = np.distance(p).manhattam();
                 long distFromS = distFromSMap.get(p);
                 long distFromE = distFromEMap.get(np);

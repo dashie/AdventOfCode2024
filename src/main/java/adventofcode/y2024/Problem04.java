@@ -12,7 +12,7 @@ public class Problem04 extends AoCProblem<Long, Problem04> {
         new Problem04().loadResourceAndSolve(false);
     }
 
-    private AoCBoard<Character> board;
+    private Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -27,21 +27,21 @@ public class Problem04 extends AoCProblem<Long, Problem04> {
         long result = board.forEach((p, c) -> {
             int n = 0;
             if (c == 'X') {
-                n += searchXmas(p, AoCVector.NORTH);
-                n += searchXmas(p, AoCVector.EAST);
-                n += searchXmas(p, AoCVector.SOUTH);
-                n += searchXmas(p, AoCVector.WEST);
-                n += searchXmas(p, AoCVector.NE);
-                n += searchXmas(p, AoCVector.NW);
-                n += searchXmas(p, AoCVector.SE);
-                n += searchXmas(p, AoCVector.SW);
+                n += searchXmas(p, Vector.NORTH);
+                n += searchXmas(p, Vector.EAST);
+                n += searchXmas(p, Vector.SOUTH);
+                n += searchXmas(p, Vector.WEST);
+                n += searchXmas(p, Vector.NE);
+                n += searchXmas(p, Vector.NW);
+                n += searchXmas(p, Vector.SE);
+                n += searchXmas(p, Vector.SW);
             }
             return n;
         });
         return result;
     }
 
-    private int searchXmas(AoCPoint p, AoCVector v) {
+    private int searchXmas(Point p, Vector v) {
         if (board.getOrBlank(p, v) != 'M') return 0;
         if (board.getOrBlank(p, v.mul(2)) != 'A') return 0;
         if (board.getOrBlank(p, v.mul(3)) != 'S') return 0;
@@ -60,7 +60,7 @@ public class Problem04 extends AoCProblem<Long, Problem04> {
         return result;
     }
 
-    private boolean checkMaxCross(AoCPoint p) {
+    private boolean checkMaxCross(Point p) {
         if ((board.getOrBlank(p, 1, 1) == 'M'
             && board.getOrBlank(p, -1, -1) == 'S')
             ||

@@ -1,12 +1,14 @@
 package adventofcode.y2023;
 
-import adventofcode.commons.AoCBoard;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
-import adventofcode.commons.AoCVector;
+import adventofcode.commons.Board;
+import adventofcode.commons.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static adventofcode.commons.Vector.*;
 
 /**
  * Day 14: Parabolic Reflector Dish
@@ -18,7 +20,7 @@ public class Problem14 extends AoCProblem<Long, Problem14> {
         new Problem14().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -32,11 +34,11 @@ public class Problem14 extends AoCProblem<Long, Problem14> {
      */
     @Override
     public Long solvePartOne() throws Exception {
-        AoCBoard<Character> b = tiltBoard(board.clone(), AoCVector.SOUTH);
+        Board<Character> b = tiltBoard(board.clone(), SOUTH);
         return evalTotalLoad(b);
     }
 
-    private long evalTotalLoad(AoCBoard<Character> b) {
+    private long evalTotalLoad(Board<Character> b) {
         long totalLoad = b.forEach((p, v) -> {
             if (v == 'O') return b.M - p.y;
             return 0;
@@ -44,7 +46,7 @@ public class Problem14 extends AoCProblem<Long, Problem14> {
         return totalLoad;
     }
 
-    public AoCBoard<Character> tiltBoard(AoCBoard<Character> b, AoCVector dir) {
+    public Board<Character> tiltBoard(Board<Character> b, Vector dir) {
         b.forEach(dir, (p0, v) -> {
             if (v != 'O') return 0;
             var p = p0;
@@ -65,8 +67,8 @@ public class Problem14 extends AoCProblem<Long, Problem14> {
     public Long solvePartTwo() throws Exception {
         int TOTAL_CYCLES = 1000000000;
 
-        Map<AoCBoard<Character>, Integer> frames = new HashMap<>();
-        AoCBoard<Character> b = board.clone();
+        Map<Board<Character>, Integer> frames = new HashMap<>();
+        Board<Character> b = board.clone();
 
         boolean fastForwardDone = false;
         long totalLoad = -1;
@@ -88,11 +90,11 @@ public class Problem14 extends AoCProblem<Long, Problem14> {
         return totalLoad;
     }
 
-    public long simulateTiltCycle(AoCBoard<Character> b) {
-        tiltBoard(b, AoCVector.SOUTH);
-        tiltBoard(b, AoCVector.WEST);
-        tiltBoard(b, AoCVector.NORTH);
-        tiltBoard(b, AoCVector.EAST);
+    public long simulateTiltCycle(Board<Character> b) {
+        tiltBoard(b, SOUTH);
+        tiltBoard(b, WEST);
+        tiltBoard(b, NORTH);
+        tiltBoard(b, EAST);
         return evalTotalLoad(b);
     }
 

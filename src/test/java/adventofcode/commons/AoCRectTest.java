@@ -12,8 +12,8 @@ public class AoCRectTest {
 
     @Test
     public void sortVerticesTest() {
-        AoCRect r1 = AoCRect.of(9, 6, 7, 8);
-        AoCRect r2 = AoCRect.of(7, 8, 9, 6);
+        Rect r1 = Rect.of(9, 6, 7, 8);
+        Rect r2 = Rect.of(7, 8, 9, 6);
         assertNotEquals(r1, r2);
         assertEquals(r1.sortVertices(), r2.sortVertices());
     }

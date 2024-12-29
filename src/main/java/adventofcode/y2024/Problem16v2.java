@@ -5,7 +5,7 @@ import adventofcode.commons.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static adventofcode.commons.AoCDirectedPoint.Direction.*;
+import static adventofcode.commons.DirectedPoint.Direction.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -21,7 +21,7 @@ public class Problem16v2 extends AoCProblem<Long, Problem16v2> {
         new Problem16v2().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -35,14 +35,14 @@ public class Problem16v2 extends AoCProblem<Long, Problem16v2> {
     @Override
     public Long solvePartOne() throws Exception {
         var p = board.searchFor('S');
-        return searchBestScore(AoCDirectedPoint.of(p, AoCVector.EAST));
+        return searchBestScore(DirectedPoint.of(p, Vector.EAST));
     }
 
-    private long searchBestScore(AoCDirectedPoint dp) {
+    private long searchBestScore(DirectedPoint dp) {
         return _searchBestScore(dp, 0, new HashMap<>());
     }
 
-    private long _searchBestScore(AoCDirectedPoint dp, long score, Map<AoCDirectedPoint, Long> visitsWithScore) {
+    private long _searchBestScore(DirectedPoint dp, long score, Map<DirectedPoint, Long> visitsWithScore) {
         char c = board.get(dp.p);
         if (c == '#') return -1;
         if (c == 'E')
@@ -53,8 +53,8 @@ public class Problem16v2 extends AoCProblem<Long, Problem16v2> {
         visitsWithScore.put(dp, score);
 
         long nextScore = -1;
-        for (AoCDirectedPoint.Direction d : asList(FRONT, LEFT, RIGHT)) {
-            AoCDirectedPoint dp1 = dp.move(d);
+        for (DirectedPoint.Direction d : asList(FRONT, LEFT, RIGHT)) {
+            DirectedPoint dp1 = dp.move(d);
             long cost = d == FRONT ? 1 : 1001;
             long tmpScore = _searchBestScore(dp1, score + cost, visitsWithScore);
             if (tmpScore < 0) continue;

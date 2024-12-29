@@ -10,26 +10,26 @@ import java.util.regex.Pattern;
 /**
  *
  */
-public final class AoCPoint implements Comparable<AoCPoint> {
+public final class Point implements Comparable<Point> {
 
     private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)");
 
-    public static AoCPoint parsePoint(String str) {
+    public static Point parsePoint(String str) {
         Matcher m = POINT_PATTERN.matcher(str);
         if (!m.find()) throw new IllegalArgumentException(str);
         return of(m.group(1), m.group(2), null);
     }
 
-    public static AoCPoint of(int x, int y) {
-        return new AoCPoint(x, y);
+    public static Point of(int x, int y) {
+        return new Point(x, y);
     }
 
-    public static AoCPoint of(String x, String y) {
+    public static Point of(String x, String y) {
         return of(x, y, null);
     }
 
-    public static AoCPoint of(String x, String y, String z) {
-        return new AoCPoint(
+    public static Point of(String x, String y, String z) {
+        return new Point(
             parseInt(x),
             parseInt(y),
             parseInt(z));
@@ -39,11 +39,11 @@ public final class AoCPoint implements Comparable<AoCPoint> {
     public final int y;
     public final int z;
 
-    public AoCPoint(int x, int y) {
+    public Point(int x, int y) {
         this(x, y, 0);
     }
 
-    public AoCPoint(int x, int y, int z) {
+    public Point(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -57,7 +57,7 @@ public final class AoCPoint implements Comparable<AoCPoint> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AoCPoint aocPoint = (AoCPoint) o;
+        Point aocPoint = (Point) o;
         return x == aocPoint.x && y == aocPoint.y && z == aocPoint.z;
     }
 
@@ -67,7 +67,7 @@ public final class AoCPoint implements Comparable<AoCPoint> {
     }
 
     @Override
-    public int compareTo(AoCPoint o) {
+    public int compareTo(Point o) {
         // distance from O
         var d1 = distance(0, 0);
         var d2 = o.distance(0, 0);
@@ -93,82 +93,82 @@ public final class AoCPoint implements Comparable<AoCPoint> {
     /**
      * Relative distance from p
      */
-    public AoCVector distance(AoCPoint p) {
-        return new AoCVector(x - p.x, y - p.y, z - p.z);
+    public Vector distance(Point p) {
+        return new Vector(x - p.x, y - p.y, z - p.z);
     }
 
     /**
      * Relative distance from x1, y1
      */
-    public AoCVector distance(int x1, int y1) {
-        return new AoCVector(x - x1, y - y1, z - 0);
+    public Vector distance(int x1, int y1) {
+        return new Vector(x - x1, y - y1, z - 0);
     }
 
-    public AoCPoint translate(AoCVector v) {
-        return new AoCPoint(x + v.x, y + v.y);
+    public Point translate(Vector v) {
+        return new Point(x + v.x, y + v.y);
     }
 
-    public AoCPoint translate(int dx, int dy) {
-        return new AoCPoint(x + dx, y + dy);
+    public Point translate(int dx, int dy) {
+        return new Point(x + dx, y + dy);
     }
 
-    public boolean isIn(AoCRect r) {
+    public boolean isIn(Rect r) {
         return r.contains(this);
     }
 
-    public boolean isOut(AoCRect r) {
+    public boolean isOut(Rect r) {
         return !r.contains(this);
     }
 
-    public AoCPoint north() {
-        return this.translate(AoCVector.NORTH);
+    public Point north() {
+        return this.translate(Vector.NORTH);
     }
 
-    public AoCPoint south() {
-        return this.translate(AoCVector.SOUTH);
+    public Point south() {
+        return this.translate(Vector.SOUTH);
     }
 
-    public AoCPoint east() {
-        return this.translate(AoCVector.EAST);
+    public Point east() {
+        return this.translate(Vector.EAST);
     }
 
-    public AoCPoint west() {
-        return this.translate(AoCVector.WEST);
+    public Point west() {
+        return this.translate(Vector.WEST);
     }
 
-    public List<AoCPoint> neighbors() {
+    public List<Point> neighbors() {
         return Arrays.asList(north(), east(), south(), west());
     }
 
-    public List<AoCPoint> neighbors(int distance) {
-        List<AoCPoint> points = new ArrayList<>(distance * distance);
+    public List<Point> neighbors(int distance) {
+        List<Point> points = new ArrayList<>(distance * distance);
         for (int dy = -distance; dy <= distance; ++dy) {
             int dx0 = distance - Math.abs(dy);
             for (int dx = -dx0; dx <= dx0; ++dx) {
-                if (dy != 0 || dx != 0) points.add(AoCPoint.of(x + dx, y + dy));
+                if (dy != 0 || dx != 0) points.add(Point.of(x + dx, y + dy));
             }
         }
         return points;
     }
 
-    public AoCPoint module(int modX, int modY) {
+    public Point module(int modX, int modY) {
         int x1 = x % modX;
         if (x1 < 0)
             x1 += modX;
         int y1 = y % modY;
         if (y1 < 0)
             y1 += modY;
-        return new AoCPoint(x1, y1);
+        return new Point(x1, y1);
     }
 
     /**
      * Follow all points from p0 to pEnd (p0 + direction)
      * using the Bresenham algorithm.
      */
-    public List<AoCPoint> follow(AoCVector d) {
-        List<AoCPoint> points = new ArrayList<>();
-        AoCPoint end = this.translate(d);
-        AoCVector distance = end.distance(this).absolute();
+    public List<Point> follow(Vector d) {
+        List<Point> points = new ArrayList<>();
+        Point end = this.translate(d);
+        Vector distance = end.distance(this).absolute();
 
         int dx = distance.x;
         int dy = distance.y;
@@ -176,7 +176,7 @@ public final class AoCPoint implements Comparable<AoCPoint> {
         int sy = y < end.y ? 1 : -1; // y direction
         int err = dx - dy; // initial error
 
-        AoCPoint p = this;
+        Point p = this;
         while (true) {
             int x1 = p.x;
             int y1 = p.y;
@@ -191,16 +191,16 @@ public final class AoCPoint implements Comparable<AoCPoint> {
                 err += dx;
                 y1 += sy;
             }
-            p = new AoCPoint(x1, y1);
+            p = new Point(x1, y1);
             points.add(p); // add current point
         }
         return points;
     }
 
-    public static AoCPoint[] newArray(int size, int x, int y, int z) {
-        AoCPoint[] a = new AoCPoint[size];
+    public static Point[] newArray(int size, int x, int y, int z) {
+        Point[] a = new Point[size];
         for (int i = 0; i < a.length; ++i) {
-            a[i] = new AoCPoint(x, y, z);
+            a[i] = new Point(x, y, z);
         }
         return a;
     }

@@ -13,7 +13,7 @@ public class AoCBoardTest {
 
     @Test
     public void iterateCellsTest() {
-        AoCBoard<Character> board = AoCBoard.from("""
+        Board<Character> board = Board.from("""
             ....
             .##.
             ....
@@ -34,7 +34,7 @@ public class AoCBoardTest {
 
     @Test
     public void searchAllTest() {
-        AoCBoard<Character> board = AoCBoard.from("""
+        Board<Character> board = Board.from("""
             #...
             .##.
             ....
@@ -42,7 +42,7 @@ public class AoCBoardTest {
 
         int totalCount = 0;
         int dotCount = 0;
-        Set<AoCPoint> hashSet = new HashSet<>();
+        Set<Point> hashSet = new HashSet<>();
         for (var cell : board.searchAll('#')) {
             totalCount++;
             if (cell.v == '.') dotCount++;
@@ -51,10 +51,10 @@ public class AoCBoardTest {
         Assertions.assertEquals(4, totalCount);
         Assertions.assertEquals(0, dotCount);
         Assertions.assertEquals(4, hashSet.size());
-        Assertions.assertTrue(hashSet.remove(AoCPoint.of(0, 0)));
-        Assertions.assertTrue(hashSet.remove(AoCPoint.of(1, 1)));
-        Assertions.assertTrue(hashSet.remove(AoCPoint.of(2, 1)));
-        Assertions.assertTrue(hashSet.remove(AoCPoint.of(1, 3)));
+        Assertions.assertTrue(hashSet.remove(Point.of(0, 0)));
+        Assertions.assertTrue(hashSet.remove(Point.of(1, 1)));
+        Assertions.assertTrue(hashSet.remove(Point.of(2, 1)));
+        Assertions.assertTrue(hashSet.remove(Point.of(1, 3)));
         Assertions.assertTrue(hashSet.isEmpty());
     }
 }

@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class AoCDirectedPoint {
+public class DirectedPoint {
 
-    public static AoCDirectedPoint of(AoCPoint p, AoCVector d) {
-        return new AoCDirectedPoint(p, d);
+    public static DirectedPoint of(Point p, Vector d) {
+        return new DirectedPoint(p, d);
     }
 
     public enum Direction {
@@ -17,11 +17,11 @@ public class AoCDirectedPoint {
         LEFT
     }
 
-    public final AoCPoint p;
+    public final Point p;
 
-    public final AoCVector d;
+    public final Vector d;
 
-    public AoCDirectedPoint(AoCPoint p, AoCVector d) {
+    public DirectedPoint(Point p, Vector d) {
         this.p = p;
         this.d = d;
     }
@@ -29,7 +29,7 @@ public class AoCDirectedPoint {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        AoCDirectedPoint that = (AoCDirectedPoint) o;
+        DirectedPoint that = (DirectedPoint) o;
         return Objects.equals(p, that.p) && Objects.equals(d, that.d);
     }
 
@@ -43,23 +43,23 @@ public class AoCDirectedPoint {
         return "P{" + p.x + "," + p.y + "," + p.z + "}->{" + d.x + "," + d.y + "," + d.z + "}";
     }
 
-    public AoCDirectedPoint moveFront() {
-        return new AoCDirectedPoint(p.translate(d), d);
+    public DirectedPoint moveFront() {
+        return new DirectedPoint(p.translate(d), d);
     }
 
-    public AoCDirectedPoint moveBack() {
-        return new AoCDirectedPoint(p.translate(d.rotate180()), d.rotate180());
+    public DirectedPoint moveBack() {
+        return new DirectedPoint(p.translate(d.rotate180()), d.rotate180());
     }
 
-    public AoCDirectedPoint moveLeft() {
-        return new AoCDirectedPoint(p.translate(d.rotate90L()), d.rotate90L());
+    public DirectedPoint moveLeft() {
+        return new DirectedPoint(p.translate(d.rotate90L()), d.rotate90L());
     }
 
-    public AoCDirectedPoint moveRight() {
-        return new AoCDirectedPoint(p.translate(d.rotate90R()), d.rotate90R());
+    public DirectedPoint moveRight() {
+        return new DirectedPoint(p.translate(d.rotate90R()), d.rotate90R());
     }
 
-    public AoCDirectedPoint move(Direction d) {
+    public DirectedPoint move(Direction d) {
         return switch (d) {
             case FRONT -> this.moveFront();
             case LEFT -> this.moveLeft();
@@ -68,7 +68,7 @@ public class AoCDirectedPoint {
         };
     }
 
-    public Collection<AoCDirectedPoint> move(Direction... directions) {
+    public Collection<DirectedPoint> move(Direction... directions) {
         return Arrays.stream(directions)
                      .map(this::move)
                      .toList();

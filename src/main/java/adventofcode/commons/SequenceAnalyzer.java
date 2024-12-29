@@ -5,7 +5,7 @@ import adventofcode.y2023.Problem14;
 import java.util.*;
 
 /**
- *
+ * FIXME class ti be completed
  */
 public class SequenceAnalyzer<T> {
 

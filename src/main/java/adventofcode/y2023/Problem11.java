@@ -16,7 +16,7 @@ public class Problem11 extends AoCProblem<Long, Problem11> {
         new Problem11().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
     Set<Integer> freeRows = new HashSet<>();
     Set<Integer> freeCols = new HashSet<>();
 
@@ -52,8 +52,8 @@ public class Problem11 extends AoCProblem<Long, Problem11> {
     }
 
     public long evalDistancesSum(int expansionFactor) {
-        List<AoCPoint> galaxies = board.listAll('#').stream()
-            .map(AoCBoard.Cell::p)
+        List<Point> galaxies = board.listAll('#').stream()
+            .map(Board.Cell::p)
             .toList();
 
         long result = 0;
@@ -65,9 +65,9 @@ public class Problem11 extends AoCProblem<Long, Problem11> {
         return result;
     }
 
-    public long evalDistance(AoCPoint p1, AoCPoint p2, int expansionFactor) {
+    public long evalDistance(Point p1, Point p2, int expansionFactor) {
         long distance = 0;
-        AoCVector dir = p2.distance(p1).signs();
+        Vector dir = p2.distance(p1).signs();
 
         var x = p1.x;
         while (x != p2.x) {

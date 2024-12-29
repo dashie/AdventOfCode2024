@@ -4,7 +4,7 @@ import adventofcode.commons.*;
 
 import java.util.Arrays;
 
-import static adventofcode.commons.AoCVector.charArrowToMatrixDirection;
+import static adventofcode.commons.Vector.charArrowToMatrixDirection;
 
 /**
  * Day 15: Warehouse Woes
@@ -34,25 +34,25 @@ public class Problem15 extends AoCProblem<Long, Problem15> {
      */
     @Override
     public Long solvePartOne() throws Exception {
-        AoCBoard<Character> board = new AoCBoard<>(boardData);
-        AoCPoint p = board.searchFor('@');
+        Board<Character> board = new Board<>(boardData);
+        Point p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charArrowToMatrixDirection(movement);
+            Vector d = charArrowToMatrixDirection(movement);
             if (pushSimple(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, 'O');
     }
 
-    private long evalScore(AoCBoard<Character> board, Character boxChar) {
+    private long evalScore(Board<Character> board, Character boxChar) {
         long result = board.forEach((p, v) -> v == boxChar ? 100 * p.y + p.x : 0);
         return result;
     }
 
-    private boolean pushSimple(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private boolean pushSimple(Point p, Vector d, Board<Character> board) {
         Character c = board.get(p);
         if (c == '.') return true;
         if (c == '#') return false;
-        AoCPoint nextPoint = p.translate(d);
+        Point nextPoint = p.translate(d);
         if (!pushSimple(nextPoint, d, board)) return false;
         board.set(nextPoint, board.get(p));
         board.set(p, '.');
@@ -66,10 +66,10 @@ public class Problem15 extends AoCProblem<Long, Problem15> {
     @Override
     public Long solvePartTwo() throws Exception {
         Character[][] boardDataExpanded = expandBoardData();
-        AoCBoard<Character> board = new AoCBoard<>(boardDataExpanded);
-        AoCPoint p = board.searchFor('@');
+        Board<Character> board = new Board<>(boardDataExpanded);
+        Point p = board.searchFor('@');
         for (Integer movement : movements) {
-            AoCVector d = charArrowToMatrixDirection(movement);
+            Vector d = charArrowToMatrixDirection(movement);
             if (checkAndPushComplex(p, d, board)) p = p.translate(d);
         }
         return evalScore(board, '[');
@@ -107,7 +107,7 @@ public class Problem15 extends AoCProblem<Long, Problem15> {
             .toArray(Character[][]::new);
     }
 
-    private boolean checkAndPushComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private boolean checkAndPushComplex(Point p, Vector d, Board<Character> board) {
         if (checkComplex(p, d, board)) {
             pushComplex(p, d, board);
             return true;
@@ -115,11 +115,11 @@ public class Problem15 extends AoCProblem<Long, Problem15> {
         return false;
     }
 
-    private boolean checkComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private boolean checkComplex(Point p, Vector d, Board<Character> board) {
         Character c = board.get(p);
         if (c == '.') return true;
         if (c == '#') return false;
-        AoCPoint next = p.translate(d);
+        Point next = p.translate(d);
         if (d.isEast() || d.isWest()) {
             // left/right movement does not change in the complex scenario
             if (!checkComplex(next, d, board)) return false;
@@ -137,11 +137,11 @@ public class Problem15 extends AoCProblem<Long, Problem15> {
         return true;
     }
 
-    private void pushComplex(AoCPoint p, AoCVector d, AoCBoard<Character> board) {
+    private void pushComplex(Point p, Vector d, Board<Character> board) {
         Character c = board.get(p);
         if (c == '.') return;
         if (c == '#') return;
-        AoCPoint next = p.translate(d);
+        Point next = p.translate(d);
         if (d.isEast() || d.isWest()) {
             // left/right movement does not change in the complex scenario
             pushComplex(next, d, board);

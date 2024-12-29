@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.function.Function;
 
-import static adventofcode.commons.AoCVector.*;
+import static adventofcode.commons.Vector.*;
 
 /**
  * Day 12: Garden Groups
@@ -20,7 +20,7 @@ public class Problem12 extends AoCProblem<Long, Problem12> {
         new Problem12().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -48,7 +48,7 @@ public class Problem12 extends AoCProblem<Long, Problem12> {
 
     public long evalGarden(Function<Region, Integer> fn) {
         long result = 0L;
-        Set<AoCPoint> visited = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         result += board.forEach((p, v) -> {
             if (visited.contains(p)) return 0;
             Region region = evalRegion(p, visited);
@@ -57,19 +57,19 @@ public class Problem12 extends AoCProblem<Long, Problem12> {
         return result;
     }
 
-    public Region evalRegion(AoCPoint p0, Set<AoCPoint> visited) {
+    public Region evalRegion(Point p0, Set<Point> visited) {
         char id = board.get(p0);
         Region region = new Region();
-        Deque<AoCPoint> stack = new LinkedList<>();
+        Deque<Point> stack = new LinkedList<>();
         stack.add(p0);
         while (!stack.isEmpty()) {
-            AoCPoint p = stack.pop();
+            Point p = stack.pop();
             if (visited.contains(p)) continue;
             visited.add(p);
             region.area += 1;
             // eval perimeter
-            AoCBoard.Cell c = board.cell(p, ' ');
-            for (AoCVector d : DIRECTIONS) {
+            Board.Cell c = board.cell(p, ' ');
+            for (Vector d : DIRECTIONS) {
                 if (c.getChar(d) == id)
                     stack.add(p.translate(d));
                 else

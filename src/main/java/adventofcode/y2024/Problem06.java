@@ -15,7 +15,7 @@ public class Problem06 extends AoCProblem<Long, Problem06> {
         new Problem06().loadResourceAndSolve(false);
     }
 
-    private AoCBoard<Character> board;
+    private Board<Character> board;
     private Set<String> visited = new HashSet<>();
 
     @Override
@@ -29,12 +29,12 @@ public class Problem06 extends AoCProblem<Long, Problem06> {
      */
     @Override
     public Long solvePartOne() throws Exception {
-        AoCVector d0 = AoCVector.SOUTH;
-        AoCPoint p0 = board.searchFor('^');
+        Vector d0 = Vector.SOUTH;
+        Point p0 = board.searchFor('^');
         return (long) countCells(p0, d0);
     }
 
-    private int countCells(AoCPoint p, AoCVector d) {
+    private int countCells(Point p, Vector d) {
         visited.add(p.toString());
         for (; ; ) {
             while (board.get(p, d, '#') != '#') { // go straight until the first obstacle
@@ -53,8 +53,8 @@ public class Problem06 extends AoCProblem<Long, Problem06> {
      */
     @Override
     public Long solvePartTwo() throws Exception {
-        final AoCVector d0 = AoCVector.SOUTH;
-        final AoCPoint p0 = board.searchFor('^');
+        final Vector d0 = Vector.SOUTH;
+        final Point p0 = board.searchFor('^');
         long loopsCount = board.forEach((p, c) -> {
             if (c == '#' || c == '^') return 0; // if the position is already an obstacle or is the starting pos, return
             if (!visited.contains(p.toString())) return 0; // if the position is not on the default guard path, return
@@ -68,7 +68,7 @@ public class Problem06 extends AoCProblem<Long, Problem06> {
         return loopsCount;
     }
 
-    private boolean findLoops(AoCPoint p, AoCVector d) {
+    private boolean findLoops(Point p, Vector d) {
         Set<String> directions = new HashSet<>(); // visit len with directions
         directions.add(p + "-" + d);
         for (; ; ) {

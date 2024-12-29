@@ -1,7 +1,7 @@
 package adventofcode.y2023;
 
 import adventofcode.commons.AbstractProblemTest;
-import adventofcode.commons.AoCPoint;
+import adventofcode.commons.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,12 +27,12 @@ public class Problem11Test extends AbstractProblemTest<Long> {
             .......#..
             #...#.....""");
 
-        assertEquals(9, problem.evalDistance(AoCPoint.of(1, 5), AoCPoint.of(4, 9), 2));
-        assertEquals(9, problem.evalDistance(AoCPoint.of(4, 9), AoCPoint.of(1, 5), 2));
-        assertEquals(15, problem.evalDistance(AoCPoint.of(3, 0), AoCPoint.of(7, 8), 2));
-        assertEquals(15, problem.evalDistance(AoCPoint.of(7, 8), AoCPoint.of(3, 0), 2));
-        assertEquals(5, problem.evalDistance(AoCPoint.of(0, 9), AoCPoint.of(4, 9), 2));
-        assertEquals(5, problem.evalDistance(AoCPoint.of(4, 9), AoCPoint.of(0, 9), 2));
+        assertEquals(9, problem.evalDistance(Point.of(1, 5), Point.of(4, 9), 2));
+        assertEquals(9, problem.evalDistance(Point.of(4, 9), Point.of(1, 5), 2));
+        assertEquals(15, problem.evalDistance(Point.of(3, 0), Point.of(7, 8), 2));
+        assertEquals(15, problem.evalDistance(Point.of(7, 8), Point.of(3, 0), 2));
+        assertEquals(5, problem.evalDistance(Point.of(0, 9), Point.of(4, 9), 2));
+        assertEquals(5, problem.evalDistance(Point.of(4, 9), Point.of(0, 9), 2));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class Problem11Test extends AbstractProblemTest<Long> {
             ..........
             #...#.....""");
 
-        assertEquals(11, problem.evalDistance(AoCPoint.of(1, 5), AoCPoint.of(4, 9), 2));
+        assertEquals(11, problem.evalDistance(Point.of(1, 5), Point.of(4, 9), 2));
     }
 
     @Test

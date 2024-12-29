@@ -1,8 +1,8 @@
 package adventofcode.y2023;
 
-import adventofcode.commons.AoCBoard;
+import adventofcode.commons.Board;
 import adventofcode.commons.AoCInput;
-import adventofcode.commons.AoCPoint;
+import adventofcode.commons.Point;
 import adventofcode.commons.AoCProblem;
 
 import java.util.*;
@@ -21,7 +21,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         System.out.println();
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
     long pageSize;
 
     @Override
@@ -40,11 +40,11 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         return result;
     }
 
-    record Step(AoCPoint p, int distance) {}
+    record Step(Point p, int distance) {}
 
     public long countVisitableCells() {
-        AoCPoint p0 = board.searchFor('S');
-        Set<AoCPoint> visited = new HashSet<>();
+        Point p0 = board.searchFor('S');
+        Set<Point> visited = new HashSet<>();
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0));
         while (!stack.isEmpty()) {
@@ -58,10 +58,10 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
     }
 
     public long countPlots(int steps) {
-        AoCPoint p0 = board.searchFor('S');
+        Point p0 = board.searchFor('S');
         int plotParity = steps % 2 == 0 ? 0 : 1;
 
-        Set<AoCPoint> visited = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0));
         long count = 0;
@@ -90,15 +90,15 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
 
     class BoardPage implements Comparable<BoardPage> {
 
-        final AoCPoint origin;
-        final AoCPoint p0;
+        final Point origin;
+        final Point p0;
         final long createdAt;
-        Set<AoCPoint> visited = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         long destroyAt = -1;
         int size = -1;
         long plotsCount = 0;
 
-        BoardPage(AoCPoint origin, AoCPoint p0, long createdAt) {
+        BoardPage(Point origin, Point p0, long createdAt) {
             this.origin = origin;
             this.p0 = p0;
             this.createdAt = createdAt;
@@ -156,8 +156,8 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
     }
 
     public long countPlotsWithVirtualBoard(int steps, boolean dumpPages) {
-        AoCPoint p0 = board.searchFor('S');
-        Map<AoCPoint, BoardPage> pageMap = new HashMap<>();
+        Point p0 = board.searchFor('S');
+        Map<Point, BoardPage> pageMap = new HashMap<>();
         long count = countPlotsWithVirtualBoardTraversal(steps, p0, pageMap);
 
         if (dumpPages) {
@@ -172,7 +172,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         return count;
     }
 
-    private long countPlotsWithVirtualBoardTraversal(int steps, AoCPoint p0, Map<AoCPoint, BoardPage> pageMap) {
+    private long countPlotsWithVirtualBoardTraversal(int steps, Point p0, Map<Point, BoardPage> pageMap) {
         int plotParity = steps % 2 == 0 ? 0 : 1;
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0));
@@ -189,14 +189,14 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         return count;
     }
 
-    public Character getVirtualCell(AoCPoint p, long time, int plotParity, Map<AoCPoint, BoardPage> pageMap) {
+    public Character getVirtualCell(Point p, long time, int plotParity, Map<Point, BoardPage> pageMap) {
         int rx = p.x % board.N;
         if (rx < 0) rx += board.N;
         int ry = p.y % board.M;
         if (ry < 0) ry += board.M;
-        var rp = AoCPoint.of(rx, ry);
+        var rp = Point.of(rx, ry);
 
-        AoCPoint origin = AoCPoint.of(p.x - rx, p.y - ry);
+        Point origin = Point.of(p.x - rx, p.y - ry);
         BoardPage page = pageMap.computeIfAbsent(origin, k -> new BoardPage(k, rp, time));
         if (page.visited == null) return null;
 
@@ -228,8 +228,8 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         long simulationMultiplier = parity == 0 ? 4 : 3;
         int simulationSteps = board.N / 2 + board.N * (int) simulationMultiplier + (int) remainder;
 
-        AoCPoint p0 = board.searchFor('S');
-        Map<AoCPoint, BoardPage> pageMap = new HashMap<>();
+        Point p0 = board.searchFor('S');
+        Map<Point, BoardPage> pageMap = new HashMap<>();
         long scaledCount = countPlotsWithVirtualBoardTraversal(simulationSteps, p0, pageMap);
 
         // eval visited area size (a diamond if the board is a square)
@@ -258,22 +258,22 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
             System.out.printf("cells' count (scaled): %d%n", cellsCountStats);
         }
 
-        BoardPage page0 = pageMap.get(AoCPoint.of(0, 0));
-        BoardPage page1 = pageMap.get(AoCPoint.of(board.N, 0));
+        BoardPage page0 = pageMap.get(Point.of(0, 0));
+        BoardPage page1 = pageMap.get(Point.of(board.N, 0));
 
-        BoardPage pageVLh0 = pageMap.get(AoCPoint.of(xmin, -board.M));
-        BoardPage pageVLh1 = pageMap.get(AoCPoint.of(xmin + board.N, -board.M));
-        BoardPage pageVRh0 = pageMap.get(AoCPoint.of(xmax, -board.M));
-        BoardPage pageVRh1 = pageMap.get(AoCPoint.of(xmax - board.N, -board.M));
-        BoardPage pageVLb0 = pageMap.get(AoCPoint.of(xmin, board.M));
-        BoardPage pageVLb1 = pageMap.get(AoCPoint.of(xmin + board.N, board.M));
-        BoardPage pageVRb0 = pageMap.get(AoCPoint.of(xmax, board.M));
-        BoardPage pageVRb1 = pageMap.get(AoCPoint.of(xmax - board.N, board.M));
+        BoardPage pageVLh0 = pageMap.get(Point.of(xmin, -board.M));
+        BoardPage pageVLh1 = pageMap.get(Point.of(xmin + board.N, -board.M));
+        BoardPage pageVRh0 = pageMap.get(Point.of(xmax, -board.M));
+        BoardPage pageVRh1 = pageMap.get(Point.of(xmax - board.N, -board.M));
+        BoardPage pageVLb0 = pageMap.get(Point.of(xmin, board.M));
+        BoardPage pageVLb1 = pageMap.get(Point.of(xmin + board.N, board.M));
+        BoardPage pageVRb0 = pageMap.get(Point.of(xmax, board.M));
+        BoardPage pageVRb1 = pageMap.get(Point.of(xmax - board.N, board.M));
 
-        BoardPage pageVH = pageMap.get(AoCPoint.of(0, ymin));
-        BoardPage pageVB = pageMap.get(AoCPoint.of(0, ymax));
-        BoardPage pageVL = pageMap.get(AoCPoint.of(xmin, 0));
-        BoardPage pageVR = pageMap.get(AoCPoint.of(xmax, 0));
+        BoardPage pageVH = pageMap.get(Point.of(0, ymin));
+        BoardPage pageVB = pageMap.get(Point.of(0, ymax));
+        BoardPage pageVL = pageMap.get(Point.of(xmin, 0));
+        BoardPage pageVR = pageMap.get(Point.of(xmax, 0));
 
         long ratio1 = ratio - 1;
         long oddPageSteps = ratio % 2 == 0 ? page1.plotsCount : page0.plotsCount;
@@ -368,7 +368,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         System.out.printf("steps: %-8d %d + %d x %d + %d%n", steps, stepsInto1stPage, board.N, ratio, remainder);
     }
 
-    private void dumpPagesDiamond(Map<AoCPoint, BoardPage> pageMap) {
+    private void dumpPagesDiamond(Map<Point, BoardPage> pageMap) {
         int ymin = Integer.MAX_VALUE;
         int xmin = Integer.MAX_VALUE;
         int ymax = Integer.MIN_VALUE;
@@ -385,7 +385,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         System.out.println("diamond data:");
         for (int n = xmin; n <= xmax; n += board.N) {
             for (int m = ymin; m <= ymax; m += board.M) {
-                BoardPage page = pageMap.get(AoCPoint.of(n, m));
+                BoardPage page = pageMap.get(Point.of(n, m));
                 String cell = page == null ? "      " : "%5d ".formatted(page.plotsCount);
                 System.out.print(cell);
             }
@@ -393,7 +393,7 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
         }
     }
 
-    private void dumpPagesStats(Map<AoCPoint, BoardPage> pageMap) {
+    private void dumpPagesStats(Map<Point, BoardPage> pageMap) {
         System.out.println("perimeter's pages:");
         pageMap.values().stream()
             .filter(p -> p.destroyAt < 0)
@@ -401,8 +401,8 @@ public class Problem21 extends AoCProblem<Long, Problem21> {
             .forEach(System.out::println);
 
         System.out.println("central pages with parity:");
-        System.out.println(pageMap.get(AoCPoint.of(0, 0)));
-        System.out.println(pageMap.get(AoCPoint.of(board.N, 0)));
-        System.out.println(pageMap.get(AoCPoint.of(0, board.M)));
+        System.out.println(pageMap.get(Point.of(0, 0)));
+        System.out.println(pageMap.get(Point.of(board.N, 0)));
+        System.out.println(pageMap.get(Point.of(0, board.M)));
     }
 }

@@ -1,6 +1,7 @@
 package adventofcode.y2024;
 
 import adventofcode.commons.*;
+import adventofcode.commons.Vector;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ public class Problem16 extends AoCProblem<Long, Problem16> {
         new Problem16().loadResourceAndSolve(false);
     }
 
-    AoCBoard<Character> board;
+    Board<Character> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -28,18 +29,18 @@ public class Problem16 extends AoCProblem<Long, Problem16> {
     @Override
     public Long solvePartOne() throws Exception {
         var p = board.searchFor('S');
-        List<SearchState> bestPaths = evalBestPaths(p, AoCVector.EAST);
+        List<SearchState> bestPaths = evalBestPaths(p, Vector.EAST);
         return bestPaths.getFirst().score();
     }
 
-    record SearchState(AoCDirectedPoint dp, long score, SearchState prevState) {}
+    record SearchState(DirectedPoint dp, long score, SearchState prevState) {}
 
-    private List<SearchState> evalBestPaths(AoCPoint p0, AoCVector d0) {
-        Map<AoCDirectedPoint, Long> visitsWithScore = new HashMap<>();
+    private List<SearchState> evalBestPaths(Point p0, Vector d0) {
+        Map<DirectedPoint, Long> visitsWithScore = new HashMap<>();
         // if we use a priority queue based on position to be visited sorted by score
         // is more probable to visits a cell the first time at the lowest score possible
         PriorityQueue<SearchState> pqueue = new PriorityQueue<>(Comparator.comparingLong(a -> a.score));
-        pqueue.add(new SearchState(new AoCDirectedPoint(p0, d0), 0, null));
+        pqueue.add(new SearchState(new DirectedPoint(p0, d0), 0, null));
         long bestScore = Integer.MAX_VALUE;
         List<SearchState> bestPaths = new ArrayList<>();
 
@@ -77,13 +78,13 @@ public class Problem16 extends AoCProblem<Long, Problem16> {
     @Override
     public Long solvePartTwo() throws Exception {
         var p = board.searchFor('S');
-        long score = countBestTiles(p, AoCVector.EAST);
+        long score = countBestTiles(p, Vector.EAST);
         return score;
     }
 
-    private long countBestTiles(AoCPoint p0, AoCVector d0) {
+    private long countBestTiles(Point p0, Vector d0) {
         List<SearchState> bestPaths = evalBestPaths(p0, d0);
-        Set<AoCPoint> bestTitles = new HashSet<>();
+        Set<Point> bestTitles = new HashSet<>();
         for (SearchState s : bestPaths) {
             while (s != null) {
                 bestTitles.add(s.dp.p);

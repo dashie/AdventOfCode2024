@@ -17,7 +17,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         new Problem10().loadResourceAndSolve(false);
     }
 
-    private AoCBoard<Integer> board;
+    private Board<Integer> board;
 
     @Override
     public void processInput(AoCInput input) throws Exception {
@@ -35,20 +35,20 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         );
     }
 
-    private int countTrails(AoCPoint p0, boolean distinctPath) {
+    private int countTrails(Point p0, boolean distinctPath) {
         int trails = 0;
-        Set<AoCPoint> visited = new HashSet<>();
-        Deque<AoCPoint> stack = new LinkedList<>();
+        Set<Point> visited = new HashSet<>();
+        Deque<Point> stack = new LinkedList<>();
         stack.push(p0);
         while (!stack.isEmpty()) {
-            AoCPoint p = stack.pop();
+            Point p = stack.pop();
             visited.add(p);
             int level = board.get(p, -1);
             if (level == 9) {
                 trails++;
             } else {
-                for (AoCVector dir : AoCVector.DIRECTIONS) {
-                    AoCPoint next = p.translate(dir);
+                for (Vector dir : Vector.DIRECTIONS) {
+                    Point next = p.translate(dir);
                     if (distinctPath || !visited.contains(next)) {
                         if (board.get(next, -1) == level + 1)
                             stack.push(next);

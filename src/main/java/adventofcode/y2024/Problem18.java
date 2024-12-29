@@ -4,7 +4,7 @@ import adventofcode.commons.*;
 
 import java.util.*;
 
-import static adventofcode.commons.AoCPoint.parsePoint;
+import static adventofcode.commons.Point.parsePoint;
 
 /**
  * Day 18: RAM Run
@@ -17,17 +17,17 @@ public class Problem18 extends AoCProblem<String, Problem18> {
     }
 
     int PART1_TIME;
-    AoCRect MEMORY_SIZE;
-    List<AoCPoint> bytes = new ArrayList<>();
-    List<Set<AoCPoint>> corruptedSetsAtTime = new ArrayList<>();
+    Rect MEMORY_SIZE;
+    List<Point> bytes = new ArrayList<>();
+    List<Set<Point>> corruptedSetsAtTime = new ArrayList<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
         if (isUsingSampleResource()) {
-            MEMORY_SIZE = AoCRect.of(6, 6);
+            MEMORY_SIZE = Rect.of(6, 6);
             PART1_TIME = 12;
         } else {
-            MEMORY_SIZE = AoCRect.of(70, 70);
+            MEMORY_SIZE = Rect.of(70, 70);
             PART1_TIME = 1024;
         }
 
@@ -35,10 +35,10 @@ public class Problem18 extends AoCProblem<String, Problem18> {
             bytes.add(parsePoint(str));
         }
 
-        Set<AoCPoint> prevSet = new HashSet<>();
+        Set<Point> prevSet = new HashSet<>();
         corruptedSetsAtTime.add(prevSet); // empty set at time 0
-        for (AoCPoint p : bytes) {
-            Set<AoCPoint> set = new HashSet<>(prevSet);
+        for (Point p : bytes) {
+            Set<Point> set = new HashSet<>(prevSet);
             set.add(p);
             corruptedSetsAtTime.add(set);
             prevSet = set;
@@ -55,15 +55,15 @@ public class Problem18 extends AoCProblem<String, Problem18> {
         return Long.toString(lastStep.len);
     }
 
-    record Step(AoCPoint p, long len, int time, Step prev) {}
+    record Step(Point p, long len, int time, Step prev) {}
 
     private Step findShortestPath(int time) {
-        AoCPoint p0 = new AoCPoint(0, 0);
-        AoCPoint pEnd = new AoCPoint(MEMORY_SIZE.p2.x, MEMORY_SIZE.p2.y);
+        Point p0 = new Point(0, 0);
+        Point pEnd = new Point(MEMORY_SIZE.p2.x, MEMORY_SIZE.p2.y);
 
         Step result = null;
 
-        Set<AoCPoint> visited = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
         Deque<Step> stack = new LinkedList<>();
         stack.add(new Step(p0, 0, 0, null));
 
@@ -78,7 +78,7 @@ public class Problem18 extends AoCProblem<String, Problem18> {
             if (visited.contains(s.p)) continue;
             if (corruptedSetsAtTime.get(time).contains(s.p)) continue;
             visited.add(s.p);
-            for (AoCPoint np : s.p.neighbors()) {
+            for (Point np : s.p.neighbors()) {
                 stack.add(new Step(np, s.len + 1, s.time + 1, s));
             }
         }
@@ -88,9 +88,9 @@ public class Problem18 extends AoCProblem<String, Problem18> {
     }
 
     private void dumpState(Step best, int time, int width, int height) {
-        AoCBoard<Character> board = new AoCBoard<>(Character.class, width + 1, height + 1);
+        Board<Character> board = new Board<>(Character.class, width + 1, height + 1);
         board.fill('.');
-        for (AoCPoint p : corruptedSetsAtTime.get(time)) {
+        for (Point p : corruptedSetsAtTime.get(time)) {
             board.set(p, '#');
         }
         Step s = best;
@@ -109,7 +109,7 @@ public class Problem18 extends AoCProblem<String, Problem18> {
      */
     @Override
     public String solvePartTwo() throws Exception {
-        Set<AoCPoint> pathPoints = null;
+        Set<Point> pathPoints = null;
         for (int time = PART1_TIME; time < bytes.size(); ++time) {
             if (pathPoints != null) {
                 // before to run a new simulation check if the new point falls on path cells
@@ -126,8 +126,8 @@ public class Problem18 extends AoCProblem<String, Problem18> {
         return "?";
     }
 
-    private Set<AoCPoint> lastStepToPathPoints(Step lastStep) {
-        Set<AoCPoint> points = new HashSet<>();
+    private Set<Point> lastStepToPathPoints(Step lastStep) {
+        Set<Point> points = new HashSet<>();
         while (lastStep != null) {
             points.add(lastStep.p);
             lastStep = lastStep.prev;
