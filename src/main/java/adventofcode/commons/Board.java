@@ -457,18 +457,18 @@ public final class Board<T> {
         dumpBoard(title, cellFormat, null);
     }
 
-    public void dumpBoard(String cellFormat, Function<Cell, T> transformer) {
+    public void dumpBoard(String cellFormat, Function<Cell, ?> transformer) {
         dumpBoard("", cellFormat, transformer);
     }
 
-    public void dumpBoard(String title, String cellFormat, Function<Cell, T> transformer) {
+    public void dumpBoard(String title, String cellFormat, Function<Cell, ?> transformer) {
         System.out.println();
         System.out.println("--- " + title);
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
-                T v = buffer[m][n];
+                Object v = buffer[m][n];
                 if (transformer != null) {
-                    v = transformer.apply(new Cell(n, m, v));
+                    v = transformer.apply(new Cell(n, m, (T) v));
                 }
                 System.out.printf(cellFormat, v);
             }
