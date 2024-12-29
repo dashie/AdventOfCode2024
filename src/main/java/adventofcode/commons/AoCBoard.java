@@ -63,6 +63,18 @@ public final class AoCBoard<T> {
         buffer = cloneBuffer(data); // create a clone to not to alter original data
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        AoCBoard<?> aoCBoard = (AoCBoard<?>) o;
+        return Objects.deepEquals(buffer, aoCBoard.buffer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(buffer);
+    }
+
     public int N() {
         return N;
     }
@@ -72,7 +84,7 @@ public final class AoCBoard<T> {
     }
 
     @Override
-    public AoCBoard<T> clone() throws CloneNotSupportedException {
+    public AoCBoard<T> clone() {
         return new AoCBoard<>(cloneBuffer(buffer));
     }
 
@@ -180,6 +192,54 @@ public final class AoCBoard<T> {
         int result = 0;
         for (int m = 0; m < M; ++m) {
             for (int n = 0; n < N; ++n) {
+                AoCPoint p = new AoCPoint(n, m);
+                T value = buffer[m][n];
+                result += fn.apply(p, value);
+            }
+        }
+        return result;
+    }
+
+    public int forEach(AoCVector direction, BiFunction<AoCPoint, T, Integer> fn) {
+        int m0, m1, dm, n0, n1, dn;
+        if (direction == AoCVector.SOUTH) {
+            // start from up to bottom (remember matrix coords are upside-down)
+            dm = 1;
+            m0 = 0;
+            m1 = M;
+            dn = 1;
+            n0 = 0;
+            n1 = N;
+        } else if (direction == AoCVector.EAST) {
+            // start right to left
+            dm = 1;
+            m0 = 0;
+            m1 = M;
+            dn = -1;
+            n0 = N - 1;
+            n1 = -1;
+        } else if (direction == AoCVector.NORTH) {
+            // start from bottom to up (remember matrix coords are upside-down)
+            dm = -1;
+            m0 = M - 1;
+            m1 = -1;
+            dn = 1;
+            n0 = 0;
+            n1 = N;
+        } else if (direction == AoCVector.WEST) {
+            // start from left to right
+            dm = 1;
+            m0 = 0;
+            m1 = M;
+            dn = 1;
+            n0 = 0;
+            n1 = N;
+        } else {
+            throw new IllegalArgumentException("Supports only AoCVector NORTH, EAST, SOUTH, WEST");
+        }
+        int result = 0;
+        for (int m = m0; m != m1; m += dm) {
+            for (int n = n0; n != n1; n += dn) {
                 AoCPoint p = new AoCPoint(n, m);
                 T value = buffer[m][n];
                 result += fn.apply(p, value);
@@ -353,6 +413,12 @@ public final class AoCBoard<T> {
 
     public void set(AoCPoint p, T value) {
         set(p.x, p.y, value);
+    }
+
+    public void swap(AoCPoint from, AoCPoint to) {
+        T tmp = get(to);
+        set(to, get(from));
+        set(from, tmp);
     }
 
     public void set(int x, int y, T value) {

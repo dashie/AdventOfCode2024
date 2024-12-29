@@ -25,7 +25,7 @@ public class Problem13Test extends AbstractProblemTest<Long> {
             #####.##.
             ..##..###
             #....#..#""");
-        List<Long> bitset = problem.buildBitsets(board.rows());
+        List<Long> bitset = problem.patternToBitset(board.rows());
         assertEquals(0, problem.evalReflectionDiffScore(bitset, 4));
     }
 
@@ -40,7 +40,7 @@ public class Problem13Test extends AbstractProblemTest<Long> {
             ..#.##.#.
             ..##..##.
             #.#.##.#.""");
-        List<Long> bitset = problem.buildBitsets(board.cols());
+        List<Long> bitset = problem.patternToBitset(board.cols());
         assertEquals(0, problem.evalReflectionDiffScore(bitset, 5));
     }
 

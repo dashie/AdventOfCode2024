@@ -17,22 +17,24 @@ public class Problem13 extends AoCProblem<Long, Problem13> {
         new Problem13().loadResourceAndSolve(false);
     }
 
+    record Pattern(AoCBoard<Character> schema, List<Long> rowsbits, List<Long> colsbits) {}
+
     // List[2] = { rowBitset, colBitset }
-    List<List<Long>[]> patterns = new ArrayList<>();
+    List<Pattern> patterns = new ArrayList<>();
 
     @Override
     public void processInput(AoCInput input) throws Exception {
         input.splitInput("\n\n").stream().map(AoCInput::toCharBoard).forEach(b -> {
-            List<Long> rowBitsets = buildBitsets(b.rows());
-            List<Long> colBitsets = buildBitsets(b.cols());
-            patterns.add(new List[]{rowBitsets, colBitsets});
+            List<Long> rowsbits = patternToBitset(b.rows());
+            List<Long> colsbits = patternToBitset(b.cols());
+            patterns.add(new Pattern(b, rowsbits, colsbits));
         });
     }
 
-    public List<Long> buildBitsets(Iterable<AoCBoard.Dimension<Character>> dimensions) {
-        List<Long> bitsets = new ArrayList<>();
-        for (var d : dimensions) bitsets.add(dimensionToBitset(d));
-        return bitsets;
+    public List<Long> patternToBitset(Iterable<AoCBoard.Dimension<Character>> dimensions) {
+        List<Long> bitset = new ArrayList<>();
+        for (var d : dimensions) bitset.add(dimensionToBitset(d));
+        return bitset;
     }
 
     public long dimensionToBitset(AoCBoard.Dimension<Character> dimension) {
@@ -53,13 +55,13 @@ public class Problem13 extends AoCProblem<Long, Problem13> {
     @Override
     public Long solvePartOne() throws Exception {
         long result = 0;
-        for (List<Long>[] p : patterns) {
-            for (int i = 1; i < p[0].size(); ++i) {
-                if (evalReflectionDiffScore(p[0], i) == 0)
+        for (Pattern p : patterns) {
+            for (int i = 1; i < p.rowsbits.size(); ++i) {
+                if (evalReflectionDiffScore(p.rowsbits, i) == 0)
                     result += 100 * i;
             }
-            for (int i = 1; i < p[1].size(); ++i) {
-                if (evalReflectionDiffScore(p[1], i) == 0)
+            for (int i = 1; i < p.colsbits.size(); ++i) {
+                if (evalReflectionDiffScore(p.colsbits, i) == 0)
                     result += i;
             }
         }
@@ -97,13 +99,13 @@ public class Problem13 extends AoCProblem<Long, Problem13> {
     @Override
     public Long solvePartTwo() throws Exception {
         long result = 0;
-        for (List<Long>[] p : patterns) {
-            for (int i = 1; i < p[0].size(); ++i) {
-                if (evalReflectionDiffScore(p[0], i) == 1)
+        for (Pattern p : patterns) {
+            for (int i = 1; i < p.rowsbits.size(); ++i) {
+                if (evalReflectionDiffScore(p.rowsbits, i) == 1)
                     result += 100 * i;
             }
-            for (int i = 1; i < p[1].size(); ++i) {
-                if (evalReflectionDiffScore(p[1], i) == 1)
+            for (int i = 1; i < p.colsbits.size(); ++i) {
+                if (evalReflectionDiffScore(p.colsbits, i) == 1)
                     result += i;
             }
         }
