@@ -551,11 +551,18 @@ public final class Board<T> {
             this.defaultValue = defaultValue;
         }
 
+        private Cell(Point p, T defaultValue) {
+            this.p = p;
+            this.n = p.x;
+            this.m = p.y;
+            this.v = get(p);
+            this.defaultValue = defaultValue;
+        }
+
         @Override
         public String toString() {
             return "B[" + n + "," + m + "]:" + v;
         }
-
 
         public char getChar(Vector dir) {
             return (char) Board.this.get(p, dir, defaultValue);
@@ -583,6 +590,20 @@ public final class Board<T> {
 
         public T defaultValue() {
             return defaultValue;
+        }
+
+        public List<Cell> neighbors() {
+            return p.neighbors().stream()
+                .filter(p -> isValidCell(p))
+                .map(np -> new Cell(np, defaultValue))
+                .toList();
+        }
+
+        public List<Cell> neighbors(T... v) {
+            return p.neighbors().stream()
+                .filter(p -> isValidCell(p) && AoCCollectionUtils.indexOf(v, get(p)) != -1)
+                .map(np -> new Cell(np, defaultValue))
+                .toList();
         }
     }
 

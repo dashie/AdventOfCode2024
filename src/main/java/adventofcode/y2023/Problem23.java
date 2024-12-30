@@ -1,9 +1,9 @@
 package adventofcode.y2023;
 
+import adventofcode.commons.Vector;
 import adventofcode.commons.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static adventofcode.commons.DirectedPoint.Direction.*;
 import static adventofcode.commons.Vector.*;
@@ -39,49 +39,91 @@ public class Problem23 extends AoCProblem<Long, Problem23> {
      */
     @Override
     public Long solvePartOne() throws Exception {
-        return findLongestPath(false);
+        Map<Point, Vertex> g = reduceGraph(false);
+        long longestPath = findLongestPath(g, START, new HashSet<>());
+        return longestPath;
     }
 
-    private long findLongestPath(boolean climb) {
-        findLongestPath = -1; // reset global variable
-        return findLongestPath(DirectedPoint.of(START, NORTH), climb, 0, new HashSet<>());
+    public long findLongestPath(Map<Point, Vertex> g, Point p, Set<Point> visited) {
+        if (END.equals(p)) return 0;
+        if (!visited.add(p)) return -1;
+
+        long longestPath = -1;
+        Vertex v = g.get(p);
+        for (var e : v.edges) {
+            long cost = findLongestPath(g, e.p, visited);
+            if (cost != -1) longestPath = max(longestPath, cost + e.cost);
+        }
+
+        visited.remove(p);
+        return longestPath;
     }
 
-    long findLongestPath = -1;
+    record Edge(Point p, int cost) {}
 
-    private long findLongestPath(DirectedPoint dp, boolean climb, int steps, Set<Point> visited) {
-        char c = board.get(dp.p, '#');
-        if (c == '#') return -1;
+    record Vertex(Point p, char c, Set<Edge> edges) {}
 
-        if (END.equals(dp.p)) {
-            if (steps > findLongestPath) {
-                findLongestPath = steps;
-                board.dumpBoard("best: " + steps + " ---", "%c", cell -> {
-                    if (cell.v == '.') return visited.contains(cell.p) ? '•' : ' ';
-                    return cell.v;
-                });
+    public Map<Point, Vertex> reduceGraph(boolean climb) {
+        // find critical nodes
+        Set<Point> criticalNodes = new HashSet<>();
+        for (var cell : board.cells()) {
+            if (cell.v == '#') continue; // skip walls
+
+            boolean isVertex =
+                START.equals(cell.p) || END.equals(cell.p)
+                    || "^v<>".indexOf(cell.v) != -1
+                    || cell.neighbors('.', '<', '>', '^', 'v').size() > 2;
+
+            if (isVertex) criticalNodes.add(cell.p);
+        }
+
+        // build graph
+        Map<Point, Vertex> g = new HashMap<>();
+        for (var cn : criticalNodes) {
+            if (END.equals(cn)) continue; // END accepts only in connections
+            Vertex v = buildVertex(cn, climb, criticalNodes);
+            g.put(cn, v);
+        }
+
+        //
+        return g;
+    }
+
+    record BuildVertexStep(DirectedPoint dp, int steps) {}
+
+    public Vertex buildVertex(Point p0, boolean climb, Set<Point> vertexPoints) {
+        char vc = board.get(p0);
+
+        Set<Edge> edges = new HashSet<>();
+
+        Set<Point> visited = new HashSet<>();
+        Deque<BuildVertexStep> stack = new LinkedList<>();
+        Vector.DIRECTIONS.forEach(d ->
+            stack.add(new BuildVertexStep(DirectedPoint.of(p0, d).moveFront(), 1)));
+
+        while (!stack.isEmpty()) {
+            var s = stack.poll();
+            var c = board.get(s.dp.p, '#');
+            if (c == '#') continue;
+            if (START.equals(s.dp.p)) continue; // start accept only out edges
+            if (!visited.add(s.dp.p)) continue;
+            if (vertexPoints.contains(s.dp.p)) {
+                if (!climb) {
+                    if (c == '>' && s.dp.d.is(WEST)) continue;
+                    if (c == '<' && s.dp.d.is(EAST)) continue;
+                    if (c == 'v' && s.dp.d.is(SOUTH)) continue;
+                    if (c == '^' && s.dp.d.is(NORTH)) continue;
+                }
+                edges.add(new Edge(s.dp.p, s.steps));
+                continue;
             }
-            return 0;
+            s.dp.move(FRONT, RIGHT, LEFT).forEach(ndp ->
+                stack.add(new BuildVertexStep(ndp, s.steps + 1)));
         }
 
-        if (!climb) {
-            if (c == '>' && dp.d.is(WEST)) return -1;
-            if (c == '<' && dp.d.is(EAST)) return -1;
-            if (c == 'v' && dp.d.is(SOUTH)) return -1;
-            if (c == '^' && dp.d.is(NORTH)) return -1;
-        }
-
-        if (visited.contains(dp.p)) return -1;
-        visited.add(dp.p);
-        long best = -1;
-        for (var ndp : dp.move(FRONT, LEFT, RIGHT)) {
-            long nbest = findLongestPath(ndp, climb, steps + 1, visited);
-            if (nbest != -1) best = max(best, nbest + 1);
-        }
-        visited.remove(dp.p);
-
-        return best;
+        return new Vertex(p0, vc, edges);
     }
+
 
     /**
      * ...Find the longest hike you can take through the surprisingly
@@ -90,6 +132,8 @@ public class Problem23 extends AoCProblem<Long, Problem23> {
      */
     @Override
     public Long solvePartTwo() throws Exception {
-        return findLongestPath(true);
+        Map<Point, Vertex> g = reduceGraph(true);
+        long longestPath = findLongestPath(g, START, new HashSet<>());
+        return longestPath;
     }
 }

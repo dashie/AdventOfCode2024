@@ -16,8 +16,7 @@ public class Problem23Test extends AbstractProblemTest<Long> {
 
     @Test
     public void testProblem() throws Exception {
-        // 2nd part: 6262 // set to null because at the moment the algorithm is too slow
-        _testProblem(2050L, null);
+        _testProblem(2050L, 6262L);
     }
 
 }
