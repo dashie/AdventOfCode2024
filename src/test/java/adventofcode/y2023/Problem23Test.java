@@ -15,8 +15,13 @@ public class Problem23Test extends AbstractProblemTest<Long> {
     }
 
     @Test
-    public void testProblem() throws Exception {
-        _testProblem(2050L, 6262L);
+    public void testPart1() throws Exception {
+        _testPart1(2050L);
+    }
+
+    @Test
+    public void testPart2() throws Exception {
+        _testPart2(6262L);
     }
 
 }
