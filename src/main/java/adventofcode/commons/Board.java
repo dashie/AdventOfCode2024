@@ -474,7 +474,8 @@ public final class Board<T> {
             }
             System.out.println();
         }
-        System.out.println("---");
+        System.out.println("--- " + title);
+        System.out.println();
     }
 
     public static <T> void dumpBoard(String title, Map<Point, T> points, BiFunction<Point, T, String> transformer) {

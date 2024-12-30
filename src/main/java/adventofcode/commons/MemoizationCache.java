@@ -18,18 +18,6 @@ public class MemoizationCache<V> {
         return cache.computeIfAbsent(toKey(keys), k -> new MemoizationValue());
     }
 
-    public boolean has(Object... keys) {
-        MemoizationValue mv = cache.get(toKey(keys));
-        if (mv != null) return mv.value != null;
-        return false;
-    }
-
-    public V get(Object... keys) {
-        MemoizationValue mv = cache.get(toKey(keys));
-        if (mv != null) return mv.value;
-        return null;
-    }
-
     /**
      *
      */
