@@ -12,16 +12,20 @@ import java.util.regex.Pattern;
  */
 public final class Point implements Comparable<Point> {
 
-    private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)");
+    private static final Pattern POINT_PATTERN = Pattern.compile("([+-]?[0-9]+)[, ]([+-]?[0-9]+)(?:[, ]([+-]?[0-9]+))?");
 
     public static Point parsePoint(String str) {
         Matcher m = POINT_PATTERN.matcher(str);
         if (!m.find()) throw new IllegalArgumentException(str);
-        return of(m.group(1), m.group(2), null);
+        return of(m.group(1), m.group(2), m.group(3));
     }
 
     public static Point of(int x, int y) {
         return new Point(x, y);
+    }
+
+    public static Point of(int x, int y, int z) {
+        return new Point(x, y, z);
     }
 
     public static Point of(String x, String y) {
@@ -47,6 +51,18 @@ public final class Point implements Comparable<Point> {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
+    }
+
+    public int z() {
+        return z;
     }
 
     public boolean equals(int x, int y) {
@@ -110,6 +126,10 @@ public final class Point implements Comparable<Point> {
 
     public Point translate(int dx, int dy) {
         return new Point(x + dx, y + dy);
+    }
+
+    public Point translate(int dx, int dy, int dz) {
+        return new Point(x + dx, y + dy, z + dz);
     }
 
     public boolean isIn(Rect r) {

@@ -31,6 +31,14 @@ public final class Rect {
         this.p2 = p2;
     }
 
+    public Point p1() {
+        return p1;
+    }
+
+    public Point p2() {
+        return p2;
+    }
+
     @Override
     public String toString() {
         return "R{" + p1.x + "," + p1.y + ":" + p2.x + "," + p2.y + "}";
