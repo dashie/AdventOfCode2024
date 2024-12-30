@@ -202,9 +202,10 @@ public class Problem22 extends AoCProblem<Long, Problem22> {
             Deque<Integer> stack = new LinkedList<>();
             stack.add(brickId);
             while (!stack.isEmpty()) {
-                int supportedId = stack.poll();
-                Set<Integer> supportedBricks = findSupportedBricks(supportedId, brickBlocks, xyzSpace);
+                int bid = stack.poll();
+                Set<Integer> supportedBricks = findSupportedBricks(bid, brickBlocks, xyzSpace);
                 for (var supportedBrick : supportedBricks) {
+                    if (affectedBricksStack.contains(supportedBrick)) continue;
                     Set<Integer> supportingBricks = findSupportingBricks(supportedBrick, brickBlocks, xyzSpace);
                     supportingBricks.removeAll(affectedBricksStack);
                     if (supportingBricks.isEmpty()) {
