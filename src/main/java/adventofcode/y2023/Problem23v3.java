@@ -70,6 +70,15 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
                 }
 
                 Vertex v = g.get(s.p);
+
+                var vend = v.edges.get(END);
+                if (vend != null) {
+                    if (s.steps + vend.cost > longestPath) {
+                        longestPath = s.steps + vend.cost;
+                    }
+                    continue;
+                }
+
                 for (var e : v.edges.values()) {
                     // mark the first node as the node that needs to clean the visited
                     stack.push(new FindLongestPathStep(e.p, s.steps + e.cost, s, endOfDFS));
@@ -78,7 +87,7 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
 
             } finally {
 
-                if (endOfDFS == true) { // is terminal node for the DFS, node visit is completed
+                if (endOfDFS == true) { // is terminal node for the DFS, no children, node visit is completed
                     if (firstVisit) visited.remove(s.p);
 
                     // backtracking
