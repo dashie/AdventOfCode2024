@@ -7,6 +7,7 @@ import java.util.*;
 
 import static adventofcode.commons.DirectedPoint.Direction.*;
 import static adventofcode.commons.Vector.*;
+import static java.util.Collections.EMPTY_MAP;
 
 /**
  * Day 23: A Long Walk
@@ -37,13 +38,14 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
     @Override
     public Long solvePartOne() throws Exception {
         Map<Point, Vertex> g = reduceGraph(false);
-        long longestPath = findLongestPath(START, g);
+        // perimeter score optimization works only on part 2
+        long longestPath = findLongestPath(START, g, false);
         return longestPath;
     }
 
     record FindLongestPathStep(Point p, long steps, FindLongestPathStep prev, boolean lastSibling) {}
 
-    public long findLongestPath(Point p0, Map<Point, Vertex> g) {
+    public long findLongestPath(Point p0, Map<Point, Vertex> g, boolean usePerimeterScore) {
         long longestPath = -1;
 
         Set<Point> visited = new HashSet<>();
@@ -70,16 +72,10 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
                 }
 
                 Vertex v = g.get(s.p);
-
-                var vend = v.edges.get(END);
-                if (vend != null) {
-                    if (s.steps + vend.cost > longestPath) {
-                        longestPath = s.steps + vend.cost;
-                    }
-                    continue;
-                }
-
                 for (var e : v.edges.values()) {
+                    if (usePerimeterScore && v.perimeterScore != -1 && v.edges.size() < 4) { // perimeter vertex
+                        if (g.get(e.p).perimeterScore > v.perimeterScore) continue;
+                    }
                     // mark the first node as the node that needs to clean the visited
                     stack.push(new FindLongestPathStep(e.p, s.steps + e.cost, s, endOfDFS));
                     endOfDFS = false;
@@ -102,9 +98,23 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
         return longestPath;
     }
 
+    private void dumpGraph(Map<Point, Vertex> g) {
+        // visualize graph with command:
+        // dot Problem23.dot -Tpng -oProblem23.png -Kfdp -Gdpi=300
+        log("%ndigraph G {%n");
+        for (var ve : g.entrySet()) {
+            log("\"%s\"[label=\"%s\\n%s\"]%n", ve.getKey(), ve.getKey(), ve.getValue().perimeterScore);
+        }
+        for (var ve : g.entrySet()) {
+            for (var e : ve.getValue().edges.values())
+                log("\"%s\" -> \"%s\"%n", ve.getKey(), e.p);
+        }
+        log("}%n%n");
+    }
+
     record Edge(Point p, int cost) {}
 
-    record Vertex(Point p, char c, Map<Point, Edge> edges) {}
+    record Vertex(Point p, char c, Integer perimeterScore, Map<Point, Edge> edges) {}
 
     public Map<Point, Vertex> reduceGraph(boolean climb) {
         // find critical nodes
@@ -135,8 +145,39 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
         // check that END has one single edge for a future traversal optimization
         if (edgesToEnd > 1) throw new IllegalStateException("Invalid number of edges on END");
 
+        // eval perimeter score
+        g.put(END, new Vertex(END, '.', 0, EMPTY_MAP));
+        evalPerimeterScore(g);
+
         //
         return g;
+    }
+
+    private void evalPerimeterScore(Map<Point, Vertex> g) {
+        // assign a score on perimeter nodes (see the file Problem23.png)
+        // when a visits go on perimeter node it has to go only to the END,
+        // or if it goes far from END the visits finishes always in a loop.
+
+        boolean buildPerimeterScore = true;
+        while (buildPerimeterScore) {
+            buildPerimeterScore = false;
+            for (var entry : g.entrySet()) {
+                var vertex = entry.getValue();
+                if (vertex.perimeterScore != null) continue;
+                if (vertex.c != '.' || vertex.edges.size() > 3) {
+                    g.put(vertex.p, new Vertex(vertex.p, vertex.c, -1, vertex.edges));
+                } else {
+                    for (var edge : vertex.edges.values()) {
+                        var vertex1 = g.get(edge.p);
+                        if (vertex1.perimeterScore != null && vertex1.perimeterScore != -1) {
+                            buildPerimeterScore = true;
+                            g.put(vertex.p, new Vertex(vertex.p, vertex.c, vertex1.perimeterScore + 1, vertex.edges));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     record BuildVertexStep(DirectedPoint dp, int steps) {}
@@ -172,7 +213,7 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
                 stack.add(new BuildVertexStep(ndp, s.steps + 1)));
         }
 
-        return new Vertex(p0, vc, edges);
+        return new Vertex(p0, vc, null, edges);
     }
 
 
@@ -184,7 +225,8 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
     @Override
     public Long solvePartTwo() throws Exception {
         Map<Point, Vertex> g = reduceGraph(true);
-        long longestPath = findLongestPath(START, g);
+        // dumpGraph(g);
+        long longestPath = findLongestPath(START, g, true);
         return longestPath;
     }
 }
