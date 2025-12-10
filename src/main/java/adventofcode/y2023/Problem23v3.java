@@ -158,6 +158,7 @@ public class Problem23v3 extends AoCProblem<Long, Problem23v3> {
         // when a visits go on perimeter node it has to go only to the END,
         // or if it goes far from END the visits finishes always in a loop.
 
+        // FIME improve the way we eval the perimeter score
         boolean buildPerimeterScore = true;
         while (buildPerimeterScore) {
             buildPerimeterScore = false;

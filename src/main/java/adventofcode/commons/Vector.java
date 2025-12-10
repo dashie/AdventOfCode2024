@@ -76,6 +76,10 @@ public final class Vector implements Comparable<Vector> {
         return "V{" + x + "," + y + "," + z + "}";
     }
 
+    public double module() {
+        return Math.sqrt((long) x * (long) x + (long) y * (long) y + (long) z * (long) z);
+    }
+
     public int manhattam() {
         return Math.abs(x) + Math.abs(y);
     }

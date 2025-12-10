@@ -605,6 +605,20 @@ public final class Board<T> {
                 .map(np -> new Cell(np, defaultValue))
                 .toList();
         }
+
+        public List<Cell> adjacents() {
+            return p.adjacents().stream()
+                .filter(p -> isValidCell(p))
+                .map(np -> new Cell(np, defaultValue))
+                .toList();
+        }
+
+        public List<Cell> adjacents(T... v) {
+            return p.adjacents().stream()
+                .filter(p -> isValidCell(p) && AoCCollectionUtils.indexOf(v, get(p)) != -1)
+                .map(np -> new Cell(np, defaultValue))
+                .toList();
+        }
     }
 
     /**

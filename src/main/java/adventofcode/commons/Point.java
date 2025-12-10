@@ -156,8 +156,28 @@ public final class Point implements Comparable<Point> {
         return this.translate(Vector.WEST);
     }
 
+    public Point northEast() {
+        return this.translate(Vector.NE);
+    }
+
+    public Point northWest() {
+        return this.translate(Vector.NW);
+    }
+
+    public Point southEast() {
+        return this.translate(Vector.SW);
+    }
+
+    public Point southWest() {
+        return this.translate(Vector.SE);
+    }
+
     public List<Point> neighbors() {
         return Arrays.asList(north(), east(), south(), west());
+    }
+
+    public List<Point> adjacents() {
+        return Arrays.asList(north(), northEast(), east(), southEast(), south(), southWest(), west(), northWest());
     }
 
     public List<Point> neighbors(int distance) {
