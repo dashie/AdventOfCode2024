@@ -60,7 +60,8 @@ public class Problem11 extends AoCProblem<Long, Problem11> {
     }
 
     /**
-     * ...
+     * ...Find all of the paths that lead from svr to out.
+     * How many of those paths visit both dac and fft?
      */
     @Override
     public Long solvePartTwo() throws Exception {
