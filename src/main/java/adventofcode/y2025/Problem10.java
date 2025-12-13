@@ -3,6 +3,7 @@ package adventofcode.y2025;
 import adventofcode.commons.AoCInput;
 import adventofcode.commons.AoCProblem;
 import adventofcode.commons.LineEx;
+import adventofcode.commons.TupleGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,17 +25,19 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
 
         int len;
         long diagram;
-        List<List<Integer>> wiringsInt = new ArrayList<>();
-        List<Long> wiringsBin = new ArrayList<>();
+        long[] wiringMasks = new long[0];
+        int[][] wiringVectors = new int[0][0];
+
         int[] requirements;
+        int[] requirementsPriority;
 
         @Override
         public String toString() {
             String d = Long.toBinaryString(diagram);
-            String w = wiringsBin.stream()
-                .map(Long::toBinaryString)
+            String w = Arrays.stream(wiringMasks)
+                .mapToObj(Long::toBinaryString)
                 .collect(Collectors.joining(","));
-            return "%15s %s".formatted(d, w);
+            return "%15s %40s".formatted(d, w);
         }
 
         public void parseDiagram(String str) {
@@ -47,16 +50,18 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         }
 
         public void parseWirings(List<String> strs) {
+            wiringMasks = new long[strs.size()];
+            wiringVectors = new int[strs.size()][len];
+            int i = 0;
             for (var str : strs) {
-                List<Integer> wiringInt = new ArrayList<>();
-                long wiringBin = 0;
+                long mask = 0;
                 for (var b : str.replaceAll("[()]", "").split(",")) {
-                    wiringInt.add(Integer.parseInt(b));
                     int button = Integer.parseInt(b);
-                    wiringBin = wiringBin | (0b1 << (len - button - 1));
+                    mask = mask | (0b1 << (len - button - 1));
+                    wiringVectors[i][button] = 1;
                 }
-                wiringsInt.add(wiringInt);
-                wiringsBin.add(wiringBin);
+                wiringMasks[i] = mask;
+                i++;
             }
         }
 
@@ -99,7 +104,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
         long result = 0;
         for (var m : machines) {
             List<Long> pushes = resolveMachineDiagram(m);
-            log("%s -> %s%n", m, pushes);
+            // log("%s -> %s%n", m, pushes);
             result += pushes.size();
         }
         return result;
@@ -114,7 +119,7 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
     }
 
     private boolean resolveMachineDiagram(Machine m, LinkedList<Long> pushes, long state, int maxlen) {
-        for (var w : m.wiringsBin) {
+        for (var w : m.wiringMasks) {
             pushes.add(w);
             if (maxlen == 1) {
                 if ((state ^ w) == m.diagram)
@@ -129,63 +134,192 @@ public class Problem10 extends AoCProblem<Long, Problem10> {
     }
 
     /**
-     * ...
+     * ...Analyze each machine's joltage requirements and button
+     * wiring schematics. What is the fewest button presses required
+     * to correctly configure the joltage level counters on all of
+     * the machines?
      */
     @Override
     public Long solvePartTwo() throws Exception {
         long result = 0;
         for (var m : machines) {
-            List<Integer> pushes = resolveMachineJoltage(m);
-            log("%s -> %s%n", m, pushes);
-            result += pushes.size();
+            var s = gaussianSolver(m.wiringVectors, m.requirements);
+            if (s == null) {
+                log("%50s = KO <---%n", Arrays.toString(m.requirements));
+            } else {
+                long sum = Arrays.stream(s).sum();
+                result += sum;
+                log("%50s = %-10s %s%n", Arrays.toString(m.requirements), sum, Arrays.toString(s));
+            }
         }
         return result;
     }
 
-    private List<Integer> resolveMachineJoltage(Machine m) {
-        LinkedList<Integer> pushes = new LinkedList<>();
-        int minpushes = Arrays.stream(m.requirements).max().getAsInt();
-        int[] state = new int[m.requirements.length];
-        for (int i = minpushes; ; ++i) {
-            if (resolveMachineJoltage(m, pushes, state, i))
-                return pushes;
-        }
-    }
+    private int[] gaussianSolver(int[][] a, int[] r) {
 
-    private boolean resolveMachineJoltage(Machine m, LinkedList<Integer> pushes, int[] state, int maxlen) {
-        for (int i = 0; i < state.length; ++i) {
-            if (state[i] > m.requirements[i])
-                return false;
-        }
-
-        for (int i = 0; i < m.wiringsInt.size(); ++i) {
-            var w = m.wiringsInt.get(i);
-            pushes.add(i);
-            state = toggle(state, w);
-            if (maxlen == 1) {
-                if (Arrays.equals(m.requirements, state))
-                    return true;
-            } else {
-                if (resolveMachineJoltage(m, pushes, state, maxlen - 1))
-                    return true;
+        // eval contraints
+        int MAX_PUSHES = Arrays.stream(r).sum();
+        int[] constraints = new int[a.length];
+        Arrays.fill(constraints, MAX_PUSHES);
+        for (int i = 0; i < r.length; ++i) {
+            for (int j = 0; j < a.length; ++j) {
+                if (a[j][i] > 0 && r[i] < constraints[j])
+                    constraints[j] = r[i];
             }
-            state = untoggle(state, w);
-            pushes.removeLast();
         }
-        return false;
+
+        // create AR matrix
+        List<int[]> ar = new ArrayList<>(r.length);
+        for (int i = 0; i < r.length; ++i) {
+            int[] line = new int[a.length + 1];
+            for (int j = 0; j < a.length; j++)
+                line[j] = a[j][i];
+            line[a.length] = r[i];
+            ar.add(line);
+        }
+        // dumpMatrix(ar);
+
+        // gaussian elimination
+        gaussianElimination(ar);
+        // dumpMatrix(ar);
+
+        // find best solution
+        int[] solution = findBestSolutions(ar, constraints);
+        return solution;
     }
 
-    private int[] toggle(int[] state, List<Integer> wiring) {
-        for (int b : wiring) {
-            state[b]++;
+    private void gaussianElimination(List<int[]> ar) {
+        int m = ar.size();
+        int n = ar.get(0).length - 1; // al cols without last one (R)
+
+        int rowIndex = 0;  // current row where to start search for pivot
+        for (int colIndex = 0; colIndex < n && rowIndex < m; colIndex++) {
+
+            // search pivot
+            int pivotIndex = -1;
+            for (int i = rowIndex; i < m; i++) {
+                if (ar.get(i)[colIndex] != 0) {
+                    pivotIndex = i;
+                    break;
+                }
+            }
+            if (pivotIndex == -1) continue; // no pivot found
+
+            // move up the pivot row
+            int[] pivotRow = ar.get(pivotIndex);
+            if (pivotIndex != rowIndex) {
+                int[] tmp = ar.get(rowIndex);
+                ar.set(rowIndex, pivotRow);
+                ar.set(pivotIndex, tmp);
+            }
+
+            // reduce rows under pivot
+            for (int i = rowIndex + 1; i < m; i++) {
+                int[] row = ar.get(i);
+                if (row[colIndex] != 0) {
+                    int factorRow = pivotRow[colIndex];
+                    int factorPivot = row[colIndex];
+                    for (int j = colIndex; j <= n; j++)
+                        row[j] = row[j] * factorRow - pivotRow[j] * factorPivot;
+                }
+            }
+
+            rowIndex++; // next row
         }
-        return state;
     }
 
-    private int[] untoggle(int[] state, List<Integer> wiring) {
-        for (int b : wiring) {
-            state[b]--;
+    private int[] findBestSolutions(List<int[]> ar, int[] contraints) {
+        int m = ar.size();
+        int n = ar.get(0).length - 1;  // number of variables
+
+        // find pivot and free variables (-1 for free variables/columns)
+        boolean[] isPivot = new boolean[n];
+        int[] pivotCol = new int[m];
+        Arrays.fill(pivotCol, -1);
+        for (int i = 0; i < m; i++) {
+            int[] row = ar.get(i);
+            for (int c = 0; c < n; c++) {
+                if (row[c] != 0) {
+                    isPivot[c] = true;
+                    pivotCol[i] = c;
+                    break;
+                }
+            }
         }
-        return state;
+
+        // lista variabili libere
+        List<Integer> freeVars = new ArrayList<>();
+        List<Integer> freeVarsMax = new ArrayList<>();
+        for (int c = 0; c < n; c++) {
+            if (!isPivot[c]) {
+                freeVars.add(c);
+                freeVarsMax.add(contraints[c]);
+            }
+        }
+
+        int[] bestSolution = null;
+        int[] sol = new int[n];
+
+        if (freeVars.isEmpty()) {
+            if (findSolution(ar, pivotCol, sol))
+                bestSolution = sol.clone();
+        } else {
+            for (var tuple : TupleGenerator.iterableOf(freeVarsMax, freeVars.size())) {
+                Arrays.fill(sol, 0);
+                for (int i = 0; i < freeVars.size(); ++i)
+                    sol[freeVars.get(i)] = tuple[i];
+                if (findSolution(ar, pivotCol, sol)) {
+                    if (Arrays.stream(sol).allMatch(s -> s >= 0)) {
+                        if (bestSolution != null) {
+                            int bestSum = Arrays.stream(bestSolution).sum();
+                            int solSum = Arrays.stream(sol).sum();
+                            if (bestSum <= solSum) continue;
+                        }
+                        bestSolution = sol.clone();
+                    }
+                }
+            }
+        }
+
+        return bestSolution;
+    }
+
+    private boolean findSolution(List<int[]> ar, int[] pivotCol, int[] sol) {
+        int m = ar.size();
+        int n = ar.get(0).length - 1;  // number of variables
+
+        for (int r = m - 1; r >= 0; r--) {
+
+            // row without pivot, skip it
+            int pcol = pivotCol[r];
+            if (pcol == -1)
+                continue;
+
+            int rhs = ar.get(r)[n];
+            int[] row = ar.get(r);
+
+            // subtract found values (free or pivot)
+            for (int c = pcol + 1; c < n; c++) {
+                rhs -= row[c] * sol[c];
+            }
+
+            // accept only integer solutions
+            if (rhs % row[pcol] != 0)
+                return false;
+
+            sol[pcol] = rhs / row[pcol];
+        }
+
+        return true;
+    }
+
+    private void dumpMatrix(List<int[]> m) {
+        log("-----%n");
+        for (var l : m) {
+            for (int i = 0; i < l.length - 1; ++i)
+                log("%3s", l[i]);
+            log(" : %s%n", l[l.length - 1]);
+        }
+        log("-----%n");
     }
 }
