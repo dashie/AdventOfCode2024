@@ -62,7 +62,11 @@ public class Problem05 extends AoCProblem<Long, Problem05> {
     }
 
     /**
-     * ...
+     * ...Now, the second section of the database (the available ingredient IDs)
+     * is irrelevant. Here are the fresh ingredient ID ranges...
+     *
+     * Process the database file again. How many ingredient IDs are considered
+     * to be fresh according to the fresh ingredient ID ranges?
      */
     @Override
     public Long solvePartTwo() throws Exception {

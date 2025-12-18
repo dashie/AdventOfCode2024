@@ -17,7 +17,6 @@ public class Problem02 extends AoCProblem<Long, Problem02> {
         new Problem02().loadResourceAndSolve(false);
     }
 
-    private static final long DIAL_SIZE = 100;
     private List<String[]> ranges = new ArrayList<>();
 
     @Override

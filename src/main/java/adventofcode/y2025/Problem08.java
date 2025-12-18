@@ -17,7 +17,6 @@ public class Problem08 extends AoCProblem<Long, Problem08> {
     }
 
     private int CONNECTION_COUNTS;
-
     private List<Point> boxes = null;
 
     @Override
